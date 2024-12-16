@@ -29,7 +29,7 @@ class ShadowShader;
 
 //posteffect
 class GausianBlurShader;
-
+class FadeShader;
 class AssetsManager
 {
 
@@ -85,6 +85,7 @@ public:
 	ShadowShader* GetShadowShader(void);
 
 	GausianBlurShader* GetGausianBlurShader(void);
+	FadeShader* GetFadeShader(void);
 
 	void SetShader(ShaderSet::ShaderIndex index);
 
@@ -122,5 +123,6 @@ private:
 	ShadowShader* shadowShader;
 
 	GausianBlurShader* gausianBlur;
+	FadeShader* fadeShader;
 };
 

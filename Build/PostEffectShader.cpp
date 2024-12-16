@@ -22,6 +22,7 @@ PostEffectShader::~PostEffectShader()
 void PostEffectShader::Init(void)
 {
 	pCBufferManager = pRenderer->GetGameEngine()->GetCBufferManager();
+	//this->texSize = pRenderer->GetGameEngine()->GetWindowSize();
 	renderTex1 = new RenderTexture(pRenderer->GetGameEngine()->GetAssetsManager());
 	renderTex2 = new RenderTexture(pRenderer->GetGameEngine()->GetAssetsManager());
 	renderTex1->CreateRenderTexture((int)texSize.x, (int)texSize.y, "postEffectBuffer1");

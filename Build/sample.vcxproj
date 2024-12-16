@@ -167,6 +167,7 @@
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="DirectionalLightComponent.h" />
     <ClInclude Include="DX11Texture.h" />
+    <ClInclude Include="FadeShader.h" />
     <ClInclude Include="FbxConvertDX11.h" />
     <ClInclude Include="MeshField.h" />
     <ClInclude Include="FullScreenQuadVertex.h" />
@@ -189,6 +190,7 @@
     <ClInclude Include="MeshData.h" />
     <ClInclude Include="MeshFieldComponent.h" />
     <ClInclude Include="MeshFieldVertex.h" />
+    <ClInclude Include="MikanSoftLogo.h" />
     <ClInclude Include="PhongMaterial.h" />
     <ClInclude Include="PhongShader.h" />
     <ClInclude Include="PointColliderComponent.h" />
@@ -197,8 +199,6 @@
     <ClInclude Include="primitivecomponent.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="RenderTexture.h" />
-    <ClInclude Include="Robot.h" />
-    <ClInclude Include="RobotComponent.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneManager.h" />
     <ClInclude Include="ShaderSet.h" />
@@ -228,12 +228,12 @@
     <ClInclude Include="SoundEngine.h" />
     <ClInclude Include="SphereColliderComponent.h" />
     <ClInclude Include="SpriteComponent.h" />
+    <ClInclude Include="TitleBG.h" />
     <ClInclude Include="TitleLogo.h" />
     <ClInclude Include="TitleManager.h" />
     <ClInclude Include="TitleManagerComponent.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="transformcomponent.h" />
-    <ClInclude Include="Tree.h" />
     <ClInclude Include="UIManagerComponent.h" />
     <ClInclude Include="UIMaterial.h" />
     <ClInclude Include="UIShader.h" />
@@ -257,6 +257,7 @@
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="DirectionalLightComponent.cpp" />
     <ClCompile Include="DX11Texture.cpp" />
+    <ClCompile Include="FadeShader.cpp" />
     <ClCompile Include="FbxConvertDX11.cpp" />
     <ClCompile Include="MeshField.cpp" />
     <ClCompile Include="FullScreenQuadVertex.cpp" />
@@ -279,6 +280,7 @@
     <ClCompile Include="MeshData.cpp" />
     <ClCompile Include="MeshFieldComponent.cpp" />
     <ClCompile Include="MeshFieldVertex.cpp" />
+    <ClCompile Include="MikanSoftLogo.cpp" />
     <ClCompile Include="PhongMaterial.cpp" />
     <ClCompile Include="PhongShader.cpp" />
     <ClCompile Include="PointColliderComponent.cpp" />
@@ -287,8 +289,6 @@
     <ClCompile Include="primitivecomponent.cpp" />
     <ClCompile Include="renderer.cpp" />
     <ClCompile Include="RenderTexture.cpp" />
-    <ClCompile Include="Robot.cpp" />
-    <ClCompile Include="RobotComponent.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneManager.cpp" />
     <ClCompile Include="ShaderSet.cpp" />
@@ -318,17 +318,20 @@
     <ClCompile Include="SoundEngine.cpp" />
     <ClCompile Include="SphereColliderComponent.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
+    <ClCompile Include="TitleBG.cpp" />
     <ClCompile Include="TitleLogo.cpp" />
     <ClCompile Include="TitleManager.cpp" />
     <ClCompile Include="TitleManagerComponent.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="transformcomponent.cpp" />
-    <ClCompile Include="Tree.cpp" />
     <ClCompile Include="UIManagerComponent.cpp" />
     <ClCompile Include="UIMaterial.cpp" />
     <ClCompile Include="UIShader.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="shaders\Fade.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="shaders\GausianBlur.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>

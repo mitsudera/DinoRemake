@@ -79,9 +79,6 @@
     <Filter Include="Shader\SkyShader">
       <UniqueIdentifier>{57da6a5d-4755-47c1-8fc9-11b513d57d5a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="gameobject\3D\Tree">
-      <UniqueIdentifier>{7865ab42-64d5-40ae-a228-fb638bb7700b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="component\primitiveComponent">
       <UniqueIdentifier>{de7b19b0-1a9a-4289-ac0e-20b0b7d80bb0}</UniqueIdentifier>
     </Filter>
@@ -150,6 +147,9 @@
     </Filter>
     <Filter Include="gameobject\3D\Field">
       <UniqueIdentifier>{e0f225da-6219-4983-87f7-eb518628afba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\PostEffect\FadeShader">
+      <UniqueIdentifier>{5326b69f-218c-4a78-a184-921131cac080}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -258,17 +258,8 @@
     <ClInclude Include="TitleManager.h">
       <Filter>gameobject\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="RobotComponent.h">
-      <Filter>gameobject\3D\Robot</Filter>
-    </ClInclude>
-    <ClInclude Include="Robot.h">
-      <Filter>gameobject\3D\Robot</Filter>
-    </ClInclude>
     <ClInclude Include="SkySphere.h">
       <Filter>gameobject\3D</Filter>
-    </ClInclude>
-    <ClInclude Include="Tree.h">
-      <Filter>gameobject\3D\Tree</Filter>
     </ClInclude>
     <ClInclude Include="TitleLogo.h">
       <Filter>gameobject\2D\Title</Filter>
@@ -384,6 +375,15 @@
     <ClInclude Include="MeshField.h">
       <Filter>gameobject\3D\Field</Filter>
     </ClInclude>
+    <ClInclude Include="TitleBG.h">
+      <Filter>gameobject\2D\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="MikanSoftLogo.h">
+      <Filter>gameobject\2D\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="FadeShader.h">
+      <Filter>Shader\PostEffect\FadeShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -488,20 +488,11 @@
     <ClCompile Include="TitleManager.cpp">
       <Filter>gameobject\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="Robot.cpp">
-      <Filter>gameobject\3D\Robot</Filter>
-    </ClCompile>
-    <ClCompile Include="RobotComponent.cpp">
-      <Filter>gameobject\3D\Robot</Filter>
-    </ClCompile>
     <ClCompile Include="TitleLogo.cpp">
       <Filter>gameobject\2D\Title</Filter>
     </ClCompile>
     <ClCompile Include="SkySphere.cpp">
       <Filter>gameobject\3D</Filter>
-    </ClCompile>
-    <ClCompile Include="Tree.cpp">
-      <Filter>gameobject\3D\Tree</Filter>
     </ClCompile>
     <ClCompile Include="primitivecomponent.cpp">
       <Filter>component\primitiveComponent</Filter>
@@ -614,6 +605,15 @@
     <ClCompile Include="MeshField.cpp">
       <Filter>gameobject\3D\Field</Filter>
     </ClCompile>
+    <ClCompile Include="TitleBG.cpp">
+      <Filter>gameobject\2D\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="MikanSoftLogo.cpp">
+      <Filter>gameobject\2D\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="FadeShader.cpp">
+      <Filter>Shader\PostEffect\FadeShader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\shader.hlsl">
@@ -636,6 +636,9 @@
     </FxCompile>
     <FxCompile Include="shaders\GausianBlur.hlsl">
       <Filter>Shader\PostEffect\GausianBlur</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\Fade.hlsl">
+      <Filter>Shader\PostEffect\FadeShader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

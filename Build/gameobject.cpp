@@ -55,6 +55,7 @@ GameObject::~GameObject()
 
 void GameObject::Init(void)
 {
+	this->pGameEngine = pScene->GetGameEngine();
 	this->collider = nullptr;
 	this->isActive = TRUE;
 	this->transformComponent->Init();

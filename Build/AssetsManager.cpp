@@ -14,6 +14,7 @@
 #include "ShadowShader.h"
 #include "GausianBlurShader.h"
 #include "LambartMaterial.h"
+#include "FadeShader.h"
 
 #define MESH_PATH "data/MODEL/mesh/"
 #define SKINMESH_PATH "data/MODEL/skinmesh/"
@@ -343,6 +344,7 @@ void AssetsManager::CreateAllShader(void)
 
 	//posteffect
 	gausianBlur = new GausianBlurShader(this->pGameEngine->GetRenderer());
+	fadeShader = new FadeShader(this->pGameEngine->GetRenderer());
 
 }
 
@@ -374,6 +376,11 @@ ShadowShader* AssetsManager::GetShadowShader(void)
 GausianBlurShader* AssetsManager::GetGausianBlurShader(void)
 {
 	return this->gausianBlur;
+}
+
+FadeShader* AssetsManager::GetFadeShader(void)
+{
+	return this->fadeShader;
 }
 
 void AssetsManager::SetShader(ShaderSet::ShaderIndex index)

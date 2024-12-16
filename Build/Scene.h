@@ -32,7 +32,7 @@ public:
 
 protected:
 	GameEngine* pGameEngine;
-	vector <GameObject*> gameObjectList;
+	vector <GameObject*> gameObjectArray;
 	vector<CameraComponent*> cameraArray;
 
 };

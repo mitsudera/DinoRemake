@@ -89,8 +89,8 @@ void SpriteComponent::SetSpriteCenter(string texPath, XMFLOAT3 pos, float width,
 
 	float w = (width / screenHW.x) * 2.0f;
 	float h = (height / screenHW.y) * 2.0f;
-	float l = (((pos.x / screenHW.x) - 0.5f) * 2.0f) - w * 0.5f;
-	float t = (((pos.y / screenHW.y) - 0.5f) * 2.0f) - h * 0.5f;
+	float l = (pos.x / screenHW.x) - w * 0.5;
+	float t = (pos.y / screenHW.y) - h * 0.5;
 
 
 	this->texIndex = pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->LoadTexture(texPath);

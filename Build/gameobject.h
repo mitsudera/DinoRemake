@@ -35,7 +35,7 @@ class Scene;
 class TransformComponent;
 class Component;
 class MeshData;
-
+class GameEngine;
 class GameObject
 {
 public:
@@ -96,6 +96,7 @@ public:
 
 protected:
 	Scene* pScene;
+	GameEngine* pGameEngine;
 	TransformComponent* transformComponent;
 	ColliderComponent* collider;
 

@@ -4,8 +4,6 @@
 #include "GameEngine.h"
 #include "input.h"
 #include "CameraComponent.h"
-#include "RobotComponent.h"
-#include "CameraComponent.h"
 #include "ShadowMap.h"
 
 GameManagerComponent::GameManagerComponent(GameObject* gameObject)

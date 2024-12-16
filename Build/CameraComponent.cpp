@@ -17,7 +17,7 @@
 #include "AssetsManager.h"
 #include "component.h"
 #include "transformcomponent.h"
-
+#include "RenderTexture.h"
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -109,6 +109,9 @@ void CameraComponent::Init(void)
 	// ビューポートタイプの初期化
 	SetViewPort(VIEWPORT_TYPE::TYPE_FULL_SCREEN);
 	this->mtxProj = XMMatrixPerspectiveFovLH(this->angle, this->aspect, this->nearZ, this->farZ);
+
+	pGameEngine->GetAssetsManager()->CreateRenderTexture(1920.0f, 1080.0f, "cameraRT");
+
 }
 
 void CameraComponent::Update(void)
@@ -159,6 +162,7 @@ void CameraComponent::Render(void)
 	pRenderer->GetDeviceContext()->RSSetViewports(1, &vp);
 
 	//描画ターゲットのセット
+
 	pRenderer->GetDeviceContext()->OMSetRenderTargets(1, &this->renderTarget, this->depthTarget);
 
 	pGameObject->GetScene()->GetGameEngine()->GetCBufferManager()->SetViewMtx(&this->mtxView);
@@ -214,7 +218,7 @@ void CameraComponent::Render(void)
 
 	}
 
-
+	
 
 
 
@@ -291,6 +295,40 @@ void CameraComponent::SetMainCamera(void)
 {
 	this->pGameEngine->SetMainCamera(this);
 }
+
+void CameraComponent::AddPostEffect(PostEffectShader* shader, string name, BOOL enable)
+{
+	PostEffect posteffect;
+	posteffect.shader = shader;
+	posteffect.name = name;
+	posteffect.enable = enable;
+}
+
+void CameraComponent::SetPostEffectEnable(string name, BOOL enable)
+{
+	for (int i = 0; i < postEffectArray.size(); i++)
+	{
+		if (postEffectArray[i].name==name)
+		{
+			postEffectArray[i].enable = enable;
+			return;
+		}
+	}
+}
+
+BOOL CameraComponent::GetPostEffectAnyTrue(void)
+{
+	for (int i = 0; i < postEffectArray.size(); i++)
+	{
+		if (postEffectArray[i].enable)
+		{
+			return TRUE;
+		}
+	}
+	return FALSE;
+}
+
+
 
 
 

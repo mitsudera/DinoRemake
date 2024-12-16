@@ -92,12 +92,12 @@ GameEngine* Scene::GetGameEngine(void)
 
 vector<GameObject*>& Scene::GetGameObject(void)
 {
-	return this->gameObjectList;
+	return this->gameObjectArray;
 }
 
 GameObject* Scene::GetGameObjectName(string name)
 {
-	for (GameObject* object:gameObjectList)
+	for (GameObject* object:gameObjectArray)
 	{
 		if (object->GetName() == name)
 		{

@@ -12,6 +12,9 @@ class Renderer;
 
 class MeshComponent;
 
+class PostEffectShader;
+
+class RenderTexture;
 //*****************************************************************************
 // É}ÉNÉçíËã`
 //*****************************************************************************
@@ -44,6 +47,13 @@ public:
 	struct CameraCBuffer
 	{
 		XMFLOAT4 camPos;
+	};
+
+	struct PostEffect
+	{
+		PostEffectShader* shader;
+		string name;
+		BOOL enable;
 	};
 
 	CameraComponent();
@@ -87,6 +97,13 @@ public:
 
 	void SetMainCamera(void);
 
+	void AddPostEffect(PostEffectShader* shader, string name, BOOL enable);
+
+	void SetPostEffectEnable(string name, BOOL enable);
+
+	BOOL GetPostEffectAnyTrue(void);
+
+
 private:
 
 	D3D11_VIEWPORT vp;
@@ -119,5 +136,8 @@ private:
 	ClearMode clearMode;
 
 	GameObject* sky;
+
+	vector<PostEffect> postEffectArray;
+	RenderTexture* renderTexture;
 
 };
