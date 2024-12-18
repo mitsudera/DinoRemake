@@ -52,12 +52,45 @@ void AssetsManager::Init(void)
 void AssetsManager::Uninit(void)
 {
 
-	for (int i = 0; i < this->MeshDataTree.size(); i++)
+	for (int i = 0; i < this->MeshDataArray.size(); i++)
 	{
-		delete this->MeshDataTree[i];
+		if(this->MeshDataArray[i]) delete this->MeshDataArray[i];
 
 	}
-	this->MeshDataTree.clear();
+	this->MeshDataArray.clear();
+
+
+	for (AnimationData* data: AnimDataArray)
+	{
+		if (data) delete data;
+	}
+	AnimDataArray.clear();
+
+	for (ShaderSet* data: ShaderSetArray)
+	{
+		if (data) delete data;
+	}
+	ShaderSetArray.clear();
+
+	for (PostEffectShader* data:PostEffectShaderArray)
+	{
+		if (data) delete data;
+	}
+	PostEffectShaderArray.clear();
+
+	for (Material* data:MaterialArray)
+	{
+		if (data) delete data;
+	}
+	MaterialArray.clear();
+
+
+	for (RenderTexture* data : RenderTextureArray)
+	{
+		if (data) delete data;
+	}
+	RenderTextureArray.clear();
+
 
 	//for (int i = 0; i < this->KeyFrameAnimDataArray.size(); i++)
 	//{
@@ -338,13 +371,24 @@ void AssetsManager::CreateAllShader(void)
 {
 	//
 	lambartShader = new LambartShader(this->pGameEngine->GetRenderer());
+	ShaderSetArray.push_back(lambartShader);
+
 	phongShader = new PhongShader(this->pGameEngine->GetRenderer());
+	ShaderSetArray.push_back(phongShader);
+
 	uiShader = new UIShader(this->pGameEngine->GetRenderer());
+	ShaderSetArray.push_back(uiShader);
+
 	shadowShader = new ShadowShader(this->pGameEngine->GetRenderer());
+	ShaderSetArray.push_back(shadowShader);
 
 	//posteffect
 	gausianBlur = new GausianBlurShader(this->pGameEngine->GetRenderer());
+	PostEffectShaderArray.push_back(gausianBlur);
+
 	fadeShader = new FadeShader(this->pGameEngine->GetRenderer());
+	PostEffectShaderArray.push_back(fadeShader);
+
 
 }
 
@@ -363,10 +407,6 @@ UIShader* AssetsManager::GetUIShader(void)
 	return this->uiShader;
 }
 
-SkyShader* AssetsManager::GetSkyShader(void)
-{
-	return this->skyShader;
-}
 
 ShadowShader* AssetsManager::GetShadowShader(void)
 {
@@ -448,6 +488,7 @@ RenderTexture* AssetsManager::GetRenderTexture(int index)
 void AssetsManager::DeleteRenderTexture(int index)
 {
 	if(this->RenderTextureArray[index]) delete this->RenderTextureArray[index];
+	this->RenderTextureArray[index] = nullptr;
 }
 
 int AssetsManager::LoadMaterial(Material* material)

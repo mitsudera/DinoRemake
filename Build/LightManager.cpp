@@ -13,7 +13,8 @@ LightManager::LightManager(GameEngine* pGameEngine)
 
 LightManager::~LightManager()
 {
-	
+	if (direcLightBuffer) direcLightBuffer->Release();
+	if (pointLightBuffer) pointLightBuffer->Release();
 }
 
 void LightManager::Init()

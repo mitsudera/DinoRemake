@@ -36,7 +36,7 @@ CBufferManager::~CBufferManager()
 	if (WorldBuffer) WorldBuffer->Release();
 	if (ViewBuffer) ViewBuffer->Release();
 	if (ProjectionBuffer) ProjectionBuffer->Release();
-
+	if (CameraBuffer) CameraBuffer->Release();
 }
 
 

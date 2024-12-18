@@ -43,6 +43,7 @@ ShadowMap::ShadowMap(GameEngine* gameEngine)
 
 ShadowMap::~ShadowMap()
 {
+	if (shadowBuffer) shadowBuffer->Release();
 	delete this->blurShader;
 }
 

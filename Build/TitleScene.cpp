@@ -50,8 +50,8 @@ void TitleScene::Init()
 	this->gameObjectArray.push_back(bgmPlayer);
 	
 	//他のオブジェクトを取得する可能性があるオブジェクトは後から
-	TitleManager* titleManager = new TitleManager(this);
-	this->gameObjectArray.push_back(titleManager);
+	//TitleManager* titleManager = new TitleManager(this);
+	//this->gameObjectArray.push_back(titleManager);
 
 	Scene::InitAllObject();
 

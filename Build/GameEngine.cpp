@@ -84,9 +84,6 @@ void GameEngine::Update()
  	this->activeScene->Update();
 	collisionManager->Update();
 
-	if (input->GetKeyboardTrigger(DIK_0))
-	{
-	}
 }
 
 void GameEngine::Draw()
@@ -117,8 +114,11 @@ void GameEngine::Uninit()
 	delete input;
 	delete assetsManager;
 	delete renderer;
-
-
+	delete sceneManager;
+	delete soundEngine;
+	delete cBufferManager;
+	delete lightManager;
+	delete shadowMap;
 }
 
 long GameEngine::GetMouseMoveX(void)

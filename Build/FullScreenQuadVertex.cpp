@@ -92,7 +92,9 @@ FullScreenQuadVertex::FullScreenQuadVertex(Renderer* renderer)
 
 FullScreenQuadVertex::~FullScreenQuadVertex()
 {
-	if(this->vertexBuffer) this->vertexBuffer->Release();
+	if (this->vertexBuffer) this->vertexBuffer->Release();
+	if (this->VertexLayout) this->VertexLayout->Release();
+	if (this->vs)this->vs->Release();
 }
 
 void FullScreenQuadVertex::Draw(void)

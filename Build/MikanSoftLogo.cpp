@@ -19,7 +19,6 @@ void MikanSoftLogo::Init(void)
 
 	this->name = "MikanLogo";
 	SpriteComponent* logo = AddComponent<SpriteComponent>();
-	logo->CreateVertexBuffer();
 	logo->SetSpriteLeftDown("data/texture/title/logo.png", XMFLOAT3(0.0f, 0.0f, 0.0f), pGameEngine->GetWindowSize().x, pGameEngine->GetWindowSize().y);
 
 }

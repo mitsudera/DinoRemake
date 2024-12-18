@@ -37,21 +37,21 @@ Renderer::Renderer(GameEngine* pGameEngine)
 
 
 
-	DepthStateEnable;
-	DepthStateDisable;
+	//DepthStateEnable;
+	//DepthStateDisable;
 
-	BlendStateNone;
-	BlendStateAlphaBlend;
-	BlendStateAdd;
-	BlendStateSubtract;
-	BlendStateParam;
+	//BlendStateNone;
+	//BlendStateAlphaBlend;
+	//BlendStateAdd;
+	//BlendStateSubtract;
+	//BlendStateParam;
 
 
-	RasterStateCullOff;
-	RasterStateCullCW;
-	RasterStateCullCCW;
-	RasterStateFillSOLID;
-	RasterStateFillWIRE;
+	//RasterStateCullOff;
+	//RasterStateCullCW;
+	//RasterStateCullCCW;
+	//RasterStateFillSOLID;
+	//RasterStateFillWIRE;
 }
 
 Renderer::~Renderer()
@@ -224,10 +224,6 @@ void Renderer::SetRenderTargetBackBuffer(void)
 	this->m_ImmediateContext->OMSetRenderTargets(1,&this->RenderTargetViewBackBuffer, this->DepthStencilViewBackBuffer);
 }
 
-void Renderer::SetMeshFieldVertex(void)
-{
-	this->meshFieldVertex->SetVertexBuffer();
-}
 
 
 
@@ -261,7 +257,7 @@ HRESULT Renderer::InitRenderer(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	sd.Flags = DXGI_SWAP_CHAIN_FLAG_GDI_COMPATIBLE;
 	deviceFlags = D3D11_CREATE_DEVICE_DEBUG | D3D11_CREATE_DEVICE_BGRA_SUPPORT;
 
-
+	
 
 
 	hr = D3D11CreateDeviceAndSwapChain(NULL,
@@ -293,7 +289,7 @@ HRESULT Renderer::InitRenderer(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 
 	//ステンシル用テクスチャー作成
-	ID3D11Texture2D* depthTexture = NULL;
+	depthTexture = NULL;
 	D3D11_TEXTURE2D_DESC td;
 	ZeroMemory( &td, sizeof(td) );
 	td.Width			= sd.BufferDesc.Width;
@@ -424,7 +420,6 @@ HRESULT Renderer::InitRenderer(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	SetDepthEnable(TRUE);
 
 
-
 	// サンプラーステート設定
 	D3D11_SAMPLER_DESC samplerDesc;
 	ZeroMemory( &samplerDesc, sizeof( samplerDesc ) );
@@ -438,10 +433,10 @@ HRESULT Renderer::InitRenderer(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	samplerDesc.MinLOD = 0;
 	samplerDesc.MaxLOD = D3D11_FLOAT32_MAX;
 
-	ID3D11SamplerState* samplerState = NULL;
-	m_D3DDevice->CreateSamplerState( &samplerDesc, &samplerState );
+	samplerWrap = NULL;
+	m_D3DDevice->CreateSamplerState( &samplerDesc, &samplerWrap );
 
-	m_ImmediateContext->PSSetSamplers( 0, 1, &samplerState );
+	m_ImmediateContext->PSSetSamplers( 0, 1, &samplerWrap );
 
 	// Borderサンプラーステート設定
 	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
@@ -452,12 +447,11 @@ HRESULT Renderer::InitRenderer(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	samplerDesc.BorderColor[2] = 1.0f;
 	samplerDesc.BorderColor[3] = 1.0f;
 
-	samplerState = NULL;
-	m_D3DDevice->CreateSamplerState(&samplerDesc, &samplerState);
-	m_ImmediateContext->PSSetSamplers(1, 1, &samplerState);
+	samplerBorder = NULL;
+	m_D3DDevice->CreateSamplerState(&samplerDesc, &samplerBorder);
+	m_ImmediateContext->PSSetSamplers(1, 1, &samplerBorder);
 
 	this->fullScreenVertex = new FullScreenQuadVertex(this);
-	this->meshFieldVertex = new MeshFieldVertex(this);
 
 	return S_OK;
 }
@@ -484,9 +478,15 @@ void Renderer::UninitRenderer(void)
 
 	if (m_ImmediateContext)		m_ImmediateContext->ClearState();
 	if (RenderTargetViewBackBuffer)		RenderTargetViewBackBuffer->Release();
+	if (DepthStencilViewBackBuffer)		DepthStencilViewBackBuffer->Release();
 	if (SwapChain)				SwapChain->Release();
 	if (m_ImmediateContext)		m_ImmediateContext->Release();
 	if (m_D3DDevice)			m_D3DDevice->Release();
+	if (depthTexture)			depthTexture->Release();
+	if (samplerWrap)			samplerWrap->Release();
+	if (samplerBorder)			samplerBorder->Release();
+
+	delete fullScreenVertex;
 }
 
 

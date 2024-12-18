@@ -105,7 +105,6 @@ public:
 
 	void SetRenderTargetBackBuffer(void);
 
-	void SetMeshFieldVertex(void);
 
 private:
 
@@ -137,10 +136,11 @@ private:
 	ID3D11RasterizerState*		RasterStateFillSOLID;
 	ID3D11RasterizerState*		RasterStateFillWIRE;
 
-
+	ID3D11Texture2D* depthTexture;
+	ID3D11SamplerState* samplerWrap;
+	ID3D11SamplerState* samplerBorder;
 	//utility
 	FullScreenQuadVertex* fullScreenVertex;
-	MeshFieldVertex* meshFieldVertex;
 };
 
 

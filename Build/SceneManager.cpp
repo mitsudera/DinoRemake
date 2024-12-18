@@ -12,7 +12,7 @@ SceneManager::SceneManager(GameEngine* pGameEngine)
 {
 	this->pGameEngine = pGameEngine;
 
-	this->defaultScene = SCENE::TITLE;
+	this->defaultScene = SCENE::STAGE1;
 
 	TitleScene* titleScene = new TitleScene(pGameEngine);
 	this->SceneList.push_back(titleScene);
@@ -33,6 +33,10 @@ SceneManager::SceneManager(GameEngine* pGameEngine)
 
 SceneManager::~SceneManager()
 {
+	for (Scene* scene :SceneList)
+	{
+		delete scene;
+	}
 }
 
 

@@ -141,5 +141,6 @@ private:
 	int postEffectIndex;
 	BOOL postEffectEnable;
 	RenderTexture* renderTexture;
+	int renderTextureIndex;
 
 };

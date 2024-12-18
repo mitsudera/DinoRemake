@@ -18,7 +18,6 @@ void TitleLogo::Init(void)
 	this->name = "TitleLogo";
 	SpriteComponent* logo = new SpriteComponent(this);
 	logo->Init();
-	logo->CreateVertexBuffer();
 	logo->SetAlphaTest(TRUE);
 
 	XMFLOAT2 windowsize = pGameEngine->GetWindowSize();

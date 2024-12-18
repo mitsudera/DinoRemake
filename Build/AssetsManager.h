@@ -24,10 +24,10 @@ class RenderTexture;
 class LambartShader;
 class PhongShader;
 class UIShader;
-class SkyShader;
 class ShadowShader;
 
 //posteffect
+class PostEffectShader;
 class GausianBlurShader;
 class FadeShader;
 class AssetsManager
@@ -81,7 +81,6 @@ public:
 	LambartShader* GetLambartShader(void);
 	PhongShader* GetPhongShader(void);
 	UIShader* GetUIShader(void);
-	SkyShader* GetSkyShader(void);
 	ShadowShader* GetShadowShader(void);
 
 	GausianBlurShader* GetGausianBlurShader(void);
@@ -106,6 +105,8 @@ private:
 	vector<MeshData*> MeshDataArray;
 	vector<AnimationData*> AnimDataArray;
 	vector<RenderTexture*> RenderTextureArray;
+	vector<ShaderSet*> ShaderSetArray;
+	vector<PostEffectShader*> PostEffectShaderArray;
 
 	//vector<KeyFrameAnimData*>  KeyFrameAnimDataArray;
 	//vector<SkinMeshDataList*> SkinMeshDataListArray;
@@ -119,7 +120,6 @@ private:
 	LambartShader* lambartShader;
 	PhongShader* phongShader;
 	UIShader* uiShader;
-	SkyShader* skyShader;
 	ShadowShader* shadowShader;
 
 	GausianBlurShader* gausianBlur;
