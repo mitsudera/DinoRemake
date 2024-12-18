@@ -19,9 +19,10 @@ void TitleLogo::Init(void)
 	SpriteComponent* logo = new SpriteComponent(this);
 	logo->Init();
 	logo->CreateVertexBuffer();
+	logo->SetAlphaTest(TRUE);
 
 	XMFLOAT2 windowsize = pGameEngine->GetWindowSize();
-	logo->SetSpriteCenter("data/texture/title/titlelogo.png", XMFLOAT3(0.0f, ((300.0f / 1080.0f) * windowsize.y), 0.0f), (600.0f / 1920.0f) * windowsize.x, (300.0f / 1080.0f) * windowsize.y);
+	logo->SetSpriteCenter("data/texture/title/titlelogo.png", XMFLOAT3(0.0f, ((450.0f / 1080.0f) * windowsize.y), 0.0f), (1200.0f / 1920.0f) * windowsize.x, (600.0f / 1080.0f) * windowsize.y);
 	this->componentList.push_back(logo);
 
 

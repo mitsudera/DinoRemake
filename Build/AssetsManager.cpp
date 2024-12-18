@@ -445,8 +445,26 @@ RenderTexture* AssetsManager::GetRenderTexture(int index)
 	return this->RenderTextureArray[index];
 }
 
+void AssetsManager::DeleteRenderTexture(int index)
+{
+	if(this->RenderTextureArray[index]) delete this->RenderTextureArray[index];
+}
+
 int AssetsManager::LoadMaterial(Material* material)
 {
+	if (material->GetName() != "")
+	{
+		for (int i = 0; i < MaterialArray.size(); i++)
+		{
+			if (MaterialArray[i]->GetName() == material->GetName())
+			{
+
+				delete material;
+				return i;
+			}
+		}
+
+	}
 
 	this->MaterialArray.push_back(material);
 	return (int)MaterialArray.size() - 1;

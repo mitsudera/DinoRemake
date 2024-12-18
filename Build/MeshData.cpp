@@ -293,7 +293,7 @@ void MeshData::LoadFbxMesh(FbxMesh* mesh,AssetsManager* ap,MeshData* parent)
 					nor);			// –@ü‚Ì
 				VertexArray[vcnt].Normal.x = (float)nor[0];
 				VertexArray[vcnt].Normal.y = (float)nor[1];
-				VertexArray[vcnt].Normal.z = -(float)nor[2];
+				VertexArray[vcnt].Normal.z = (float)nor[2];
 
 				normals[n] = nor;
 
@@ -310,7 +310,7 @@ void MeshData::LoadFbxMesh(FbxMesh* mesh,AssetsManager* ap,MeshData* parent)
 				int IndexNumber = mesh->GetPolygonVertex(p, n);
 				VertexArray[vcnt].Position.x = (float)src[IndexNumber][0];
 				VertexArray[vcnt].Position.y = (float)src[IndexNumber][1];
-				VertexArray[vcnt].Position.z = -(float)src[IndexNumber][2];
+				VertexArray[vcnt].Position.z = (float)src[IndexNumber][2];
 
 				positions[n] = src[IndexNumber];
 
@@ -540,6 +540,8 @@ void MeshData::LoadFbxMesh(FbxMesh* mesh,AssetsManager* ap,MeshData* parent)
 
 				lambart->LoadFbxMaterial(fbxmaterial);
 
+				lambart->SetName(this->fileName + fbxmaterial->GetName());
+
 				this->materialIndex = pAssetsManager->LoadMaterial(lambart);
 
 
@@ -551,6 +553,9 @@ void MeshData::LoadFbxMesh(FbxMesh* mesh,AssetsManager* ap,MeshData* parent)
 				PhongMaterial* phong = new PhongMaterial(this->GetpAssetsManager());
 
 				phong->LoadFbxMaterial(fbxmaterial);
+
+				phong->SetName(this->fileName + fbxmaterial->GetName());
+
 
 				this->materialIndex = pAssetsManager->LoadMaterial(phong);
 

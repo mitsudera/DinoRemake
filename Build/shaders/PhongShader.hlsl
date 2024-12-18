@@ -83,7 +83,8 @@ struct SHADOW
     matrix wvp;
     int enable;
     int mode;
-    int2 dummy;
+    float facter;
+    int dummy;
 };
 
 cbuffer ShadowBuffer : register(b7)
@@ -172,7 +173,7 @@ float GetVarianceDirectionalShadowFactor(float4 shadowCoord)
     float2 depth = ShadowMapNear.Sample(BorderSampler, shadowCoord.xy).xy;
     float depth_sq = depth.x * depth.x; // E(x)^2
     float variance = depth.y - depth_sq; // ƒĞ^2 = E(x^2) - E(x^2)
-    variance = saturate(variance + 0.005); // 0.0001‚ğ’Ç‰Á‚µ‚ÄˆÀ’è«‚ğŒüã
+    variance = saturate(variance + Shadow.facter); // facter‚ğ’Ç‰Á‚µ‚ÄˆÀ’è«‚ğŒüã
 
     float fragDepth = shadowCoord.z;
     float md = fragDepth - depth.x; // t - ƒÊ

@@ -50,7 +50,9 @@ public:
 	void SetLocalMtx(XMMATRIX mtx);
 	void SetTransForm(XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 scl);
 
-
+	void SetPosX(float f);
+	void SetPosY(float f);
+	void SetPosZ(float f);
 
 	XMFLOAT3 GetWorldPos(void);
 

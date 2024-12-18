@@ -61,13 +61,18 @@ void GameEngine::Init()
 	this->sceneManager = new SceneManager(this);
 	this->sceneManager->SetDefaultScene();
 
+	SetFullScreen(FALSE);
 
 
-	fullscreen = FALSE;
 }
 
 void GameEngine::Update()
 {
+	if (activeScene != nextScene)
+	{
+		SwichScene();
+	}
+
 	this->mouseDeltaX = input->GetMouseX() - oldMousePosX;
 	this->mouseDeltaY = input->GetMouseY() - oldMousePosY;
 
@@ -184,9 +189,7 @@ Scene* GameEngine::GetActiveScene(void)
 
 void GameEngine::SetActiveScene(Scene* scene)
 {
-	if(this->activeScene) this->activeScene->Uninit();
-	this->activeScene = scene;
-	activeScene->Init();
+	this->nextScene = scene;
 
 }
 
@@ -228,6 +231,24 @@ CameraComponent* GameEngine::GetMainCamera(void)
 HWND GameEngine::GetWindowHandle(void)
 {
 	return main->GetWindowHangle();
+}
+
+void GameEngine::Exit(void)
+{
+	this->main->Exit();
+}
+
+void GameEngine::SetNextScene(Scene* scene)
+{
+	this->nextScene = scene;
+}
+
+void GameEngine::SwichScene(void)
+{
+	if (this->activeScene) this->activeScene->Uninit();
+	this->activeScene = nextScene;
+	activeScene->Init();
+
 }
 
 

@@ -3,11 +3,10 @@
 #include "LambartMaterial.h"
 #include "PhongMaterial.h"
 #include "UIMaterial.h"
-#include "SkyMaterial.h"
 #include "GameEngine.h"
 #include "Material.h"
 #include "AssetsManager.h"
-
+#include "renderer.h"
 PrimitiveComponent::PrimitiveComponent()
 {
 	
@@ -51,6 +50,12 @@ void PrimitiveComponent::Uninit(void)
 void PrimitiveComponent::Draw(void)
 {
 	Component::Draw();
+	pRenderer->SetAlphaTestEnable(this->alphaTest);
+	if (this->alphaTest)
+	{
+		pRenderer->SetBlendState(BLEND_MODE::BLEND_MODE_ALPHABLEND);
+
+	}
 	if (drawShadow)
 	{
 
@@ -78,6 +83,11 @@ int PrimitiveComponent::LoadMaterial(Material* material)
 
 	materialIndex = pGameEngine->GetAssetsManager()->LoadMaterial(material);
 	return materialIndex;
+}
+
+void PrimitiveComponent::SetAlphaTest(BOOL enable)
+{
+	this->alphaTest = enable;
 }
 
 

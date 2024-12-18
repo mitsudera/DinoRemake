@@ -27,4 +27,5 @@ void PS_Main(
 		out float4 outDiffuse : SV_Target)
 {
     outDiffuse = fade.fade.x * Texture.Sample(smpWrap, float2(inTexCoord));
+    outDiffuse.a = 1.0f;
 }

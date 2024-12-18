@@ -287,6 +287,28 @@ void TransformComponent::SetTransForm(XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 scl)
 	this->SetScale(scl);
 }
 
+void TransformComponent::SetPosX(float f)
+{
+	this->pos.x = f;
+	PosUpdate();
+}
+
+void TransformComponent::SetPosY(float f)
+{
+	this->pos.y = f;
+	PosUpdate();
+
+
+}
+
+void TransformComponent::SetPosZ(float f)
+{
+	this->pos.z = f;
+	PosUpdate();
+
+
+}
+
 XMFLOAT3 TransformComponent::GetWorldPos(void)
 {
 	XMFLOAT3 lPos = XMFLOAT3(0.0f, 0.0f, 0.0f);
@@ -378,6 +400,7 @@ void TransformComponent::MoveForward(float f)
 void TransformComponent::PosUpdate(void)
 {
 	this->mtxpos = XMMatrixTranslation(this->pos.x, this->pos.y, this->pos.z);
+	UpdateMatrix();
 }
 
 void TransformComponent::SetForwardDiection(XMFLOAT3 dir)

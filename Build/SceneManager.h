@@ -1,12 +1,6 @@
 #pragma once
 #include"Coreminimal.h"
 
-enum SCENE
-{
-	TITLE,
-	GAME,
-	MAX_SCENE,
-};
 
 
 class GameEngine;
@@ -16,10 +10,20 @@ class Scene;
 
 class SceneManager
 {
-
-
-
 public:
+
+
+	enum class SCENE :int
+	{
+		TITLE,
+		TUORIAL,
+		STAGE_SELECT,
+		STAGE1,
+		STAGE2,
+		MAX_SCENE,
+	};
+
+
 	SceneManager(GameEngine* pGameEngine);
 	~SceneManager();
 

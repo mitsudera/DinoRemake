@@ -13,6 +13,7 @@ SoundSpeakerComponent::SoundSpeakerComponent(GameObject* gameObject)
 
 SoundSpeakerComponent::~SoundSpeakerComponent()
 {
+	
 }
 
 void SoundSpeakerComponent::Init(void)
@@ -29,15 +30,12 @@ void SoundSpeakerComponent::Uninit(void)
 void SoundSpeakerComponent::Update(void)
 {
 	Component::Update();
+
+
 }
 
 int SoundSpeakerComponent::LoadSound(string fileName, string name, SoundType type)
 {
-	SoundData* newData = new SoundData;
-	newData->fileName = fileName;
-	newData->name = name;
-	newData->type = type;
-
 	string filePath;
 
 	switch (type)
@@ -58,25 +56,30 @@ int SoundSpeakerComponent::LoadSound(string fileName, string name, SoundType typ
 		break;
 	}
 
-	newData->index = pSoundEngine->LoadSoundData(filePath,type);
-	
-	soundDataArray.push_back(newData);
+	AudioData* newData = new AudioData;
+	pSoundEngine->LoadSoundData(newData, filePath, type);
 
-	return soundDataArray.size() - 1;
+	newData->fileName = fileName;
+	newData->name = name;
+
+	
+	audioDataArray.push_back(newData);
+
+	return audioDataArray.size() - 1;
 }
 
 void SoundSpeakerComponent::StartSound(int index)
 {
-	pSoundEngine->StartSound(this->soundDataArray[index]->index);
+	pSoundEngine->StartSound(this->audioDataArray[index]);
 }
 
 void SoundSpeakerComponent::StartSound(string name)
 {
-	for (SoundData* soundData:soundDataArray)
+	for (AudioData* audioData:audioDataArray)
 	{
-		if (soundData->name == name)
+		if (audioData->name == name)
 		{
-			pSoundEngine->StartSound(soundData->index);
+			pSoundEngine->StartSound(audioData);
 			return;
 		}
 	}
@@ -84,17 +87,17 @@ void SoundSpeakerComponent::StartSound(string name)
 
 void SoundSpeakerComponent::StopSound(int index)
 {
-	pSoundEngine->StopSound(this->soundDataArray[index]->index);
+	pSoundEngine->StopSound(this->audioDataArray[index]);
 
 }
 
 void SoundSpeakerComponent::StopSound(string name)
 {
-	for (SoundData* soundData : soundDataArray)
+	for (AudioData* audioData : audioDataArray)
 	{
-		if (soundData->name == name)
+		if (audioData->name == name)
 		{
-			pSoundEngine->StopSound(soundData->index);
+			pSoundEngine->StopSound(audioData);
 			return;
 		}
 	}
@@ -103,9 +106,9 @@ void SoundSpeakerComponent::StopSound(string name)
 
 void SoundSpeakerComponent::StopAllSound(void)
 {
-	for (SoundData* soundData : soundDataArray)
+	for (AudioData* audioData : audioDataArray)
 	{
-		pSoundEngine->StopSound(soundData->index);
+		pSoundEngine->StopSound(audioData);
 	}
 
 }

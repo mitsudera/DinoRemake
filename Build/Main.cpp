@@ -76,7 +76,7 @@ int Main::Run(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int
 	// ウィンドウの作成
 	hWnd = CreateWindow(CLASS_NAME,
 		WINDOW_NAME,
-		WS_OVERLAPPEDWINDOW, //WS_POPUPタイトルバー消す
+		WS_OVERLAPPEDWINDOW, 
 		CW_USEDEFAULT,																		// ウィンドウの左座標
 		CW_USEDEFAULT,																		// ウィンドウの上座標
 		(int)screenWidth + GetSystemMetrics(SM_CXDLGFRAME) * 2,									// ウィンドウ横幅
@@ -157,6 +157,12 @@ int Main::Run(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int
 float Main::GetDeltaTime(void)
 {
 	return this->deltaTime / 1000.0f;
+}
+
+void Main::Exit(void)
+{
+	// Post a quit message to end the message loop
+	PostQuitMessage(0);
 }
 
 

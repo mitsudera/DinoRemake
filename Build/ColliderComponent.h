@@ -7,7 +7,7 @@
 
 struct HitResult
 {
-	BOOL isHit[ObjectTag::ObjectTagMax];
+	BOOL isHit[(int)GameObject::ObjectTag::ObjectTagMax];
 	vector<GameObject*> hitObject;
 
 };
@@ -27,6 +27,7 @@ public:
 		Sphere,
 		Capsule,
 		Box,
+		Terrain,
 
 		//–¢ŽÀ‘•
 		AABB,
@@ -47,14 +48,14 @@ public:
 
 	virtual void Update(void) override;
 
-	BOOL GetHitTag(ObjectTag tag);
+	BOOL GetHitTag(GameObject::ObjectTag tag);
 
-	void SetHitTag(ObjectTag tag, BOOL isHit);
+	void SetHitTag(GameObject::ObjectTag tag, BOOL isHit);
 
 	Shape GetShape(void);
 	void SetShape(Shape shape);
 
-	ObjectTag GetTag(void);
+	GameObject::ObjectTag GetTag(void);
 
 
 	void SetHitObject(GameObject* gameObject);
@@ -62,12 +63,13 @@ public:
 
 
 
-	void onCollider(void);
-	void offCollider(void);
+	void OnCollider(void);
+	void OffCollider(void);
 	void Clear(void);
 
 	XMFLOAT3 GetCenter(void);
 	float GetCheckRadius(void);
+	void SetCheckRadius(float r);
 
 
 protected:

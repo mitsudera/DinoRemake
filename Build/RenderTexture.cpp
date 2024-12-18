@@ -10,6 +10,14 @@ RenderTexture::RenderTexture(AssetsManager* am)
 
 RenderTexture::~RenderTexture()
 {
+	texture->Release();			// シャドウ・マップ
+	rtv->Release();	// 深度/ステンシル・ビュー
+	srv->Release();	// シェーダ・リソース・ビュー
+
+	depthTexture->Release();			// シャドウ・マップ
+	dsv->Release();	// 深度/ステンシル・ビュー
+	dssrv->Release();	// シェーダ・リソース・ビュー
+
 }
 
 void RenderTexture::SetPSSRV(BindMode mode,int slot)
@@ -18,9 +26,14 @@ void RenderTexture::SetPSSRV(BindMode mode,int slot)
 	{
 		pRenderer->GetDeviceContext()->PSSetShaderResources(slot, 1, &srv);
 	}
-	if (mode == BindMode::BOTH || mode == BindMode::DepthTexture)
+	if (mode == BindMode::BOTH)
 	{
 		pRenderer->GetDeviceContext()->PSSetShaderResources(slot+1, 1, &dssrv);
+	}
+	if (mode == BindMode::DepthTexture)
+	{
+		pRenderer->GetDeviceContext()->PSSetShaderResources(slot, 1, &dssrv);
+
 	}
 }
 
@@ -51,7 +64,6 @@ void RenderTexture::CreateRenderTexture(int widht, int height, string name)
 	this->name = name;
 
 	HRESULT hr;
-	// シャドウ マップの作成
 	D3D11_TEXTURE2D_DESC texDesc;
 	texDesc.Width = (UINT)widht;   // 幅
 	texDesc.Height = (UINT)height;  // 高さ

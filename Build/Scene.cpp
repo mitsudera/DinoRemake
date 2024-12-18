@@ -22,7 +22,7 @@ Scene::~Scene()
 
 void Scene::Init()
 {
-
+	sceneTime = 0.0f;
 
 
 }
@@ -49,7 +49,7 @@ void Scene::Update()
 	}
 
 
-
+	sceneTime += pGameEngine->GetDeltaTime();
 }
 
 void Scene::Draw()
@@ -69,8 +69,10 @@ void Scene::Uninit()
 	for (GameObject* gameObject : GetGameObject())
 	{
 		gameObject->Uninit();
-
+		delete gameObject;
 	}
+	gameObjectArray.clear();
+	
 
 }
 
@@ -113,4 +115,9 @@ void Scene::AddCamera(CameraComponent* camera)
 {
 
 	this->cameraArray.push_back(camera);
+}
+
+float Scene::GetSceneTime(void)
+{
+	return sceneTime;
 }

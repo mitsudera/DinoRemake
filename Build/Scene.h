@@ -30,10 +30,12 @@ public:
 
 	void AddCamera(CameraComponent* camera);
 
+	float GetSceneTime(void);
 protected:
 	GameEngine* pGameEngine;
 	vector <GameObject*> gameObjectArray;
 	vector<CameraComponent*> cameraArray;
+	float sceneTime;
 
 };
 

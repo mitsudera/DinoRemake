@@ -19,6 +19,9 @@ protected:
 
 	XMFLOAT3 startPoint;
 	XMFLOAT3 endPoint;
+	XMFLOAT3 lStartPoint;
+	XMFLOAT3 lEndPoint;
+
 	float radius;
 
 };

@@ -13,10 +13,8 @@ BGMPlayer::~BGMPlayer()
 void BGMPlayer::Init(void)
 {
 	GameObject::Init();
-
+	this->name = "BGMPlayer";
 	SoundSpeakerComponent* speaker = AddComponent<SoundSpeakerComponent>();
 
-	int index = speaker->LoadSound("bgm_maoudamashii_neorock73.wav", "bgm1", SoundType::BGM);
-	speaker->StartSound(index);
 
 }

@@ -5,6 +5,14 @@
 
 Material::Material()
 {
+	this->noDiffuseTex = 1;
+	this->noNormalTex = 1;
+	this->noArmTex = 1;
+	this->ambient = { 1.0f,1.0f,1.0f,1.0f };
+	this->diffuse= { 1.0f,1.0f,1.0f,1.0f };
+	this->specular= { 0.0f,0.0f,0.0f,0.0f };
+	this->emission = { 0.0f,0.0f,0.0f,0.0f };
+	this->shininess = 10.0f;
 }
 
 Material::~Material()
@@ -46,4 +54,14 @@ void Material::LoadArmTex(string fName)
 	textureArmIndex = pAssetsManager->LoadTexture(fName);
 	this->noArmTex = 0;
 
+}
+
+void Material::SetName(string name)
+{
+	this->name = name;
+}
+
+string Material::GetName(void)
+{
+	return this->name;
 }

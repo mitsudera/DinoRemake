@@ -6,6 +6,6 @@ public:
 	GameManager(Scene* scene);
 	~GameManager();
 
-	virtual void Init(void);
+	virtual void Init(void) override;
 };
 

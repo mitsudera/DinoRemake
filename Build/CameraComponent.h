@@ -49,12 +49,14 @@ public:
 		XMFLOAT4 camPos;
 	};
 
-	struct PostEffect
+
+	enum class TrackingMode
 	{
-		PostEffectShader* shader;
-		string name;
-		BOOL enable;
+		PARENT,
+		SKY,
+		NONE,
 	};
+
 
 	CameraComponent();
 	CameraComponent(GameObject* gameObject);
@@ -73,15 +75,8 @@ public:
 
 	void Render(void);
 
-	enum class MODE
-	{
-		TRACKING_PARENT,
-		TRACKING_SKY,
-		
-		WORLD,
-	};
 
-	void SetMode(MODE mode);
+	void SetMode(TrackingMode mode);
 
 	XMMATRIX GetView(void);
 
@@ -97,12 +92,17 @@ public:
 
 	void SetMainCamera(void);
 
-	void AddPostEffect(PostEffectShader* shader, string name, BOOL enable);
+	void SetPostEffect(PostEffectShader* shader);
+	void SetPostEffectEnable(BOOL enable);
 
-	void SetPostEffectEnable(string name, BOOL enable);
+	void SetTrackingMode(TrackingMode mode);
+	TrackingMode GetTrackingMode(void);
+	XMFLOAT3 GetAtPos(void);
 
-	BOOL GetPostEffectAnyTrue(void);
+	void SetNear(float f);
+	void SetFar(float f);
 
+	void SetProjectionMtx(void);
 
 private:
 
@@ -121,12 +121,12 @@ private:
 	float				farZ;			// カメラのクリッピング最大値Z
 
 
-	BOOL layerCulling[Layer::LayerMax];
+	BOOL layerCulling[GameObject::Layer::LayerMax];
 
 	GameObject*			lookObject;
 	Renderer* pRenderer;
 
-	MODE				mode;
+	TrackingMode				mode;
 	ID3D11Buffer* cameraBuffer;
 
 	ID3D11RenderTargetView* renderTarget;
@@ -137,7 +137,9 @@ private:
 
 	GameObject* sky;
 
-	vector<PostEffect> postEffectArray;
+	vector<PostEffectShader*> shaderArray;
+	int postEffectIndex;
+	BOOL postEffectEnable;
 	RenderTexture* renderTexture;
 
 };

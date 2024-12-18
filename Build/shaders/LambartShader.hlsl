@@ -90,7 +90,8 @@ struct SHADOW
     matrix wvp;
     int enable;
     int mode;
-    int2 dummy;
+    float facter;
+    int dummy;
 };
 
 cbuffer ShadowBuffer : register(b7)
@@ -179,9 +180,9 @@ float GetVarianceDirectionalShadowFactor(float4 shadowCoord)
     float2 depth = ShadowMapNear.Sample(BorderSampler, shadowCoord.xy).xy;
     float depth_sq = depth.x * depth.x; // E(x)^2
     float variance = depth.y - depth_sq; // σ^2 = E(x^2) - E(x^2)
-    variance = saturate(variance + 0.0001); // 0.0001を追加して安定性を向上
+    variance = saturate(variance + Shadow.facter); // facterを追加して安定性を向上
 
-    float fragDepth = shadowCoord.z;//-0.001することでシャドウアクネを軽減
+    float fragDepth = shadowCoord.z;//
     float md = fragDepth - depth.x; // t - μ
     float p = variance / (variance + (md * md)); // σ^2 / (σ^2 + (t - μ)^2)
 

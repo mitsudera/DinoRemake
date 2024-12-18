@@ -32,7 +32,7 @@ ShadowMap::ShadowMap(GameEngine* gameEngine)
 	pRenderer->GetDevice()->CreateBuffer(&hBufferDesc, nullptr, &this->shadowBuffer);
 	pCBufferManager->SetShadowBuffer(this->shadowBuffer);
 	quality = ShadowQuality::High;
-	vhwn = 64.0f;
+	vhwn = 256.0f;
 	vhwf = 1024.0f;
 	variance = TRUE;
 
@@ -43,6 +43,7 @@ ShadowMap::ShadowMap(GameEngine* gameEngine)
 
 ShadowMap::~ShadowMap()
 {
+	delete this->blurShader;
 }
 
 void ShadowMap::CreateShadowMap(ShadowQuality quality)
@@ -95,22 +96,29 @@ void ShadowMap::ShadowMapping(void)
 
 
 	this->shadowBufferStruct.mode = variance;
+	this->shadowBufferStruct.facter = (vFar - vNear) * 0.0005;
 
 	XMMATRIX view;
 	XMMATRIX proj;
 
 	XMVECTOR mapPos;
 	XMVECTOR camPos;
+	XMVECTOR camAt;
 	XMVECTOR lDir;
 
 
 	camPos = XMLoadFloat3(&pGameEngine->GetMainCamera()->GetWorldPos());
+	if (pGameEngine->GetMainCamera()->GetTrackingMode()!=CameraComponent::TrackingMode::NONE)
+	{
+		camPos= XMLoadFloat3(&pGameEngine->GetMainCamera()->GetAtPos());
+	}
+	
 
 	lDir = pGameEngine->GetLightmanager()->GetMainLight()->GetTransFormComponent()->GetAxisZ();
 
 	lDir = XMVector3Normalize(lDir);
 
-	mapPos = camPos - (lDir * vFar * 0.5f);
+	mapPos = camPos- (lDir * vFar * 0.5f);
 
 
 

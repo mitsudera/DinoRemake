@@ -34,6 +34,8 @@ public:
 	void SetMaterialIndex(int index);
 	int LoadMaterial(Material* material);
 
+	void SetAlphaTest(BOOL enable);
+
 protected:
 	Renderer* pRenderer;
 	BOOL hasShadow;

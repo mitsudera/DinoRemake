@@ -1,28 +1,21 @@
 #pragma once
+#include "Coreminimal.h"
 #include "component.h"
 #include "SoundEngine.h"
+
 
 
 class SoundSpeakerComponent : public Component
 {
 public:
-
-
-
-	struct SoundData
-	{
-		string fileName;
-		string name;
-		SoundType type;
-		int index;
-	};
-
 	SoundSpeakerComponent(GameObject* gameObject);
 	~SoundSpeakerComponent();
 
 	virtual void Init(void) override;
 	virtual void Uninit(void) override;
 	virtual void Update(void) override;
+
+
 
 	int LoadSound(string fileName, string name, SoundType type);
 
@@ -37,7 +30,7 @@ private:
 	
 	SoundEngine* pSoundEngine;
 
-	vector<SoundData*> soundDataArray;
+	vector<AudioData*> audioDataArray;
 	
 
 

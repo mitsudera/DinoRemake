@@ -27,7 +27,9 @@ void SpriteComponent::Init(void)
 	CreateVertexBuffer();
 	Material* uiMaterial = new UIMaterial(pGameObject->GetScene()->GetGameEngine()->GetAssetsManager());
 	this->materialIndex = pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->LoadMaterial(uiMaterial);
-
+	texSlice.x = 1;
+	texSlice.y = 1;
+	texLRrev = FALSE;
 }
 
 void SpriteComponent::Update(void)
@@ -38,6 +40,7 @@ void SpriteComponent::Update(void)
 void SpriteComponent::Uninit(void)
 {
 	PrimitiveComponent::Uninit();
+	this->vertexBuffer->Release();
 }
 
 void SpriteComponent::Draw(void)
@@ -45,23 +48,32 @@ void SpriteComponent::Draw(void)
 
 	PrimitiveComponent::Draw();
 
-	Renderer* renderer = this->GetGameObject()->GetScene()->GetGameEngine()->GetRenderer();
 
 
+	//頂点バッファの中身を埋める
+
+	D3D11_MAPPED_SUBRESOURCE msr;
+	this->GetGameObject()->GetScene()->GetGameEngine()->GetRenderer()->GetDeviceContext()->Map(this->vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
+
+	VERTEX_3D* pVtx = (VERTEX_3D*)msr.pData;
+
+	memcpy(pVtx, vertexArray, sizeof(VERTEX_3D) * 4);
+
+	this->GetGameObject()->GetScene()->GetGameEngine()->GetRenderer()->GetDeviceContext()->Unmap(this->vertexBuffer, 0);
 
 
-	renderer->SetCullingMode(CULL_MODE::CULL_MODE_BACK);
+	pRenderer->SetCullingMode(CULL_MODE::CULL_MODE_BACK);
 	// 頂点バッファ設定
 	UINT stride = sizeof(VERTEX_3D);
 	UINT offset = 0;
 
-	renderer->GetDeviceContext()->IASetVertexBuffers(0, 1, &this->vertexBuffer, &stride, &offset);
-	renderer->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+	pRenderer->GetDeviceContext()->IASetVertexBuffers(0, 1, &this->vertexBuffer, &stride, &offset);
+	pRenderer->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 	
 	pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->GetTexture(texIndex)->SetShaderResourcePS(0);
 
 
-	renderer->GetDeviceContext()->Draw(4, 0);
+	pRenderer->GetDeviceContext()->Draw(4, 0);
 
 }
 
@@ -95,7 +107,6 @@ void SpriteComponent::SetSpriteCenter(string texPath, XMFLOAT3 pos, float width,
 
 	this->texIndex = pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->LoadTexture(texPath);
 
-	VERTEX_3D vertexArray[4];
 
 
 	vertexArray[0].Position = { l,t + h,z };
@@ -115,23 +126,13 @@ void SpriteComponent::SetSpriteCenter(string texPath, XMFLOAT3 pos, float width,
 	vertexArray[3].Diffuse = { 1.0f,1.0f,1.0f,1.0f };
 	vertexArray[3].TexCoord = { 1.0f,1.0f };
 
-	//頂点バッファの中身を埋める
-
-	D3D11_MAPPED_SUBRESOURCE msr;
-	this->GetGameObject()->GetScene()->GetGameEngine()->GetRenderer()->GetDeviceContext()->Map(this->vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
-
-	VERTEX_3D* pVtx = (VERTEX_3D*)msr.pData;
-
-	memcpy(pVtx, vertexArray, sizeof(VERTEX_3D) * 4);
-
-	this->GetGameObject()->GetScene()->GetGameEngine()->GetRenderer()->GetDeviceContext()->Unmap(this->vertexBuffer, 0);
 
 
 
 
 }
 
-void SpriteComponent::SetSpriteLeftTop(string texPath, XMFLOAT3 pos, float width, float height)
+void SpriteComponent::SetSpriteLeftDown(string texPath, XMFLOAT3 pos, float width, float height)
 {
 
 
@@ -146,7 +147,6 @@ void SpriteComponent::SetSpriteLeftTop(string texPath, XMFLOAT3 pos, float width
 
 	this->texIndex = pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->LoadTexture(texPath);
 
-	VERTEX_3D vertexArray[4];
 
 
 	vertexArray[0].Position = { l,t+h,z };
@@ -177,4 +177,97 @@ void SpriteComponent::SetSpriteLeftTop(string texPath, XMFLOAT3 pos, float width
 
 	this->GetGameObject()->GetScene()->GetGameEngine()->GetRenderer()->GetDeviceContext()->Unmap(this->vertexBuffer, 0);
 
+}
+
+void SpriteComponent::SetFullScreen(string texPath)
+{
+	this->texIndex = pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->LoadTexture(texPath);
+
+
+
+	vertexArray[0].Position = { -1,1,0 };
+	vertexArray[0].Diffuse = { 1.0f,1.0f,1.0f,1.0f };
+	vertexArray[0].TexCoord = { 0.0f,0.0f };
+
+
+	vertexArray[1].Position = { 1,1,0};
+	vertexArray[1].Diffuse = { 1.0f,1.0f,1.0f,1.0f };
+	vertexArray[1].TexCoord = { 1.0f,0.0f };
+
+	vertexArray[2].Position = { -1,-1 ,0 };
+	vertexArray[2].Diffuse = { 1.0f,1.0f,1.0f,1.0f };
+	vertexArray[2].TexCoord = { 0.0f,1.0f };
+
+	vertexArray[3].Position = { 1 ,-1,0 };
+	vertexArray[3].Diffuse = { 1.0f,1.0f,1.0f,1.0f };
+	vertexArray[3].TexCoord = { 1.0f,1.0f };
+
+}
+
+void SpriteComponent::SetTexSlice(XMINT2 slice)
+{
+	texSlice = slice;
+	sliceMax = slice.x * slice.y;
+}
+
+void SpriteComponent::SetSliceTexIndex(int index)
+{
+
+	this->sliceIndex = index%sliceMax;
+	
+
+	XMINT2 pos;
+
+	pos.x = index % texSlice.x;
+	pos.y = index / texSlice.y;
+	
+	XMFLOAT2 uv;
+	XMFLOAT2 uvScale;
+	uvScale.x = 1.0f / (float)texSlice.x;
+	uvScale.y = 1.0f / (float)texSlice.y;
+
+	uv.x = uvScale.x * (float)pos.x;
+	uv.y = uvScale.y * (float)pos.y;
+
+	if (texLRrev)
+	{
+		vertexArray[1].TexCoord = { uv.x,uv.y };
+		vertexArray[0].TexCoord = { uv.x + uvScale.x,uv.y };
+		vertexArray[3].TexCoord = { uv.x,uv.y + uvScale.y };
+		vertexArray[2].TexCoord = { uv.x + uvScale.x,uv.y + uvScale.y };
+
+	}
+	else
+	{
+		vertexArray[0].TexCoord = { uv.x,uv.y };
+		vertexArray[1].TexCoord = { uv.x + uvScale.x,uv.y };
+		vertexArray[2].TexCoord = { uv.x,uv.y + uvScale.y };
+		vertexArray[3].TexCoord = { uv.x + uvScale.x,uv.y + uvScale.y };
+
+	}
+
+
+
+
+}
+
+void SpriteComponent::SetColor(XMFLOAT4 diffuse)
+{
+	vertexArray[0].Diffuse = diffuse;
+	vertexArray[1].Diffuse = diffuse;
+	vertexArray[2].Diffuse = diffuse;
+	vertexArray[3].Diffuse = diffuse;
+
+
+}
+
+void SpriteComponent::SetTexture(string path)
+{
+	this->texIndex = pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->LoadTexture(path);
+
+}
+
+void SpriteComponent::SetLRRev(BOOL enable)
+{
+	texLRrev = enable;
 }

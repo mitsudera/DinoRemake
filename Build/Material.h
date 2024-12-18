@@ -28,6 +28,9 @@ public:
 	void LoadNormalTex(string fName);
 	void LoadArmTex(string fName);
 
+	void SetName(string name);
+	string GetName(void);
+
 	XMFLOAT4	ambient;
 	XMFLOAT4	diffuse;
 	XMFLOAT4	specular;
@@ -51,7 +54,7 @@ protected:
 
 
 
-
+	string name;
 
 	ShaderSet* pShader;
 	AssetsManager* pAssetsManager;

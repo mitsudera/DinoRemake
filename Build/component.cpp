@@ -17,6 +17,7 @@ Component::Component(GameObject* gameObject)
 
 Component::~Component()
 {
+	Uninit();
 }
 
 void Component::Init(void)

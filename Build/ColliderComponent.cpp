@@ -27,12 +27,15 @@ void ColliderComponent::Init(void)
 	this->attribute = Attribute::Collider;
 	result.hitObject.clear();
 	
-	for (int i = 0; i < ObjectTag::ObjectTagMax; i++)
+	this->checkRadius = 1.0f;
+
+	for (int i = 0; i < (int)GameObject::ObjectTag::ObjectTagMax; i++)
 	{
 		result.isHit[i] = FALSE;
 
 	}
 
+	OnCollider();
 }
 
 void ColliderComponent::Uninit(void)
@@ -51,14 +54,14 @@ void ColliderComponent::Update(void)
 
 }
 
-BOOL ColliderComponent::GetHitTag(ObjectTag tag)
+BOOL ColliderComponent::GetHitTag(GameObject::ObjectTag tag)
 {
-	return result.isHit[tag];
+	return result.isHit[(int)tag];
 }
 
-void ColliderComponent::SetHitTag(ObjectTag tag, BOOL isHit)
+void ColliderComponent::SetHitTag(GameObject::ObjectTag tag, BOOL isHit)
 {
-	this->result.isHit[tag] = isHit;
+	this->result.isHit[(int)tag] = isHit;
 }
 
 ColliderComponent::Shape ColliderComponent::GetShape(void)
@@ -72,7 +75,7 @@ void ColliderComponent::SetShape(Shape shape)
 	this->shape = shape;
 }
 
-ObjectTag ColliderComponent::GetTag(void)
+GameObject::ObjectTag ColliderComponent::GetTag(void)
 {
 	return pGameObject->GetTag();
 }
@@ -109,7 +112,7 @@ void ColliderComponent::Clear(void)
 {
 	this->result.hitObject.clear();
 
-	for (int i = 0; i < ObjectTag::ObjectTagMax; i++)
+	for (int i = 0; i < (int)GameObject::ObjectTag::ObjectTagMax; i++)
 	{
 		this->result.isHit[i] = FALSE;
 	}
@@ -127,16 +130,20 @@ float ColliderComponent::GetCheckRadius(void)
 	return this->checkRadius;
 }
 
-
-
-
-void ColliderComponent::onCollider(void)
+void ColliderComponent::SetCheckRadius(float r)
 {
-	this->Init();
+	checkRadius = r;
+}
+
+
+
+
+void ColliderComponent::OnCollider(void)
+{
 	this->GetGameObject()->GetScene()->GetGameEngine()->GetCollisionManager()->AddCollider(this);
 }
 
-void ColliderComponent::offCollider(void)
+void ColliderComponent::OffCollider(void)
 {
 
 	this->GetGameObject()->GetScene()->GetGameEngine()->GetCollisionManager()->DeleteCllider(this);

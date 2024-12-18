@@ -23,7 +23,7 @@ private:
 
 	CameraComponent* gameCamera;
 	CameraComponent* debugCamera;
-
+	GameObject* player;
 
 	void SetCameraModeGame(void);
 	void SetCameraModeDebug(void);

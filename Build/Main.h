@@ -37,7 +37,7 @@ public:
 	// 前フレームからの経過ミリ秒を取得する
 	float GetDeltaTime(void);
 
-
+	void Exit(void);
 
 protected:
 	void Init(void);

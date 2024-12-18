@@ -31,7 +31,7 @@ MeshComponent::MeshComponent(GameObject* gameObject)
 	attribute = Attribute::Primitive;
 
 	MeshDataIndex = 0;
-	cullMode = CULL_MODE::CULL_MODE_FRONT;
+	cullMode = CULL_MODE::CULL_MODE_BACK;
 	this->alphaTest = FALSE;
 
 

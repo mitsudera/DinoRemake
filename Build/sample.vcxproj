@@ -140,6 +140,7 @@
       <ConformanceMode>false</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <AdditionalIncludeDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\include;</AdditionalIncludeDirectories>
+      <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
@@ -188,11 +189,14 @@
     <ClInclude Include="MeshAnimData.h" />
     <ClInclude Include="MeshComponent.h" />
     <ClInclude Include="MeshData.h" />
-    <ClInclude Include="MeshFieldComponent.h" />
+    <ClInclude Include="RedEnemy.h" />
+    <ClInclude Include="TerrainComponent.h" />
     <ClInclude Include="MeshFieldVertex.h" />
     <ClInclude Include="MikanSoftLogo.h" />
     <ClInclude Include="PhongMaterial.h" />
     <ClInclude Include="PhongShader.h" />
+    <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerComponent.h" />
     <ClInclude Include="PointColliderComponent.h" />
     <ClInclude Include="PointLightComponent.h" />
     <ClInclude Include="PostEffectShader.h" />
@@ -207,33 +211,39 @@
     <ClInclude Include="ShadowShader.h" />
     <ClInclude Include="SkeletonAnimData.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="SkinMeshComponent.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="SkinMeshDataList.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="SkyMaterial.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="SkyShader.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="SkySphere.h" />
-    <ClInclude Include="sound.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="SoundSpeakerComponent.h" />
     <ClInclude Include="SoundEngine.h" />
     <ClInclude Include="SphereColliderComponent.h" />
     <ClInclude Include="SpriteComponent.h" />
+    <ClInclude Include="Stage1Manager.h" />
+    <ClInclude Include="Stage1ManagerComponent.h" />
+    <ClInclude Include="Stage1Scene.h" />
+    <ClInclude Include="Stage2Scene.h" />
+    <ClInclude Include="StageSelectManager.h" />
+    <ClInclude Include="StageSelectManagerComponent.h" />
+    <ClInclude Include="StageSelectScene.h" />
+    <ClInclude Include="TerrainColliderComponent.h" />
     <ClInclude Include="TitleBG.h" />
+    <ClInclude Include="TitleCursor.h" />
     <ClInclude Include="TitleLogo.h" />
     <ClInclude Include="TitleManager.h" />
     <ClInclude Include="TitleManagerComponent.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="transformcomponent.h" />
+    <ClInclude Include="TutorialManager.h" />
+    <ClInclude Include="TutorialManagerComponent.h" />
+    <ClInclude Include="TutorialScene.h" />
     <ClInclude Include="UIManagerComponent.h" />
     <ClInclude Include="UIMaterial.h" />
     <ClInclude Include="UIShader.h" />
@@ -278,11 +288,14 @@
     <ClCompile Include="MeshAnimData.cpp" />
     <ClCompile Include="MeshComponent.cpp" />
     <ClCompile Include="MeshData.cpp" />
-    <ClCompile Include="MeshFieldComponent.cpp" />
+    <ClCompile Include="RedEnemy.cpp" />
+    <ClCompile Include="TerrainComponent.cpp" />
     <ClCompile Include="MeshFieldVertex.cpp" />
     <ClCompile Include="MikanSoftLogo.cpp" />
     <ClCompile Include="PhongMaterial.cpp" />
     <ClCompile Include="PhongShader.cpp" />
+    <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerComponent.cpp" />
     <ClCompile Include="PointColliderComponent.cpp" />
     <ClCompile Include="PointLightComponent.cpp" />
     <ClCompile Include="PostEffectShader.cpp" />
@@ -297,33 +310,39 @@
     <ClCompile Include="ShadowShader.cpp" />
     <ClCompile Include="SkeletonAnimData.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="SkinMeshComponent.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="SkinMeshDataList.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="SkyMaterial.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="SkyShader.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="SkySphere.cpp" />
-    <ClCompile Include="sound.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="SoundSpeakerComponent.cpp" />
     <ClCompile Include="SoundEngine.cpp" />
     <ClCompile Include="SphereColliderComponent.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
+    <ClCompile Include="Stage1Manager.cpp" />
+    <ClCompile Include="Stage1ManagerComponent.cpp" />
+    <ClCompile Include="Stage1Scene.cpp" />
+    <ClCompile Include="Stage2Scene.cpp" />
+    <ClCompile Include="StageSelectManager.cpp" />
+    <ClCompile Include="StageSelectManagerComponent.cpp" />
+    <ClCompile Include="StageSelectScene.cpp" />
+    <ClCompile Include="TerrainColliderComponent.cpp" />
     <ClCompile Include="TitleBG.cpp" />
+    <ClCompile Include="TitleCursor.cpp" />
     <ClCompile Include="TitleLogo.cpp" />
     <ClCompile Include="TitleManager.cpp" />
     <ClCompile Include="TitleManagerComponent.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="transformcomponent.cpp" />
+    <ClCompile Include="TutorialManager.cpp" />
+    <ClCompile Include="TutorialManagerComponent.cpp" />
+    <ClCompile Include="TutorialScene.cpp" />
     <ClCompile Include="UIManagerComponent.cpp" />
     <ClCompile Include="UIMaterial.cpp" />
     <ClCompile Include="UIShader.cpp" />
@@ -331,27 +350,35 @@
   <ItemGroup>
     <FxCompile Include="shaders\Fade.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="shaders\GausianBlur.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="shaders\LambartShader.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="shaders\PhongShader.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="shaders\shader.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="shaders\ShadowShader.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="shaders\TerrainShader.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="shaders\UIShader.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

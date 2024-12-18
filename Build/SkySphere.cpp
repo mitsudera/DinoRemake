@@ -2,7 +2,6 @@
 #include "transformcomponent.h"
 #include "MeshComponent.h"
 #include "renderer.h"
-#include "SkyMaterial.h"
 #include "Scene.h"
 #include "GameEngine.h"
 

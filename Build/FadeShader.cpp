@@ -1,12 +1,12 @@
 #include "FadeShader.h"
 #include "renderer.h"
 #include "CBufferManager.h"
-
+#include "GameEngine.h"
 FadeShader::FadeShader(Renderer* renderer)
 {
 	pRenderer = renderer;
-
-
+	this->texSize = pRenderer->GetGameEngine()->GetWindowSize();
+	Init();
 }
 
 FadeShader::~FadeShader()
@@ -45,4 +45,13 @@ void FadeShader::PostEffectDraw(ID3D11ShaderResourceView* srv, ID3D11RenderTarge
 	pCBufferManager->SetCBufferVSPS(fadeBuffer, CBufferManager::BufferSlot::Free1);
 
 	PostEffectShader::PostEffectDraw(srv, rtv);
+}
+
+void FadeShader::SetFade(float f)
+{
+	FadeCbuffer data;
+
+	data.fade.x = f;
+	pRenderer->GetDeviceContext()->UpdateSubresource(fadeBuffer, 0, NULL, &data, 0, 0);
+
 }

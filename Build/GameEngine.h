@@ -56,6 +56,12 @@ public:
 
 	HWND GetWindowHandle(void);
 
+	void Exit(void);
+
+	void SetNextScene(Scene* scene);
+
+	void SwichScene(void);
+
 private:
 
 	Main* main;
@@ -81,6 +87,7 @@ private:
 
 	BOOL fullscreen;
 
+	Scene* nextScene;
 
 	XMFLOAT2 windowSize;
 };

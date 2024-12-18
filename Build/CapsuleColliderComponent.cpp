@@ -24,8 +24,8 @@ void CapsuleColliderComponent::Update(void)
 {
 	ColliderComponent::Update();
 	XMMATRIX worldMtx = GetWorldMtx();
-	XMVECTOR sp = XMLoadFloat3(&startPoint);
-	XMVECTOR ep = XMLoadFloat3(&endPoint);
+	XMVECTOR sp = XMLoadFloat3(&lStartPoint);
+	XMVECTOR ep = XMLoadFloat3(&lEndPoint);
 
 	sp = XMVector3Transform(sp, worldMtx);
 	ep = XMVector3Transform(ep, worldMtx);
@@ -38,10 +38,10 @@ void CapsuleColliderComponent::Update(void)
 
 void CapsuleColliderComponent::SetCapsule(XMFLOAT3 start, XMFLOAT3 end, float radius)
 {
-	this->startPoint = start;
-	this->endPoint = end;
-	XMVECTOR sp = XMLoadFloat3(&startPoint);
-	XMVECTOR ep = XMLoadFloat3(&endPoint);
+	this->lStartPoint = start;
+	this->lEndPoint = end;
+	XMVECTOR sp = XMLoadFloat3(&lStartPoint);
+	XMVECTOR ep = XMLoadFloat3(&lEndPoint);
 
 	XMVECTOR len = XMVector3Length(ep - sp);
 

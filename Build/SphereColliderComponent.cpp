@@ -13,6 +13,7 @@ void SphereColliderComponent::Init(void)
 {
 	ColliderComponent::Init();
 	this->shape = Shape::Sphere;
+	
 }
 
 void SphereColliderComponent::Uninit(void)
@@ -23,7 +24,6 @@ void SphereColliderComponent::Uninit(void)
 void SphereColliderComponent::Update(void)
 {
 	ColliderComponent::Update();
-
 }
 
 void SphereColliderComponent::SetRadius(float r)

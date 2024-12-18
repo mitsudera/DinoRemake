@@ -11,6 +11,7 @@ GausianBlurShader::GausianBlurShader(Renderer* renderer)
 
 GausianBlurShader::~GausianBlurShader()
 {
+	if(gausBuffer) gausBuffer->Release();
 }
 
 void GausianBlurShader::Init(void)

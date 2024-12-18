@@ -10,6 +10,10 @@ PostEffectShader::PostEffectShader()
 
 PostEffectShader::~PostEffectShader()
 {
+
+	delete renderTex1;
+	delete renderTex2;
+
 	for (ID3D11PixelShader* ps : PSArray)
 	{
 		ps->Release();
@@ -32,6 +36,7 @@ void PostEffectShader::Init(void)
 
 void PostEffectShader::PostEffectDraw(ID3D11ShaderResourceView* srv,ID3D11RenderTargetView* rtv)
 {
+	pRenderer->SetDepthEnable(FALSE);
 	for (int i = 0; i < PSArray.size(); i++)
 	{
 		if(i%2==1)

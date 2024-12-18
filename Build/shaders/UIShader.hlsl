@@ -51,5 +51,4 @@ void PSmain(             in float4 inPosition : SV_POSITION,
     color *= inDiffuse;
 	
     outDiffuse = color;
-
 }

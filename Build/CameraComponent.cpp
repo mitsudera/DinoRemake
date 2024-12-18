@@ -18,6 +18,7 @@
 #include "component.h"
 #include "transformcomponent.h"
 #include "RenderTexture.h"
+#include "PostEffectShader.h"
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -37,7 +38,7 @@ static int				ViewPortType = TYPE_FULL_SCREEN;
 
 CameraComponent::CameraComponent()
 {
-	for (int i = 0; i < Layer::LayerMax; i++)
+	for (int i = 0; i < (int)GameObject::Layer::LayerMax; i++)
 	{
 		layerCulling[i] = FALSE;
 	}
@@ -50,7 +51,7 @@ CameraComponent::CameraComponent(GameObject* gameObject)
 	pRenderer = gameObject->GetScene()->GetGameEngine()->GetRenderer();
 
 	gameObject->GetScene()->AddCamera(this);
-	for (int i = 0; i < Layer::LayerMax; i++)
+	for (int i = 0; i < (int)GameObject::Layer::LayerMax; i++)
 	{
 		layerCulling[i] = FALSE;
 	}
@@ -81,7 +82,7 @@ void CameraComponent::Init(void)
 
 	this->attribute = Attribute::Camera;
 
-	this->mode = MODE::WORLD;
+	this->mode = TrackingMode::NONE;
 
 
 	this->at = { 0.0f, 0.0f, -1.0f };
@@ -98,8 +99,8 @@ void CameraComponent::Init(void)
 
 	this->len = 50.0f;
 
-	this->mode = MODE::WORLD;
-	for (int i = 0; i < Layer::LayerMax; i++)
+	this->mode = TrackingMode::NONE;
+	for (int i = 0; i < (int)GameObject::Layer::LayerMax; i++)
 	{
 		layerCulling[i] = FALSE;
 	}
@@ -110,7 +111,9 @@ void CameraComponent::Init(void)
 	SetViewPort(VIEWPORT_TYPE::TYPE_FULL_SCREEN);
 	this->mtxProj = XMMatrixPerspectiveFovLH(this->angle, this->aspect, this->nearZ, this->farZ);
 
-	pGameEngine->GetAssetsManager()->CreateRenderTexture(1920.0f, 1080.0f, "cameraRT");
+	int index= pGameEngine->GetAssetsManager()->CreateRenderTexture(1920.0f, 1080.0f, "cameraRT");
+	renderTexture= pGameEngine->GetAssetsManager()->GetRenderTexture(index);
+	postEffectIndex = 0;
 
 }
 
@@ -126,7 +129,7 @@ void CameraComponent::Uninit(void)
 {
 	Component::Uninit();
 
-
+	delete renderTexture;
 }
 
 void CameraComponent::Render(void)
@@ -134,20 +137,20 @@ void CameraComponent::Render(void)
 
 	switch (this->mode)
 	{
-	case MODE::TRACKING_PARENT:
+	case TrackingMode::PARENT:
 
 
 		this->at = this->pGameObject->GetParent()->GetTransFormComponent()->GetWorldPos();
 		this->mtxView = XMMatrixLookAtLH(XMLoadFloat3(&this->GetWorldPos()), XMLoadFloat3(&this->at), XMLoadFloat3(&this->up));
 
 		break;
-	case MODE::TRACKING_SKY:
+	case TrackingMode::SKY:
 
 
 		this->mtxView = XMMatrixLookAtLH(XMLoadFloat3(&this->GetWorldPos()), XMLoadFloat3(&this->at), XMLoadFloat3(&this->up));
 
 		break;
-	case MODE::WORLD:
+	case TrackingMode::NONE:
 
 		this->mtxView = XMMatrixLookToLH(XMLoadFloat3(&this->GetWorldPos()), XMLoadFloat3(&GetTransFormComponent()->GetForward()), this->GetTransFormComponent()->GetAxisY());
 		break;
@@ -158,65 +161,120 @@ void CameraComponent::Render(void)
 
 	pGameEngine->GetCBufferManager()->SetCameraBuffer(&GetWorldPos());
 
+	pGameEngine->GetCBufferManager()->SetViewMtx(&this->mtxView);
+
+
+	pGameEngine->GetCBufferManager()->SetProjectionMtx(&this->mtxProj);
+
+
 	//ビューポートセット
 	pRenderer->GetDeviceContext()->RSSetViewports(1, &vp);
 
-	//描画ターゲットのセット
 
-	pRenderer->GetDeviceContext()->OMSetRenderTargets(1, &this->renderTarget, this->depthTarget);
-
-	pGameObject->GetScene()->GetGameEngine()->GetCBufferManager()->SetViewMtx(&this->mtxView);
-
-	pGameObject->GetScene()->GetGameEngine()->GetCBufferManager()->SetCameraBuffer(cameraBuffer);
-
-	pGameObject->GetScene()->GetGameEngine()->GetCBufferManager()->SetProjectionMtx(&this->mtxProj);
-
-
-	const float cc[4] = { clearColor.x,clearColor.y,clearColor.z,clearColor.w };
-
-	//描画ターゲットのクリア
-	switch (clearMode)
+	if (!postEffectEnable)
 	{
+		//描画ターゲットのセット
+		pRenderer->GetDeviceContext()->OMSetRenderTargets(1, &this->renderTarget, this->depthTarget);
+		const float cc[4] = { clearColor.x,clearColor.y,clearColor.z,clearColor.w };
 
-	case ClearMode::None:
-
-
-		break;
-	case ClearMode::Color:
-
-
-
-		pRenderer->GetDeviceContext()->ClearRenderTargetView(this->renderTarget, cc);
-		pRenderer->GetDeviceContext()->ClearDepthStencilView(this->depthTarget, D3D11_CLEAR_DEPTH, 1.0f, 0);
-
-		break;
-
-	case ClearMode::SkySphere:
-
-
-		//スカイスフィアで背景クリアをする場合
-
-		layerCulling[Layer::Sky] = TRUE;
-		pRenderer->SetDepthEnable(FALSE);
-		this->sky->GetTransFormComponent()->SetPosition(this->GetWorldPos());
-
-		this->sky->GetTransFormComponent()->UpdateMatrix();
-
-		for (int j = 0; j < ShaderSet::ShaderIndex::MAX; j++)
+		//描画ターゲットのクリア
+		switch (clearMode)
 		{
-			pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->SetShader((ShaderSet::ShaderIndex)j);
+
+		case ClearMode::None:
 
 
-			sky->Draw((ShaderSet::ShaderIndex)j);
+			break;
+		case ClearMode::Color:
 
 
+
+			pRenderer->GetDeviceContext()->ClearRenderTargetView(this->renderTarget, cc);
+			pRenderer->GetDeviceContext()->ClearDepthStencilView(this->depthTarget, D3D11_CLEAR_DEPTH, 1.0f, 0);
+
+			break;
+
+		case ClearMode::SkySphere:
+
+
+			//スカイスフィアで背景クリアをする場合
+
+			layerCulling[(int)GameObject::Layer::Sky] = TRUE;
+			pRenderer->SetDepthEnable(FALSE);
+			this->sky->GetTransFormComponent()->SetPosition(this->GetWorldPos());
+
+			this->sky->GetTransFormComponent()->UpdateMatrix();
+
+			for (int j = 0; j < ShaderSet::ShaderIndex::MAX; j++)
+			{
+				pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->SetShader((ShaderSet::ShaderIndex)j);
+
+
+				sky->Draw((ShaderSet::ShaderIndex)j);
+
+
+
+
+			}
+			pRenderer->SetDepthEnable(TRUE);
 
 
 		}
-		pRenderer->SetDepthEnable(TRUE);
 
 
 	}
+	else
+	{
+		this->renderTexture->SetRTV(RenderTexture::BindMode::BOTH,0);
+		const float cc[4] = { clearColor.x,clearColor.y,clearColor.z,clearColor.w };
+
+		//描画ターゲットのクリア
+		switch (clearMode)
+		{
+
+		case ClearMode::None:
+
+
+			break;
+		case ClearMode::Color:
+
+
+
+			pRenderer->GetDeviceContext()->ClearRenderTargetView(this->renderTexture->GetRenderTargetView(), cc);
+			pRenderer->GetDeviceContext()->ClearDepthStencilView(this->renderTexture->GetDepthStencilView(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+			break;
+
+		case ClearMode::SkySphere:
+
+
+			//スカイスフィアで背景クリアをする場合
+
+			layerCulling[(int)GameObject::Layer::Sky] = TRUE;
+			pRenderer->SetDepthEnable(FALSE);
+			this->sky->GetTransFormComponent()->SetPosition(this->GetWorldPos());
+
+			this->sky->GetTransFormComponent()->UpdateMatrix();
+
+			for (int j = 0; j < ShaderSet::ShaderIndex::MAX; j++)
+			{
+				pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->SetShader((ShaderSet::ShaderIndex)j);
+
+
+				sky->Draw((ShaderSet::ShaderIndex)j);
+
+
+
+
+			}
+			pRenderer->SetDepthEnable(TRUE);
+
+
+		}
+
+
+	}
+
+
 
 	
 
@@ -230,7 +288,7 @@ void CameraComponent::Render(void)
 		for (GameObject* gameObject : pGameObject->GetScene()->GetGameObject())
 		{
 			//レイヤーのカリングチェック
-			if (layerCulling[gameObject->GetLayer()])
+			if (layerCulling[(int)gameObject->GetLayer()])
 				continue;
 
 			gameObject->Draw((ShaderSet::ShaderIndex)i);
@@ -238,13 +296,17 @@ void CameraComponent::Render(void)
 	}
 
 	pRenderer->GetDeviceContext()->OMSetRenderTargets(0, nullptr, nullptr);
+	if (postEffectEnable)
+	{
+		this->shaderArray[postEffectIndex]->PostEffectDraw(this->renderTexture->GetSRV(), this->renderTarget);
 
+	}
 
 }
 
 
 
-void CameraComponent::SetMode(MODE mode)
+void CameraComponent::SetMode(TrackingMode mode)
 {
 	this->mode = mode;
 
@@ -296,45 +358,50 @@ void CameraComponent::SetMainCamera(void)
 	this->pGameEngine->SetMainCamera(this);
 }
 
-void CameraComponent::AddPostEffect(PostEffectShader* shader, string name, BOOL enable)
+void CameraComponent::SetPostEffect(PostEffectShader* shader)
 {
-	PostEffect posteffect;
-	posteffect.shader = shader;
-	posteffect.name = name;
-	posteffect.enable = enable;
+	this->shaderArray.push_back(shader);
 }
 
-void CameraComponent::SetPostEffectEnable(string name, BOOL enable)
+void CameraComponent::SetPostEffectEnable(BOOL enable)
 {
-	for (int i = 0; i < postEffectArray.size(); i++)
-	{
-		if (postEffectArray[i].name==name)
-		{
-			postEffectArray[i].enable = enable;
-			return;
-		}
-	}
+	this->postEffectEnable = enable;
 }
 
-BOOL CameraComponent::GetPostEffectAnyTrue(void)
+void CameraComponent::SetTrackingMode(TrackingMode mode)
 {
-	for (int i = 0; i < postEffectArray.size(); i++)
-	{
-		if (postEffectArray[i].enable)
-		{
-			return TRUE;
-		}
-	}
-	return FALSE;
+	this->mode = mode;
 }
 
+CameraComponent::TrackingMode CameraComponent::GetTrackingMode(void)
+{
+	return this->mode;
+}
 
+XMFLOAT3 CameraComponent::GetAtPos(void)
+{
+	return this->at;
+}
 
+void CameraComponent::SetNear(float f)
+{
+	this->nearZ = f;
+	SetProjectionMtx();
+}
 
+void CameraComponent::SetFar(float f)
+{
+	this->farZ = f;
+	SetProjectionMtx();
 
-//=============================================================================
-// ビューポートの設定
-//=============================================================================
+}
+
+void CameraComponent::SetProjectionMtx(void)
+{
+	this->mtxProj = XMMatrixPerspectiveFovLH(this->angle, this->aspect, this->nearZ, this->farZ);
+
+}
+
 void CameraComponent::SetViewPort(int m_type)
 {
 

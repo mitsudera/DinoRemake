@@ -5,6 +5,8 @@
 #include "input.h"
 #include "CameraComponent.h"
 #include "ShadowMap.h"
+#include "transformcomponent.h"
+#include "PlayerComponent.h"
 
 GameManagerComponent::GameManagerComponent(GameObject* gameObject)
 {
@@ -20,10 +22,11 @@ void GameManagerComponent::Init(void)
 	Component::Init();
 	attribute = Attribute::Manager;
 	this->gameScene = pGameObject->GetScene();
-	this->gameCamera = gameScene->GetGameObjectName("Robot")->GetChild("Camera")->GetComponent<CameraComponent>();
+	this->gameCamera = gameScene->GetGameObjectName("Player")->GetChild("Camera")->GetComponent<CameraComponent>();
 	this->debugCamera = gameScene->GetGameObjectName("DebugCamera")->GetComponent<CameraComponent>();
+	this->player = gameScene->GetGameObjectName("Player");
 
-	SetCameraModeDebug();
+	SetCameraModeGame();
 
 	pGameEngine->GetShadowMap()->SetEnable(TRUE);
 	pGameEngine->GetShadowMap()->SetVariance(TRUE);
@@ -38,23 +41,15 @@ void GameManagerComponent::Uninit(void)
 void GameManagerComponent::Update(void)
 {
 	Component::Update();
-	if(input->GetKeyboardTrigger(DIK_1))
+	if(input->GetKeyboardTrigger(DIK_P))
 	{
 		SetCameraModeGame();
 	}
-	if(input->GetKeyboardTrigger(DIK_2))
+	if(input->GetKeyboardTrigger(DIK_O))
 	{
 		SetCameraModeDebug();
 	}
 
-	if(input->GetKeyboardTrigger(DIK_3))
-	{
-		pGameEngine->SetFullScreen(TRUE);
-	}
-	if(input->GetKeyboardTrigger(DIK_4))
-	{
-		pGameEngine->SetFullScreen(FALSE);
-	}
 
 
 
@@ -65,6 +60,8 @@ void GameManagerComponent::SetCameraModeGame(void)
 	gameCamera->SetActive(TRUE);
 	gameCamera->SetMainCamera();
 	debugCamera->SetActive(FALSE);
+	player->GetComponent<PlayerComponent>()->SetContorol(TRUE);
+
 	//pGameObject->GetScene()->GetGameObjectName("Robot")->GetComponent<RobotComponent>()->SetActive(TRUE);
 
 
@@ -74,6 +71,8 @@ void GameManagerComponent::SetCameraModeDebug(void)
 {
 	gameCamera->SetActive(FALSE);
 	debugCamera->SetActive(TRUE);
+	debugCamera->GetTransFormComponent()->SetPosition(gameCamera->GetTransFormComponent()->GetWorldPos());
+	player->GetComponent<PlayerComponent>()->SetContorol(FALSE);
 	debugCamera->SetMainCamera();
 	//pGameObject->GetScene()->GetGameObjectName("Robot")->GetComponent<RobotComponent>()->SetActive(FALSE);
 

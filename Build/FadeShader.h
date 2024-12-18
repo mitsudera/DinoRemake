@@ -14,6 +14,8 @@ public:
 		XMFLOAT4 fade;
 	};
 
+	void SetFade(float f);
+
 private:
 
 

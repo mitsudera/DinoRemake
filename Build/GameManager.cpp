@@ -1,5 +1,6 @@
 #include "GameManager.h"
 #include "GameManagerComponent.h"
+#include "SoundSpeakerComponent.h"
 GameManager::GameManager(Scene* scene)
 {
 	this->pScene = scene;
@@ -14,7 +15,7 @@ void GameManager::Init(void)
 {
 	GameObject::Init();
 	this->name = "GameManager";
-	GameManagerComponent* gameManagerComponent = new GameManagerComponent(this);
-	gameManagerComponent->Init();
-	componentList.push_back(gameManagerComponent);
+	GameManagerComponent* gameManagerComponent = AddComponent<GameManagerComponent>();
+
+
 }

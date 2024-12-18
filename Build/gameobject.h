@@ -4,31 +4,8 @@
 #include "component.h"
 #include "ShaderSet.h"
 
-typedef enum
-{
-	TagNone,
-	TagPlayer,
-	TagEnemy,
-	TagField,
-	TagPlayerBullet,
-	TagPlayerMissile,
-	TagEnemyMissile,
 
-	ObjectTagMax,
-}ObjectTag;
 
-typedef enum
-{	
-	Default,
-	Sky,
-	Field,
-	Water,
-	UI,
-	Player,
-
-	LayerMax,
-}
-Layer;
 
 class ColliderComponent;
 class Scene;
@@ -36,9 +13,35 @@ class TransformComponent;
 class Component;
 class MeshData;
 class GameEngine;
+class ColliderComponent;
+
+
 class GameObject
 {
 public:
+
+	enum class ObjectTag:int
+	{
+		Default,
+		Player,
+		Enemy,
+		Field,
+
+		ObjectTagMax,
+	};
+
+
+	enum class Layer:int
+	{
+		Default,
+		Sky,
+		Field,
+		Water,
+		UI,
+
+		LayerMax,
+	};
+
 	GameObject();
 	GameObject(Scene* scene);
 	GameObject(GameObject* parent);
@@ -55,7 +58,6 @@ public:
 
 	Scene* GetScene(void);
 	TransformComponent* GetTransFormComponent(void);
-	ColliderComponent* GetCollider(void);
 
 	ObjectTag GetTag(void);
 	Layer GetLayer(void);
@@ -82,6 +84,7 @@ public:
 	T* AddComponent(void);
 
 
+
 	void SetHasShadowAll(BOOL b);
 
 	GameObject* AddChild(string name);
@@ -98,8 +101,6 @@ protected:
 	Scene* pScene;
 	GameEngine* pGameEngine;
 	TransformComponent* transformComponent;
-	ColliderComponent* collider;
-
 
 	vector<Component*> componentList;
 

@@ -16,12 +16,6 @@
     <Filter Include="gameobject">
       <UniqueIdentifier>{5ca1ad43-3eb5-4528-abc6-509b9394d9c1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="component">
-      <UniqueIdentifier>{fa49727c-ae80-4c72-a2fc-8a3066404396}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="math">
-      <UniqueIdentifier>{570a1ca4-084a-4369-9239-05cbd5b0440b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="misc">
       <UniqueIdentifier>{c7d76af9-1c49-4485-bee2-982201477c30}</UniqueIdentifier>
     </Filter>
@@ -42,9 +36,6 @@
     </Filter>
     <Filter Include="gameobject\Camera">
       <UniqueIdentifier>{96a44aaa-7a14-4ae0-934b-6e84a0a4ca49}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="component\Camera">
-      <UniqueIdentifier>{cb75e590-abba-4ede-8978-6a6eef771ee8}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shader\Material">
       <UniqueIdentifier>{dbfbc113-a982-4060-8483-73027d192393}</UniqueIdentifier>
@@ -70,20 +61,11 @@
     <Filter Include="gameobject\GameObject">
       <UniqueIdentifier>{269e4b1f-069c-4450-a34c-3c3397ead6ac}</UniqueIdentifier>
     </Filter>
-    <Filter Include="gameobject\3D\Robot">
-      <UniqueIdentifier>{5b6ed62a-6047-4d44-acfd-3e2e1bc98aac}</UniqueIdentifier>
-    </Filter>
     <Filter Include="gameobject\2D\Title">
       <UniqueIdentifier>{99e69468-4fa5-4056-9e5a-4eedb214fd84}</UniqueIdentifier>
     </Filter>
     <Filter Include="Shader\SkyShader">
       <UniqueIdentifier>{57da6a5d-4755-47c1-8fc9-11b513d57d5a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="component\primitiveComponent">
-      <UniqueIdentifier>{de7b19b0-1a9a-4289-ac0e-20b0b7d80bb0}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="component\ColliderComponent">
-      <UniqueIdentifier>{861bc099-2d31-40d5-be08-65d2a563171f}</UniqueIdentifier>
     </Filter>
     <Filter Include="GameEngine">
       <UniqueIdentifier>{b9dca675-2a2c-4887-b62c-0dc6ce728bd9}</UniqueIdentifier>
@@ -100,9 +82,6 @@
     <Filter Include="GameEngine\core">
       <UniqueIdentifier>{0b90fff3-36c1-46f4-baa2-63ecfb6f9a9f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="component\LightComponent">
-      <UniqueIdentifier>{2c043215-ebc7-4b5c-8f73-d441a412c6fa}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Assets">
       <UniqueIdentifier>{b95820f7-cdb8-472b-9c71-795ab37060c0}</UniqueIdentifier>
     </Filter>
@@ -114,15 +93,6 @@
     </Filter>
     <Filter Include="Shader\ShadowShader">
       <UniqueIdentifier>{e729880f-82b7-40f9-8cc5-b229eff4fc26}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="component\TransformComponent">
-      <UniqueIdentifier>{4679350b-514b-4e5b-a2d7-d3e16ee8d8d9}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="component\AnimationContoroler">
-      <UniqueIdentifier>{13897a7f-2df5-4955-bd33-69c793a8f180}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="component\Component">
-      <UniqueIdentifier>{c97cef2c-80ae-4f94-be2f-a777d2782128}</UniqueIdentifier>
     </Filter>
     <Filter Include="gameobject\Light">
       <UniqueIdentifier>{7f67ff35-50c5-4a0a-9602-3a607f746c67}</UniqueIdentifier>
@@ -136,9 +106,6 @@
     <Filter Include="GameEngine\Renderer\Utility">
       <UniqueIdentifier>{acde035f-92f1-46ed-bf66-94895c1673df}</UniqueIdentifier>
     </Filter>
-    <Filter Include="component\SoundComponent">
-      <UniqueIdentifier>{d7775d8d-6102-4467-86fa-04e7d80c7fa0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameEngine\SoundEngine">
       <UniqueIdentifier>{6af55bbf-5525-47f8-bec7-ae76818e9d77}</UniqueIdentifier>
     </Filter>
@@ -150,6 +117,45 @@
     </Filter>
     <Filter Include="Shader\PostEffect\FadeShader">
       <UniqueIdentifier>{5326b69f-218c-4a78-a184-921131cac080}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="component">
+      <UniqueIdentifier>{fa49727c-ae80-4c72-a2fc-8a3066404396}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="component\Camera">
+      <UniqueIdentifier>{cb75e590-abba-4ede-8978-6a6eef771ee8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="component\primitiveComponent">
+      <UniqueIdentifier>{de7b19b0-1a9a-4289-ac0e-20b0b7d80bb0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="component\ColliderComponent">
+      <UniqueIdentifier>{861bc099-2d31-40d5-be08-65d2a563171f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="component\LightComponent">
+      <UniqueIdentifier>{2c043215-ebc7-4b5c-8f73-d441a412c6fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="component\TransformComponent">
+      <UniqueIdentifier>{4679350b-514b-4e5b-a2d7-d3e16ee8d8d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="component\AnimationContoroler">
+      <UniqueIdentifier>{13897a7f-2df5-4955-bd33-69c793a8f180}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="component\Component">
+      <UniqueIdentifier>{c97cef2c-80ae-4f94-be2f-a777d2782128}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="component\SoundComponent">
+      <UniqueIdentifier>{d7775d8d-6102-4467-86fa-04e7d80c7fa0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\math">
+      <UniqueIdentifier>{570a1ca4-084a-4369-9239-05cbd5b0440b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gameobject\3D\Enemy">
+      <UniqueIdentifier>{beb5d1cf-70fe-4f9c-a6e4-1355be1e63ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gameobject\3D\Player">
+      <UniqueIdentifier>{8651e73c-45e9-46cb-a775-5c6561a03e46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gameobject\3D\Sky">
+      <UniqueIdentifier>{5cca2db8-f779-4585-a3e8-ed26443af99d}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -187,13 +193,13 @@
       <Filter>Assets</Filter>
     </ClInclude>
     <ClInclude Include="math.h">
-      <Filter>math</Filter>
+      <Filter>GameEngine\math</Filter>
     </ClInclude>
     <ClInclude Include="FbxConvertDX11.h">
-      <Filter>math</Filter>
+      <Filter>GameEngine\math</Filter>
     </ClInclude>
     <ClInclude Include="collision.h">
-      <Filter>math</Filter>
+      <Filter>GameEngine\math</Filter>
     </ClInclude>
     <ClInclude Include="CollisionManager.h">
       <Filter>GameEngine\Manager</Filter>
@@ -258,9 +264,6 @@
     <ClInclude Include="TitleManager.h">
       <Filter>gameobject\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="SkySphere.h">
-      <Filter>gameobject\3D</Filter>
-    </ClInclude>
     <ClInclude Include="TitleLogo.h">
       <Filter>gameobject\2D\Title</Filter>
     </ClInclude>
@@ -300,19 +303,10 @@
     <ClInclude Include="SkeletonAnimData.h">
       <Filter>misc</Filter>
     </ClInclude>
-    <ClInclude Include="SkyShader.h">
-      <Filter>misc</Filter>
-    </ClInclude>
     <ClInclude Include="SkinMeshComponent.h">
       <Filter>misc</Filter>
     </ClInclude>
     <ClInclude Include="SkinMeshDataList.h">
-      <Filter>misc</Filter>
-    </ClInclude>
-    <ClInclude Include="SkyMaterial.h">
-      <Filter>misc</Filter>
-    </ClInclude>
-    <ClInclude Include="sound.h">
       <Filter>misc</Filter>
     </ClInclude>
     <ClInclude Include="DirectionalLightComponent.h">
@@ -366,7 +360,7 @@
     <ClInclude Include="BGMPlayer.h">
       <Filter>gameobject\Sound</Filter>
     </ClInclude>
-    <ClInclude Include="MeshFieldComponent.h">
+    <ClInclude Include="TerrainComponent.h">
       <Filter>component\primitiveComponent</Filter>
     </ClInclude>
     <ClInclude Include="MeshFieldVertex.h">
@@ -383,6 +377,54 @@
     </ClInclude>
     <ClInclude Include="FadeShader.h">
       <Filter>Shader\PostEffect\FadeShader</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleCursor.h">
+      <Filter>gameobject\2D\Title</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialManager.h">
+      <Filter>gameobject\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialManagerComponent.h">
+      <Filter>component</Filter>
+    </ClInclude>
+    <ClInclude Include="StageSelectScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="StageSelectManagerComponent.h">
+      <Filter>component</Filter>
+    </ClInclude>
+    <ClInclude Include="StageSelectManager.h">
+      <Filter>gameobject\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage1Scene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage2Scene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage1Manager.h">
+      <Filter>gameobject\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage1ManagerComponent.h">
+      <Filter>component</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerComponent.h">
+      <Filter>component</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainColliderComponent.h">
+      <Filter>component\ColliderComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="RedEnemy.h">
+      <Filter>gameobject\3D\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="Player.h">
+      <Filter>gameobject\3D\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="SkySphere.h">
+      <Filter>gameobject\3D\Sky</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -417,13 +459,13 @@
       <Filter>Assets</Filter>
     </ClCompile>
     <ClCompile Include="math.cpp">
-      <Filter>math</Filter>
+      <Filter>GameEngine\math</Filter>
     </ClCompile>
     <ClCompile Include="FbxConvertDX11.cpp">
-      <Filter>math</Filter>
+      <Filter>GameEngine\math</Filter>
     </ClCompile>
     <ClCompile Include="collision.cpp">
-      <Filter>math</Filter>
+      <Filter>GameEngine\math</Filter>
     </ClCompile>
     <ClCompile Include="CollisionManager.cpp">
       <Filter>GameEngine\Manager</Filter>
@@ -491,9 +533,6 @@
     <ClCompile Include="TitleLogo.cpp">
       <Filter>gameobject\2D\Title</Filter>
     </ClCompile>
-    <ClCompile Include="SkySphere.cpp">
-      <Filter>gameobject\3D</Filter>
-    </ClCompile>
     <ClCompile Include="primitivecomponent.cpp">
       <Filter>component\primitiveComponent</Filter>
     </ClCompile>
@@ -527,19 +566,10 @@
     <ClCompile Include="SkeletonAnimData.cpp">
       <Filter>misc</Filter>
     </ClCompile>
-    <ClCompile Include="SkyShader.cpp">
-      <Filter>misc</Filter>
-    </ClCompile>
     <ClCompile Include="SkinMeshComponent.cpp">
       <Filter>misc</Filter>
     </ClCompile>
     <ClCompile Include="SkinMeshDataList.cpp">
-      <Filter>misc</Filter>
-    </ClCompile>
-    <ClCompile Include="SkyMaterial.cpp">
-      <Filter>misc</Filter>
-    </ClCompile>
-    <ClCompile Include="sound.cpp">
       <Filter>misc</Filter>
     </ClCompile>
     <ClCompile Include="DirectionalLightComponent.cpp">
@@ -596,7 +626,7 @@
     <ClCompile Include="MeshComponent.cpp">
       <Filter>component\primitiveComponent</Filter>
     </ClCompile>
-    <ClCompile Include="MeshFieldComponent.cpp">
+    <ClCompile Include="TerrainComponent.cpp">
       <Filter>component\primitiveComponent</Filter>
     </ClCompile>
     <ClCompile Include="MeshFieldVertex.cpp">
@@ -613,6 +643,54 @@
     </ClCompile>
     <ClCompile Include="FadeShader.cpp">
       <Filter>Shader\PostEffect\FadeShader</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleCursor.cpp">
+      <Filter>gameobject\2D\Title</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialManagerComponent.cpp">
+      <Filter>component</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialManager.cpp">
+      <Filter>gameobject\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="StageSelectScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="StageSelectManagerComponent.cpp">
+      <Filter>component</Filter>
+    </ClCompile>
+    <ClCompile Include="StageSelectManager.cpp">
+      <Filter>gameobject\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage1Scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage2Scene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage1Manager.cpp">
+      <Filter>gameobject\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage1ManagerComponent.cpp">
+      <Filter>component</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerComponent.cpp">
+      <Filter>component</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainColliderComponent.cpp">
+      <Filter>component\ColliderComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="RedEnemy.cpp">
+      <Filter>gameobject\3D\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="Player.cpp">
+      <Filter>gameobject\3D\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="SkySphere.cpp">
+      <Filter>gameobject\3D\Sky</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

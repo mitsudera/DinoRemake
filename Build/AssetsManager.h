@@ -97,7 +97,7 @@ public:
 	int GetRenderTextureIndex(string name);
 	RenderTexture* GetRenderTexture(int index);
 
-
+	void DeleteRenderTexture(int index);
 
 private:
 

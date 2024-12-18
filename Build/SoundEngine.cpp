@@ -1,6 +1,5 @@
 #include "SoundEngine.h"
 #include "GameEngine.h"
-#include "sound.cpp"
 
 SoundEngine::SoundEngine(GameEngine* gameEngine)
 {
@@ -53,15 +52,6 @@ SoundEngine::~SoundEngine()
 {
 
 
-	for (AudioData audioData : this->audioDataArray)
-	{
-		IXAudio2SourceVoice* sourceVoice = audioData.sorceVoice;
-		if (sourceVoice)
-		{
-			sourceVoice->Stop(0);
-			sourceVoice->DestroyVoice();
-		}
-	}
 	if (pMasteringVoice)
 	{ 
 		pMasteringVoice->DestroyVoice();
@@ -76,11 +66,10 @@ SoundEngine::~SoundEngine()
 
 }
 
-int SoundEngine::LoadSoundData(string filePath, SoundType type)
+AudioData SoundEngine::LoadSoundData(string filePath, SoundType type)
 {
-
 	HWND hWnd = pGameEngine->GetWindowHandle();
-    HRESULT hr;
+	HRESULT hr;
 	HANDLE hFile;
 	DWORD dwChunkSize = 0;
 	DWORD dwChunkPosition = 0;
@@ -98,12 +87,12 @@ int SoundEngine::LoadSoundData(string filePath, SoundType type)
 	if (hFile == INVALID_HANDLE_VALUE)
 	{
 		MessageBox(hWnd, "サウンドデータファイルの生成に失敗！(1)", "警告！", MB_ICONWARNING);
-		return false;
+		return audioData;
 	}
 	if (SetFilePointer(hFile, 0, NULL, FILE_BEGIN) == INVALID_SET_FILE_POINTER)
 	{// ファイルポインタを先頭に移動
 		MessageBox(hWnd, "サウンドデータファイルの生成に失敗！(2)", "警告！", MB_ICONWARNING);
-		return false;
+		return audioData;
 	}
 
 	// WAVEファイルのチェック
@@ -111,18 +100,18 @@ int SoundEngine::LoadSoundData(string filePath, SoundType type)
 	if (FAILED(hr))
 	{
 		MessageBox(hWnd, "WAVEファイルのチェックに失敗！(1)", "警告！", MB_ICONWARNING);
-		return false;
+		return audioData;
 	}
 	hr = ReadChunkData(hFile, &dwFiletype, sizeof(DWORD), dwChunkPosition);
 	if (FAILED(hr))
 	{
 		MessageBox(hWnd, "WAVEファイルのチェックに失敗！(2)", "警告！", MB_ICONWARNING);
-		return false;
+		return audioData;
 	}
 	if (dwFiletype != 'EVAW')
 	{
 		MessageBox(hWnd, "WAVEファイルのチェックに失敗！(3)", "警告！", MB_ICONWARNING);
-		return false;
+		return audioData;
 	}
 
 	// フォーマットチェック
@@ -130,13 +119,13 @@ int SoundEngine::LoadSoundData(string filePath, SoundType type)
 	if (FAILED(hr))
 	{
 		MessageBox(hWnd, "フォーマットチェックに失敗！(1)", "警告！", MB_ICONWARNING);
-		return false;
+		return audioData;
 	}
 	hr = ReadChunkData(hFile, &wfx, dwChunkSize, dwChunkPosition);
 	if (FAILED(hr))
 	{
 		MessageBox(hWnd, "フォーマットチェックに失敗！(2)", "警告！", MB_ICONWARNING);
-		return false;
+		return audioData;
 	}
 
 	// オーディオデータ読み込み
@@ -144,14 +133,14 @@ int SoundEngine::LoadSoundData(string filePath, SoundType type)
 	if (FAILED(hr))
 	{
 		MessageBox(hWnd, "オーディオデータ読み込みに失敗！(1)", "警告！", MB_ICONWARNING);
-		return false;
+		return audioData;
 	}
 	audioData.pDataAudio = (BYTE*)malloc(audioData.sizeAudio);
 	hr = ReadChunkData(hFile, audioData.pDataAudio, audioData.sizeAudio, dwChunkPosition);
 	if (FAILED(hr))
 	{
 		MessageBox(hWnd, "オーディオデータ読み込みに失敗！(2)", "警告！", MB_ICONWARNING);
-		return false;
+		return audioData;
 	}
 
 	// ソースボイスの生成
@@ -159,7 +148,7 @@ int SoundEngine::LoadSoundData(string filePath, SoundType type)
 	if (FAILED(hr))
 	{
 		MessageBox(hWnd, "ソースボイスの生成に失敗！", "警告！", MB_ICONWARNING);
-		return false;
+		return audioData;
 	}
 
 	// バッファの値設定
@@ -192,13 +181,135 @@ int SoundEngine::LoadSoundData(string filePath, SoundType type)
 	// オーディオバッファの登録
 	audioData.sorceVoice->SubmitSourceBuffer(&buffer);
 
-	audioDataArray.push_back(audioData);
 
-    // ファイルを閉じる
-    CloseHandle(hFile);
+	// ファイルを閉じる
+	CloseHandle(hFile);
 
-	return audioDataArray.size() - 1;
+	return audioData;
+
 }
+
+void SoundEngine::LoadSoundData(AudioData* pData, string filePath, SoundType type)
+{
+	HWND hWnd = pGameEngine->GetWindowHandle();
+	HRESULT hr;
+	HANDLE hFile;
+	DWORD dwChunkSize = 0;
+	DWORD dwChunkPosition = 0;
+	DWORD dwFiletype;
+	WAVEFORMATEXTENSIBLE wfx;
+	XAUDIO2_BUFFER buffer;
+
+	// バッファのクリア
+	memset(&wfx, 0, sizeof(WAVEFORMATEXTENSIBLE));
+	memset(&buffer, 0, sizeof(XAUDIO2_BUFFER));
+
+	// サウンドデータファイルの生成
+	hFile = CreateFile(filePath.c_str(), GENERIC_READ, FILE_SHARE_READ, NULL, OPEN_EXISTING, 0, NULL);
+	if (hFile == INVALID_HANDLE_VALUE)
+	{
+		MessageBox(hWnd, "サウンドデータファイルの生成に失敗！(1)", "警告！", MB_ICONWARNING);
+		return;
+	}
+	if (SetFilePointer(hFile, 0, NULL, FILE_BEGIN) == INVALID_SET_FILE_POINTER)
+	{// ファイルポインタを先頭に移動
+		MessageBox(hWnd, "サウンドデータファイルの生成に失敗！(2)", "警告！", MB_ICONWARNING);
+		return;
+	}
+
+	// WAVEファイルのチェック
+	hr = CheckChunk(hFile, 'FFIR', &dwChunkSize, &dwChunkPosition);
+	if (FAILED(hr))
+	{
+		MessageBox(hWnd, "WAVEファイルのチェックに失敗！(1)", "警告！", MB_ICONWARNING);
+		return;
+	}
+	hr = ReadChunkData(hFile, &dwFiletype, sizeof(DWORD), dwChunkPosition);
+	if (FAILED(hr))
+	{
+		MessageBox(hWnd, "WAVEファイルのチェックに失敗！(2)", "警告！", MB_ICONWARNING);
+		return;
+	}
+	if (dwFiletype != 'EVAW')
+	{
+		MessageBox(hWnd, "WAVEファイルのチェックに失敗！(3)", "警告！", MB_ICONWARNING);
+		return;
+	}
+
+	// フォーマットチェック
+	hr = CheckChunk(hFile, ' tmf', &dwChunkSize, &dwChunkPosition);
+	if (FAILED(hr))
+	{
+		MessageBox(hWnd, "フォーマットチェックに失敗！(1)", "警告！", MB_ICONWARNING);
+		return;
+	}
+	hr = ReadChunkData(hFile, &wfx, dwChunkSize, dwChunkPosition);
+	if (FAILED(hr))
+	{
+		MessageBox(hWnd, "フォーマットチェックに失敗！(2)", "警告！", MB_ICONWARNING);
+		return;
+	}
+
+	// オーディオデータ読み込み
+	hr = CheckChunk(hFile, 'atad', &pData->sizeAudio, &dwChunkPosition);
+	if (FAILED(hr))
+	{
+		MessageBox(hWnd, "オーディオデータ読み込みに失敗！(1)", "警告！", MB_ICONWARNING);
+		return;
+	}
+	pData->pDataAudio = (BYTE*)malloc(pData->sizeAudio);
+	hr = ReadChunkData(hFile, pData->pDataAudio, pData->sizeAudio, dwChunkPosition);
+	if (FAILED(hr))
+	{
+		MessageBox(hWnd, "オーディオデータ読み込みに失敗！(2)", "警告！", MB_ICONWARNING);
+		return;
+	}
+
+	// ソースボイスの生成
+	hr = this->pXAudio2->CreateSourceVoice(&pData->sorceVoice, &(wfx.Format));
+	if (FAILED(hr))
+	{
+		MessageBox(hWnd, "ソースボイスの生成に失敗！", "警告！", MB_ICONWARNING);
+		return;
+	}
+
+	// バッファの値設定
+	memset(&buffer, 0, sizeof(XAUDIO2_BUFFER));
+	buffer.AudioBytes = pData->sizeAudio;
+	buffer.pAudioData = pData->pDataAudio;
+	buffer.Flags = XAUDIO2_END_OF_STREAM;
+	buffer.LoopCount = 0;
+
+	switch (type)
+	{
+	case SoundType::BGM:
+		buffer.LoopCount = -1;
+
+		break;
+	case SoundType::SE:
+		buffer.LoopCount = 0;
+
+		break;
+	case SoundType::VOICE:
+		buffer.LoopCount = 0;
+
+		break;
+	default:
+		break;
+	}
+	
+	pData->type = type;
+
+	// オーディオバッファの登録
+	pData->sorceVoice->SubmitSourceBuffer(&buffer);
+
+
+	// ファイルを閉じる
+	CloseHandle(hFile);
+
+	return;
+}
+
 
 HRESULT SoundEngine::CheckChunk(HANDLE hFile, DWORD format, DWORD* pChunkSize, DWORD* pChunkDataPosition)
 {
@@ -281,18 +392,18 @@ HRESULT SoundEngine::ReadChunkData(HANDLE hFile, void* pBuffer, DWORD dwBuffersi
 
 	return S_OK;
 }
-void SoundEngine::StartSound(int index)
+void SoundEngine::StartSound(AudioData* audioData)
 {
 	XAUDIO2_VOICE_STATE xa2state;
 	XAUDIO2_BUFFER buffer;
 
 	// バッファの値設定
 	memset(&buffer, 0, sizeof(XAUDIO2_BUFFER));
-	buffer.AudioBytes = audioDataArray[index].sizeAudio;
-	buffer.pAudioData = audioDataArray[index].pDataAudio;
+	buffer.AudioBytes = audioData->sizeAudio;
+	buffer.pAudioData = audioData->pDataAudio;
 	buffer.Flags = XAUDIO2_END_OF_STREAM;
 	buffer.LoopCount = 0;
-	switch (audioDataArray[index].type)
+	switch (audioData->type)
 	{
 	case SoundType::BGM:
 		buffer.LoopCount = -1;
@@ -312,58 +423,46 @@ void SoundEngine::StartSound(int index)
 
 
 	// 状態取得
-	audioDataArray[index].sorceVoice->GetState(&xa2state);
+	audioData->sorceVoice->GetState(&xa2state);
 	if (xa2state.BuffersQueued != 0)
 	{// 再生中
 		// 一時停止
-		audioDataArray[index].sorceVoice->Stop(0);
+		audioData->sorceVoice->Stop(0);
 
 		// オーディオバッファの削除
-		audioDataArray[index].sorceVoice->FlushSourceBuffers();
+		audioData->sorceVoice->FlushSourceBuffers();
 	}
 
 	// オーディオバッファの登録
-	audioDataArray[index].sorceVoice->SubmitSourceBuffer(&buffer);
+	audioData->sorceVoice->SubmitSourceBuffer(&buffer);
 
 	// 再生
-	audioDataArray[index].sorceVoice->Start(0);
+	audioData->sorceVoice->Start(0);
 
 }
 
-void SoundEngine::StopSound(int index)
+void SoundEngine::StopSound(AudioData* audioData)
 {
 
 	XAUDIO2_VOICE_STATE xa2state;
 
 	// 状態取得
-	audioDataArray[index].sorceVoice->GetState(&xa2state);
+	audioData->sorceVoice->GetState(&xa2state);
 	if (xa2state.BuffersQueued != 0)
 	{// 再生中
 		// 一時停止
-		audioDataArray[index].sorceVoice->Stop(0);
+		audioData->sorceVoice->Stop(0);
 
 		// オーディオバッファの削除
-		audioDataArray[index].sorceVoice->FlushSourceBuffers();
+		audioData->sorceVoice->FlushSourceBuffers();
 	}
 
 }
 
 void SoundEngine::StopAllSound(void)
 {
-
-	// 一時停止
-	for (int i = 0; i < audioDataArray.size(); i++)
-	{
-
-
-		if (audioDataArray[i].sorceVoice)
-		{
-			audioDataArray[i].sorceVoice->Stop(0);
-
-		}
-		
-	}
 }
+
 
 
 

@@ -16,7 +16,7 @@ GameObject::GameObject()
 	this->transformComponent = new TransformComponent(this);
 	this->componentList.push_back(transformComponent);
 
-	tag = ObjectTag::TagNone;
+	tag = ObjectTag::Default;
 
 }
 
@@ -25,7 +25,7 @@ GameObject::GameObject(Scene* scene)
 {
 	this->parent = nullptr;
 	this->pScene = scene;
-	tag = ObjectTag::TagNone;
+	tag = ObjectTag::Default;
 
 	this->layer = Layer::Default;
 
@@ -50,13 +50,11 @@ GameObject::GameObject(GameObject* parent)
 
 GameObject::~GameObject()
 {
-	delete this->transformComponent;
 }
 
 void GameObject::Init(void)
 {
 	this->pGameEngine = pScene->GetGameEngine();
-	this->collider = nullptr;
 	this->isActive = TRUE;
 	this->transformComponent->Init();
 
@@ -67,12 +65,16 @@ void GameObject::Uninit(void)
 	for (int i = 0; i < this->componentList.size(); i++)
 	{
 		componentList[i]->Uninit();
+
+		delete componentList[i];
 	}
+	this->componentList.clear();
+
 	for (int i = 0; i < childList.size(); i++)
 	{
 		childList[i]->Uninit();
 	}
-
+	this->childList.clear();
 }
 
 void GameObject::Update(void)
@@ -197,17 +199,13 @@ TransformComponent* GameObject::GetTransFormComponent(void)
 	return this->transformComponent;
 }
 
-ColliderComponent* GameObject::GetCollider(void)
-{
-	return this->collider;
-}
 
-ObjectTag GameObject::GetTag(void)
+GameObject::ObjectTag GameObject::GetTag(void)
 {
 	return tag;
 }
 
-Layer GameObject::GetLayer(void)
+GameObject::Layer GameObject::GetLayer(void)
 {
 	return this->layer;
 }

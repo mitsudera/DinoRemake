@@ -13,7 +13,8 @@ struct ShadowCbuffer
 	XMMATRIX wvp;
 	int enable;
 	int mode;
-	int dummy[2];
+	float facter;
+	int dummy;
 };
 
 class ShadowMap
