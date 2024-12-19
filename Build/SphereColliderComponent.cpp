@@ -9,9 +9,9 @@ SphereColliderComponent::~SphereColliderComponent()
 {
 }
 
-void SphereColliderComponent::Init(void)
+void SphereColliderComponent::Awake(void)
 {
-	ColliderComponent::Init();
+	ColliderComponent::Awake();
 	this->shape = Shape::Sphere;
 	
 }

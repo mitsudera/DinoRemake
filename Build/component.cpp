@@ -17,19 +17,26 @@ Component::Component(GameObject* gameObject)
 
 Component::~Component()
 {
-	Uninit();
+}
+
+
+void Component::Awake(void)
+{
+	this->pGameEngine = pGameObject->GetScene()->GetGameEngine();
+	this->pGameObject->GetScene()->AddSceneComponent(this);
+	this->attribute = Attribute::Component;
+	this->input = pGameEngine->GetInput();
+	this->isActive = TRUE;
+	
 }
 
 void Component::Init(void)
 {
-	this->attribute = Attribute::Component;
-	this->pGameEngine = pGameObject->GetScene()->GetGameEngine();
-	this->input = pGameEngine->GetInput();
-	this->isActive = TRUE;
 }
 
 void Component::Uninit(void)
 {
+	this->pGameObject->GetScene()->RemoveSceneComponent(this);
 }
 
 void Component::Update(void)
@@ -87,4 +94,5 @@ TransformComponent* Component::GetTransFormComponent(void)
 {
 	return this->pGameObject->GetTransFormComponent();
 }
+
 

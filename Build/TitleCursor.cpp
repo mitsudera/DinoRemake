@@ -10,10 +10,10 @@ TitleCursor::~TitleCursor()
 {
 }
 
-void TitleCursor::Init(void)
+void TitleCursor::Awake(void)
 {
 
-	GameObject::Init();
+	GameObject::Awake();
 	this->layer = Layer::UI;
 
 	this->name = "cursor";

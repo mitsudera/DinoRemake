@@ -76,9 +76,9 @@ CameraComponent::~CameraComponent()
 	Uninit();
 }
 
-void CameraComponent::Init(void)
+void CameraComponent::Awake(void)
 {
-	Component::Init();
+	Component::Awake();
 
 	this->attribute = Attribute::Camera;
 
@@ -115,6 +115,11 @@ void CameraComponent::Init(void)
 	renderTexture = pGameEngine->GetAssetsManager()->GetRenderTexture(renderTextureIndex);
 	postEffectIndex = 0;
 
+}
+
+void CameraComponent::Init(void)
+{
+	Component::Init();
 }
 
 void CameraComponent::Update(void)
@@ -281,25 +286,66 @@ void CameraComponent::Render(void)
 
 
 
+	////シェーダー毎に描画
+	//for (int i = 0; i < ShaderSet::ShaderIndex::MAX; i++)
+	//{
+	//	pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->SetShader((ShaderSet::ShaderIndex)i);
+	////	描画処理
+	//	for (GameObject* gameObject : pGameObject->GetScene()->GetGameObject())
+	//	{
+	////		レイヤーのカリングチェック
+	//		if (layerCulling[(int)gameObject->GetLayer()]||gameObject->GetLayer()==GameObject::Layer::Text)
+	//			continue;
+
+	//		gameObject->Draw((ShaderSet::ShaderIndex)i);
+	//	}
+	//}
+
+
 	//シェーダー毎に描画
 	for (int i = 0; i < ShaderSet::ShaderIndex::MAX; i++)
 	{
-		pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->SetShader((ShaderSet::ShaderIndex)i);
-		//描画処理
-		for (GameObject* gameObject : pGameObject->GetScene()->GetGameObject())
+			pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->SetShader((ShaderSet::ShaderIndex)i);
+
+		for (PrimitiveComponent* com : pGameObject->GetScene()->GetAllPrimitiveComponent())
 		{
-			//レイヤーのカリングチェック
-			if (layerCulling[(int)gameObject->GetLayer()])
+			if (!com->GetActive())
 				continue;
 
-			gameObject->Draw((ShaderSet::ShaderIndex)i);
+			//レイヤーのカリングチェック
+			if (layerCulling[(int)com->GetGameObject()->GetLayer()] || com->GetGameObject()->GetLayer() == GameObject::Layer::Text)
+				continue;
+
+			//現在セットしてるシェーダーを使っている場合描画
+			if (pGameEngine->GetAssetsManager()->GetMaterial(com->GetMaterialIndex())->GetShaderSet()->GetShaderIndex() != i)
+				continue;
+
+
+			com->Draw();
+
+
 		}
 	}
-
 	pRenderer->GetDeviceContext()->OMSetRenderTargets(0, nullptr, nullptr);
+
 	if (postEffectEnable)
 	{
 		this->shaderArray[postEffectIndex]->PostEffectDraw(this->renderTexture->GetSRV(), this->renderTarget);
+
+	}
+	for (PrimitiveComponent* com : pGameObject->GetScene()->GetAllPrimitiveComponent())
+	{
+		if (!com->GetActive())
+			continue;
+
+		//レイヤーのカリングチェック
+		if (com->GetGameObject()->GetLayer() != GameObject::Layer::Text)
+			continue;
+
+
+
+		com->Draw();
+
 
 	}
 

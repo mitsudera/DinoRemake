@@ -7,6 +7,8 @@
 #include "Material.h"
 #include "AssetsManager.h"
 #include "renderer.h"
+#include "gameobject.h"
+#include "Scene.h"
 PrimitiveComponent::PrimitiveComponent()
 {
 	
@@ -23,14 +25,16 @@ PrimitiveComponent::~PrimitiveComponent()
 	
 }
 
-void PrimitiveComponent::Init(void)
+void PrimitiveComponent::Awake(void)
 {
-	Component::Init();
+	Component::Awake();
 	this->pRenderer = pGameEngine->GetRenderer();
 	this->pCBufferManager = pGameEngine->GetCBufferManager();
 	this->pAssetsManager = pGameEngine->GetAssetsManager();
-	attribute = Attribute::Primitive;
 
+	this->pGameObject->GetScene()->AddScenePrimitiveComponent(this);
+	attribute = Attribute::Primitive;
+	alphaTest = FALSE;
 	hasShadow = FALSE;
 	drawShadow = FALSE;
 }
@@ -43,6 +47,8 @@ void PrimitiveComponent::Update(void)
 void PrimitiveComponent::Uninit(void)
 {
 	Component::Uninit();
+	this->pGameObject->GetScene()->RemoveScenePrimitiveComponent(this);
+
 }
 
 

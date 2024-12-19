@@ -9,14 +9,12 @@ Camera::Camera(Scene* scene)
 {
 	this->pScene = scene;
 	this->parent = nullptr;
-	cameraComponent = nullptr;
 }
 
 Camera::Camera(GameObject* gameObject)
 {
 	this->parent = gameObject;
 	this->pScene = gameObject->GetScene();
-	cameraComponent = nullptr;
 
 }
 
@@ -24,22 +22,16 @@ Camera::~Camera()
 {
 }
 
-void Camera::Init(void)
+void Camera::Awake(void)
 {
-	GameObject::Init();
+	GameObject::Awake();
 	this->name = "Camera";
-	cameraComponent = new CameraComponent(this);
-	cameraComponent->Init();
+	CameraComponent* cameraComponent = AddComponent<CameraComponent>();
 
 	cameraComponent->SetRenderTarget(pScene->GetGameEngine()->GetRenderer()->GetBackBuffer());
 	cameraComponent->SetDepthStencilView(pScene->GetGameEngine()->GetRenderer()->GetBackBufferDSV());
 
-	this->componentList.push_back(cameraComponent);
 
 
 }
 
-CameraComponent* Camera::GetCameraComponent(void)
-{
-	return this->cameraComponent;
-}

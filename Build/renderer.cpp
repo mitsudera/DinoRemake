@@ -229,6 +229,7 @@ void Renderer::SetRenderTargetBackBuffer(void)
 
 
 
+
 //=============================================================================
 // 初期化処理
 //=============================================================================
@@ -453,6 +454,9 @@ HRESULT Renderer::InitRenderer(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 
 	this->fullScreenVertex = new FullScreenQuadVertex(this);
 
+
+
+
 	return S_OK;
 }
 
@@ -462,6 +466,8 @@ HRESULT Renderer::InitRenderer(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 //=============================================================================
 void Renderer::UninitRenderer(void)
 {
+	delete fullScreenVertex;
+
 	// オブジェクト解放
 	if (DepthStateEnable)		DepthStateEnable->Release();
 	if (DepthStateDisable)	DepthStateDisable->Release();
@@ -479,14 +485,15 @@ void Renderer::UninitRenderer(void)
 	if (m_ImmediateContext)		m_ImmediateContext->ClearState();
 	if (RenderTargetViewBackBuffer)		RenderTargetViewBackBuffer->Release();
 	if (DepthStencilViewBackBuffer)		DepthStencilViewBackBuffer->Release();
-	if (SwapChain)				SwapChain->Release();
 	if (m_ImmediateContext)		m_ImmediateContext->Release();
 	if (m_D3DDevice)			m_D3DDevice->Release();
 	if (depthTexture)			depthTexture->Release();
 	if (samplerWrap)			samplerWrap->Release();
 	if (samplerBorder)			samplerBorder->Release();
 
-	delete fullScreenVertex;
+	if (SwapChain)				SwapChain->Release();
+
+
 }
 
 
@@ -577,3 +584,93 @@ IDXGISwapChain* Renderer::GetSwapChain(void)
 	return SwapChain;
 }
 
+void Renderer::DrawStringText(string text, float fontSize, XMFLOAT4 color, XMFLOAT2 pos, XMFLOAT2 size, string font, TEXT_ANCHOR textAnchor)
+{
+	HRESULT hr;
+
+	//バックバッファからサーフェスを取得する
+	IDXGISurface1* pBackSurface = NULL;
+	hr = SwapChain->GetBuffer(0, __uuidof(IDXGISurface1), (void**)&pBackSurface);
+
+
+
+	if (SUCCEEDED(hr))
+	{
+		//取得したサーフェスからデバイスコンテキストを取得する
+		HDC hdc;
+		hr = pBackSurface->GetDC(FALSE, &hdc);
+
+		if (SUCCEEDED(hr))
+		{
+			//文字色を変更
+			SetTextColor(hdc, RGB(color.x * 255, color.y * 255, color.z * 255));
+
+			//背景を透明に変更
+			SetBkMode(hdc, TRANSPARENT);
+
+
+
+			RECT rect;
+			rect.left = (LONG)(pos.x);
+			rect.top = (LONG)(pos.y);
+			rect.right = (LONG)(pos.x + size.x );
+			rect.bottom = (LONG)(pos.y + size.y );
+
+
+
+
+			int rectDT = DT_SINGLELINE;	//縦のRECTも有効化する
+
+			switch (textAnchor % 3)
+			{	//横のRECT
+			case 0:
+				rectDT |= DT_LEFT;
+				break;
+			case 1:
+				rectDT |= DT_CENTER;
+				break;
+			case 2:
+				rectDT |= DT_RIGHT;
+				break;
+			default:
+				break;
+			}
+
+			switch (textAnchor / 3)
+			{	//縦のRECT
+			case 0:
+				rectDT |= DT_TOP;
+				break;
+			case 1:
+				rectDT |= DT_VCENTER;
+				break;
+			case 2:
+				rectDT |= DT_BOTTOM;
+				break;
+			default:
+				break;
+			}
+
+
+			LPCSTR lpcwstrFontName = font.c_str();
+			//Font作成 Showcard Gothic
+			HFONT font = CreateFont((int)fontSize, 0, 0, 0, FW_DONTCARE, FALSE, FALSE, FALSE, SHIFTJIS_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, FF_DONTCARE, "Showcard Gothic");//フォントの指定　引数にできる
+			HGDIOBJ hgdi = SelectObject(hdc, font);
+
+			//テキスト出力
+			DrawText(hdc, const_cast<char*>(text.c_str()), text.length(), &rect, rectDT);
+
+			SelectObject(hdc, hgdi); //フォントを元に戻す
+			DeleteObject(font);	//オブジェクト削除
+
+		//デバイスコンテキストを解放する
+			pBackSurface->ReleaseDC(NULL);
+
+		}
+		//サーフェスを解放する
+		pBackSurface->Release();
+
+		//レンダリングターゲットがリセットされるのでセットしなおす
+		m_ImmediateContext->OMSetRenderTargets(1, &RenderTargetViewBackBuffer, DepthStencilViewBackBuffer);
+	}
+}

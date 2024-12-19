@@ -15,6 +15,8 @@
 #include "GausianBlurShader.h"
 #include "LambartMaterial.h"
 #include "FadeShader.h"
+#include "UIMaterial.h"
+#include "TerrainShader.h"
 
 #define MESH_PATH "data/MODEL/mesh/"
 #define SKINMESH_PATH "data/MODEL/skinmesh/"
@@ -41,12 +43,12 @@ AssetsManager::~AssetsManager()
 
 }
 
-void AssetsManager::Init(void)
+void AssetsManager::Awake(void)
 {
 	//pGameEngine->GetRenderer()->CreateCSFile("shaders/CSskinmesh.hlsl", "CSFunc", &skinMeshCompute);
 	
 	CreateAllShader();
-
+	CreateDefaultMaterial();
 }
 
 void AssetsManager::Uninit(void)
@@ -382,6 +384,10 @@ void AssetsManager::CreateAllShader(void)
 	shadowShader = new ShadowShader(this->pGameEngine->GetRenderer());
 	ShaderSetArray.push_back(shadowShader);
 
+	terrainShader = new TerrainShader(this->pGameEngine->GetRenderer());
+	ShaderSetArray.push_back(terrainShader);
+
+
 	//posteffect
 	gausianBlur = new GausianBlurShader(this->pGameEngine->GetRenderer());
 	PostEffectShaderArray.push_back(gausianBlur);
@@ -390,6 +396,13 @@ void AssetsManager::CreateAllShader(void)
 	PostEffectShaderArray.push_back(fadeShader);
 
 
+}
+
+void AssetsManager::CreateDefaultMaterial(void)
+{
+	UIMaterial* uiMat = new UIMaterial(this);
+	uiMat->SetName("UIMaterial");
+	MaterialArray.push_back(uiMat);
 }
 
 LambartShader* AssetsManager::GetLambartShader(void)
@@ -411,6 +424,11 @@ UIShader* AssetsManager::GetUIShader(void)
 ShadowShader* AssetsManager::GetShadowShader(void)
 {
 	return this->shadowShader;
+}
+
+TerrainShader* AssetsManager::GetTerrainShader(void)
+{
+	return this->terrainShader;
 }
 
 GausianBlurShader* AssetsManager::GetGausianBlurShader(void)
@@ -455,6 +473,18 @@ Material* AssetsManager::GetMaterial(int index)
 	return MaterialArray[index];
 }
 
+int AssetsManager::GetMaterialIndex(string name)
+{
+	for (int i = 0; i < MaterialArray.size(); i++)
+	{
+		if (MaterialArray[i]->GetName()==name)
+		{
+			return i;
+		}
+	}
+	return 0;
+}
+
 int AssetsManager::CreateRenderTexture(int widht, int height, string name)
 {
 	RenderTexture* rtex = new RenderTexture(this);
@@ -483,6 +513,11 @@ int AssetsManager::GetRenderTextureIndex(string name)
 RenderTexture* AssetsManager::GetRenderTexture(int index)
 {
 	return this->RenderTextureArray[index];
+}
+
+ShaderSet* AssetsManager::GetShader(ShaderSet::ShaderIndex index)
+{
+	return ShaderSetArray[index];
 }
 
 void AssetsManager::DeleteRenderTexture(int index)

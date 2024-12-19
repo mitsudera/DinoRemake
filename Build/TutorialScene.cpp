@@ -21,49 +21,35 @@ TutorialScene::~TutorialScene()
 {
 }
 
-void TutorialScene::Init()
+void TutorialScene::Awake()
 {
 
-	Scene::Init();
+	Scene::Awake();
 
-	GameObject* tutorialBG = new GameObject(this);
-	tutorialBG->Init();
+
+	GameObject* tutorialBG = CreateGameObject<GameObject>("tutorialBG");
 	SpriteComponent* bg= tutorialBG->AddComponent<SpriteComponent>();
 	bg->SetFullScreen("data/TEXTURE/tutorial/tutorial.png");
-	tutorialBG->SetName("tutorialBG");
-	this->gameObjectArray.push_back(tutorialBG);
 
 
-	GameObject* sousa = new GameObject(this);
-	sousa->Init();
+	GameObject* sousa = CreateGameObject<GameObject>("sousa");
 	SpriteComponent* sousasp= sousa->AddComponent<SpriteComponent>();
 	sousasp->SetSpriteCenter("data/TEXTURE/tutorial/sousa.png", XMFLOAT3(0.0f, 0.0f, 0.0f), pGameEngine->GetWindowSize().x * 0.8f, pGameEngine->GetWindowSize().y * 0.8f);
 	sousasp->SetAlphaTest(TRUE);
-	sousa->SetName("sousa");
-	this->gameObjectArray.push_back(sousa);
 
 
-	GameObject* trigger = new GameObject(this);
-	trigger->Init();
+	GameObject* trigger = CreateGameObject<GameObject>("trigger");
 	SpriteComponent* triggersp= trigger->AddComponent<SpriteComponent>();
 	triggersp->SetSpriteLeftDown("data/TEXTURE/tutorial/trigger.png", XMFLOAT3(0.0f, 0.0f, 0.0f), pGameEngine->GetWindowSize().x, TEXTURE_TRIGGER_HEIGHT);
 	triggersp->SetAlphaTest(TRUE);
-	trigger->SetName("trigger");
-	this->gameObjectArray.push_back(trigger);
 
 
+	CreateGameObject<Camera>();
 
+	CreateGameObject<BGMPlayer>();
 
-	Camera* tutorialCamera = new Camera(this);
-	this->gameObjectArray.push_back(tutorialCamera);
-
-	BGMPlayer* bgmPlayer = new BGMPlayer(this);
-	this->gameObjectArray.push_back(bgmPlayer);
+	CreateGameObject<TutorialManager>();
 	
-	//他のオブジェクトを取得する可能性があるオブジェクトは後から
-	TutorialManager* tutorialManager = new TutorialManager(this);
-	this->gameObjectArray.push_back(tutorialManager);
 
-	Scene::InitAllObject();
 
 }

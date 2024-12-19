@@ -5,7 +5,7 @@ class TutorialManager :public GameObject
 public:
 	TutorialManager(Scene* scene);
 	~TutorialManager();
-	virtual void Init(void) override;
+	virtual void Awake(void) override;
 
 };
 

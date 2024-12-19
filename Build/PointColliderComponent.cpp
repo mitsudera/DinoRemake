@@ -9,9 +9,9 @@ PointColliderComponent::~PointColliderComponent()
 {
 }
 
-void PointColliderComponent::Init(void)
+void PointColliderComponent::Awake(void)
 {
-	ColliderComponent::Init();
+	ColliderComponent::Awake();
 	this->shape = Shape::Point;
 }
 

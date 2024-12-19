@@ -88,7 +88,7 @@ int Main::Run(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int
 
 
 	// DirectXの初期化(ウィンドウを作成してから行う)
-	Init();
+	Awake();
 	//if (FAILED(Init(hInstance, hWnd, mode)))
 	//{
 	//	return -1;
@@ -167,7 +167,7 @@ void Main::Exit(void)
 
 
 
-void Main::Init(void)
+void Main::Awake(void)
 {
 	//マウス位置の初期化
 	GetCursorPos(&this->mousePos);
@@ -175,7 +175,7 @@ void Main::Init(void)
 	srand((unsigned)time(NULL));
 	pGameEngine = new GameEngine(this);
 
-	pGameEngine->Init();
+	pGameEngine->Awake();
 	
 
 }

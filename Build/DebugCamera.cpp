@@ -24,19 +24,13 @@ DebugCamera::~DebugCamera()
 {
 }
 
-void DebugCamera::Init(void)
+void DebugCamera::Awake(void)
 {
-	GameObject::Init();
+	GameObject::Awake();
 	this->name = "DebugCamera";
-	cameraComponent = new CameraComponent(this);
-	cameraComponent->Init();
-
-	cameraComponent->SetRenderTarget(pScene->GetGameEngine()->GetRenderer()->GetBackBuffer());
-	cameraComponent->SetDepthStencilView(pScene->GetGameEngine()->GetRenderer()->GetBackBufferDSV());
-	cameraComponent->SetSky(pScene->GetGameObjectName("SkySphere"));
-
-
-	this->componentList.push_back(cameraComponent);
+	CameraComponent* cameraComponent= AddComponent<CameraComponent>();
+	cameraComponent->SetRenderTarget(pGameEngine->GetRenderer()->GetBackBuffer());
+	cameraComponent->SetDepthStencilView(pGameEngine->GetRenderer()->GetBackBufferDSV());
 
 	this->AddComponent<CameraControllerComponent>(); 
 

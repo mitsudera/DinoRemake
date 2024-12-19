@@ -67,7 +67,7 @@ public:
     LightManager(GameEngine* pGameEngine);
     ~LightManager();
 
-    void Init();
+    void Awake();
 	void Update();
 
     void SetLightNear(XMFLOAT3 pos);//指定のポジションに近いライトをオンにする

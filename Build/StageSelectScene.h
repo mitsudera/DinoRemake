@@ -7,7 +7,7 @@ public:
 	StageSelectScene(GameEngine* pGameEngine);
 	~StageSelectScene();
 
-	virtual void Init() override;
+	virtual void Awake() override;
 
 
 };

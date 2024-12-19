@@ -11,9 +11,9 @@ GameManager::~GameManager()
 {
 }
 
-void GameManager::Init(void)
+void GameManager::Awake(void)
 {
-	GameObject::Init();
+	GameObject::Awake();
 	this->name = "GameManager";
 	GameManagerComponent* gameManagerComponent = AddComponent<GameManagerComponent>();
 

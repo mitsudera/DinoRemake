@@ -56,7 +56,7 @@ public:
 
 	Input();
 	~Input();
-	HRESULT Init(HINSTANCE hInst, HWND hWnd);
+	HRESULT Awake(HINSTANCE hInst, HWND hWnd);
 	void Uninit(void);
 	void Update(void);
 

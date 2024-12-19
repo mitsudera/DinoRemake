@@ -13,9 +13,9 @@ DirectionalLightComponent::~DirectionalLightComponent()
 {
 }
 
-void DirectionalLightComponent::Init(void)
+void DirectionalLightComponent::Awake(void)
 {
-	Component::Init();
+	Component::Awake();
 	index = pGameEngine->GetLightmanager()->AddLight(this);
 }
 

@@ -12,6 +12,7 @@
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
 
+
 #define DIRECTINPUT_VERSION 0x0800		// 警告対処
 #include "dinput.h"
 #include "mmsystem.h"
@@ -32,9 +33,12 @@
 #include <windows.h>
 #include <stdexcept>
 #include <filesystem>
-
+#include <cwchar>
+#include <list>
 //FBXSDKライブラリ
 #include <fbxsdk.h>
+
+
 
 #pragma warning(pop)
 //*****************************************************************************
@@ -52,7 +56,6 @@
 #pragma comment (lib,"libfbxsdk-mt.lib")
 #pragma comment (lib,"libxml2-mt.lib")
 #pragma comment (lib,"zlib-mt.lib")
-
 
 
 // 本来はヘッダに書かない方が良い

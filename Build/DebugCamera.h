@@ -11,11 +11,10 @@ public:
 	DebugCamera(GameObject* gameObject);
 	~DebugCamera();
 
-	virtual void Init(void) override;
+	virtual void Awake(void) override;
 
 
 private:
-	CameraComponent* cameraComponent;
 
 };
 

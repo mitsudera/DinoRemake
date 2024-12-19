@@ -19,11 +19,12 @@ class ShaderSet
 {
 public:
 		
-	typedef enum
+	typedef enum 
 	{
 		Lambart,
 		Phong,
 		UI,
+		Terrain,
 		Shadow,
 		MAX,
 

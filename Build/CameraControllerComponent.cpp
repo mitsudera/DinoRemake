@@ -14,10 +14,15 @@ CameraControllerComponent::~CameraControllerComponent()
 {
 }
 
+void CameraControllerComponent::Awake(void)
+{
+	Component::Awake();
+}
+
 void CameraControllerComponent::Init(void)
 {
 	Component::Init();
-	this->camara = pGameObject;
+
 }
 
 void CameraControllerComponent::Uninit(void)
@@ -30,32 +35,32 @@ void CameraControllerComponent::Update(void)
 	Component::Update();
 	if (input->GetKeyboardPress(DIK_W))
 	{
-		this->camara->GetTransFormComponent()->MoveZAxis(1.0f);
+		GetTransFormComponent()->MoveZAxis(1.0f);
 
 	}
 	if (input->GetKeyboardPress(DIK_S))
 	{
-		this->camara->GetTransFormComponent()->MoveZAxis(-1.0f);
+		GetTransFormComponent()->MoveZAxis(-1.0f);
 
 	}
 	if (input->GetKeyboardPress(DIK_D))
 	{
-		this->camara->GetTransFormComponent()->MoveXAxis(1.0f);
+		GetTransFormComponent()->MoveXAxis(1.0f);
 
 	}
 	if (input->GetKeyboardPress(DIK_A))
 	{
-		this->camara->GetTransFormComponent()->MoveXAxis(-1.0f);
+		GetTransFormComponent()->MoveXAxis(-1.0f);
 
 	}
 	if (input->GetKeyboardPress(DIK_E))
 	{
-		this->camara->GetTransFormComponent()->MoveYAxis(1.0f);
+		GetTransFormComponent()->MoveYAxis(1.0f);
 
 	}
 	if (input->GetKeyboardPress(DIK_Q))
 	{
-		this->camara->GetTransFormComponent()->MoveYAxis(-1.0f);
+		GetTransFormComponent()->MoveYAxis(-1.0f);
 
 	}
 	if (input->IsMouseRightPressed())
@@ -69,8 +74,8 @@ void CameraControllerComponent::Update(void)
 		x *= 0.001f;
 		y *= 0.001f;
 
-		this->camara->GetTransFormComponent()->RotWorldYaw(x);
-		this->camara->GetTransFormComponent()->RotPitch(y);
+		GetTransFormComponent()->RotWorldYaw(x);
+		GetTransFormComponent()->RotPitch(y);
 
 	}
 

@@ -23,7 +23,7 @@ GameEngine::~GameEngine()
 {
 }
 
-void GameEngine::Init()
+void GameEngine::Awake()
 {
 	
 	this->windowSize.x = screenWidth;
@@ -42,16 +42,16 @@ void GameEngine::Init()
 
 
 	this->lightManager = new LightManager(this);
-	lightManager->Init();
+	lightManager->Awake();
 
 
 	this->assetsManager = new AssetsManager(this);
-	this->assetsManager->Init();
+	this->assetsManager->Awake();
 
 
 
 	this->input = new Input();
-	this->input->Init(*main->GetInstanceHandle(), main->GetWindowHangle());
+	this->input->Awake(*main->GetInstanceHandle(), main->GetWindowHangle());
 
 	this->shadowMap = new ShadowMap(this);
 	this->shadowMap->CreateShadowMap(ShadowMap::ShadowQuality::High);
@@ -59,6 +59,7 @@ void GameEngine::Init()
 
 	this->sceneManager = new SceneManager(this);
 	this->sceneManager->SetDefaultScene();
+
 
 	SetFullScreen(FALSE);
 
@@ -106,18 +107,27 @@ void GameEngine::Uninit()
 	this->activeScene->Uninit();
 
 	this->input->Uninit();
-	this->assetsManager->Uninit();
-	this->renderer->UninitRenderer();
-
 	delete input;
+
+	this->assetsManager->Uninit();
 	delete assetsManager;
-	delete renderer;
+
+
+	delete lightManager;
+
+
+	delete cBufferManager;
+
+	delete shadowMap;
+
+
 	delete sceneManager;
 	delete soundEngine;
-	delete cBufferManager;
-	delete lightManager;
-	delete shadowMap;
 	delete collisionManager;
+
+	this->renderer->UninitRenderer();
+	delete renderer;
+
 }
 
 long GameEngine::GetMouseMoveX(void)
@@ -246,8 +256,8 @@ void GameEngine::SwichScene(void)
 {
 	if (this->activeScene) this->activeScene->Uninit();
 	this->activeScene = nextScene;
+	activeScene->Awake();
 	activeScene->Init();
-
 }
 
 

@@ -6,7 +6,7 @@ class TerrainComponent :public PrimitiveComponent
 public:
 	TerrainComponent(GameObject* gameObject);
 	~TerrainComponent();
-	virtual void Init(void) override;
+	virtual void Awake(void) override;
 	virtual void Update(void) override;
 	virtual void Uninit(void) override;
 

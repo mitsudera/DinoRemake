@@ -10,9 +10,9 @@ TitleBG::~TitleBG()
 {
 }
 
-void TitleBG::Init(void)
+void TitleBG::Awake(void)
 {
-	GameObject::Init();
+	GameObject::Awake();
 	this->layer = Layer::UI;
 
 	this->name = "TitleBG";

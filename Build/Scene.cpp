@@ -20,33 +20,62 @@ Scene::~Scene()
 
 }
 
-void Scene::Init()
+void Scene::Awake()
 {
 	sceneTime = 0.0f;
 
 
 }
 
+void Scene::Init(void)
+{
+	for (GameObject* gameObject : GetGameObject())
+	{
+		gameObject->Init();
+
+	}
+
+}
+
 void Scene::Update()
 {
 
-	for (GameObject* gameObject : GetGameObject())
+
+	for (Component* com :allComponent)
 	{
-		if (!gameObject->GetActive())
+		if (!com->GetActive())
 			continue;
-		gameObject->Update();
+
+		com->Update();
 
 	}
 
-
-	for (GameObject* gameObject : GetGameObject())
+	for (TransformComponent* com :allTransformComponent)
 	{
-		if (!gameObject->GetActive())
+		if (!com->GetActive())
 			continue;
 
-		gameObject->UpdateMatrix();
+		com->UpdateMatrix();
 
 	}
+
+	//for (GameObject* gameObject : GetGameObject())
+	//{
+	//	if (!gameObject->GetActive())
+	//		continue;
+	//	gameObject->Update();
+
+	//}
+
+
+	//for (GameObject* gameObject : GetGameObject())
+	//{
+	//	if (!gameObject->GetActive())
+	//		continue;
+
+	//	gameObject->UpdateMatrix();
+
+	//}
 
 
 	sceneTime += pGameEngine->GetDeltaTime();
@@ -76,16 +105,6 @@ void Scene::Uninit()
 
 }
 
-void Scene::InitAllObject(void)
-{
-
-	for (GameObject* gameObject : GetGameObject())
-	{
-		gameObject->Init();
-
-	}
-
-}
 
 GameEngine* Scene::GetGameEngine(void)
 {
@@ -120,4 +139,49 @@ void Scene::AddCamera(CameraComponent* camera)
 float Scene::GetSceneTime(void)
 {
 	return sceneTime;
+}
+
+list<Component*>& Scene::GetAllComponent(void)
+{
+	return allComponent;
+}
+
+list<TransformComponent*>& Scene::GetAllTransformComponent(void)
+{
+	return allTransformComponent;
+}
+
+list<PrimitiveComponent*>& Scene::GetAllPrimitiveComponent(void)
+{
+	return allPrimitiveComponent;
+}
+
+void Scene::AddSceneComponent(Component* com)
+{
+	this->allComponent.push_back(com);
+}
+
+void Scene::AddSceneTransformComponent(TransformComponent* com)
+{
+	this->allTransformComponent.push_back(com);
+}
+
+void Scene::AddScenePrimitiveComponent(PrimitiveComponent* com)
+{
+	this->allPrimitiveComponent.push_back(com);
+}
+
+void Scene::RemoveSceneComponent(Component* com)
+{
+	allComponent.remove(com);
+}
+
+void Scene::RemoveSceneTransformComponent(TransformComponent* com)
+{
+	allTransformComponent.remove(com);
+}
+
+void Scene::RemoveScenePrimitiveComponent(PrimitiveComponent* com)
+{
+	allPrimitiveComponent.remove(com);
 }

@@ -7,7 +7,7 @@ public:
 	TitleScene(GameEngine* pGameEngine);
 	~TitleScene();
 
-	virtual void Init() override;
+	virtual void Awake() override;
 
 
 };

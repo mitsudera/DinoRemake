@@ -6,7 +6,7 @@ public:
 	TerrainColliderComponent(GameObject* gameObject);
 	~TerrainColliderComponent();
 
-	virtual void Init(void) override;
+	virtual void Awake(void) override;
 	virtual void Uninit(void) override;
 	virtual void Update(void) override;
 

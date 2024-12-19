@@ -15,9 +15,16 @@ PlayerComponent::~PlayerComponent()
 {
 }
 
+void PlayerComponent::Awake(void)
+{
+	Component::Awake();
+}
+
 void PlayerComponent::Init(void)
 {
 	Component::Init();
+	control = TRUE;
+	PlayerOffset = 2.0f;
 }
 
 void PlayerComponent::Uninit(void)

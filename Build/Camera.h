@@ -10,12 +10,10 @@ public:
 	Camera(GameObject* gameObject);
 	~Camera();
 
-	virtual void Init(void) override;
+	virtual void Awake(void) override;
 
-	CameraComponent* GetCameraComponent(void);
 
 private:
-	CameraComponent* cameraComponent;
 
 };
 

@@ -19,40 +19,26 @@ StageSelectScene::~StageSelectScene()
 {
 }
 
-void StageSelectScene::Init()
+void StageSelectScene::Awake()
 {
-	Scene::Init();
+	Scene::Awake();
 
-	GameObject* BG = new GameObject(this);
-	BG->Init();
+	GameObject* BG = CreateGameObject<GameObject>("BG");
 	SpriteComponent* bg = BG->AddComponent<SpriteComponent>();
 	bg->SetFullScreen("data/TEXTURE/stageselect/stageselect.jpg");
-	BG->SetName("BG");
-	this->gameObjectArray.push_back(BG);
 
-	GameObject* cursor = new GameObject(this);
-	cursor->Init();
+	GameObject* cursor = CreateGameObject<GameObject>("cursor");
 	SpriteComponent* cursorSprite = cursor->AddComponent<SpriteComponent>();
 	cursorSprite->SetAlphaTest(TRUE);
 	cursorSprite->SetTexSlice(XMINT2(7, 1));
 	cursorSprite->SetSliceTexIndex(0);
 
-	cursor->SetName("cursor");
-	this->gameObjectArray.push_back(cursor);
 
-	
+	CreateGameObject<Camera>();
 
+	CreateGameObject<BGMPlayer>();
 
-	Camera* tutorialCamera = new Camera(this);
-	this->gameObjectArray.push_back(tutorialCamera);
+	CreateGameObject<StageSelectManager>();
 
-	BGMPlayer* bgmPlayer = new BGMPlayer(this);
-	this->gameObjectArray.push_back(bgmPlayer);
-
-	//他のオブジェクトを取得する可能性があるオブジェクトは後から
-	StageSelectManager* stageSelectManager = new StageSelectManager(this);
-	this->gameObjectArray.push_back(stageSelectManager);
-
-	Scene::InitAllObject();
 
 }

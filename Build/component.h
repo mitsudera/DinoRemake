@@ -1,10 +1,9 @@
 #pragma once
 #include "Coreminimal.h"
-
 class GameEngine;
-class GameObject;
 class TransformComponent;
 class Input;
+class GameObject;
 
 class Component
 {
@@ -25,7 +24,8 @@ public:
 	Component(GameObject* gameObject);
 	~Component();
 
-	virtual void Init(void);
+	virtual void Awake(void);//オブジェクトの生成時
+	virtual void Init(void);//シーンが始まった時と動的に生成された時他オブジェクトやコンポーネント等を参照する場合はここで入れる
 	virtual void Uninit(void);
 	virtual void Update(void);
 	virtual void Draw(void);
@@ -45,6 +45,7 @@ public:
 	XMFLOAT3 GetWorldPos(void);
 
 	TransformComponent* GetTransFormComponent(void);
+
 
 protected:
 	GameObject* pGameObject;

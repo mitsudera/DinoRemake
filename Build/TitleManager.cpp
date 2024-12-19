@@ -10,13 +10,11 @@ TitleManager::~TitleManager()
 {
 }
 
-void TitleManager::Init(void)
+void TitleManager::Awake(void)
 {
-	GameObject::Init();
+	GameObject::Awake();
 	this->name = "TitleManager";
-	TitleManagerComponent* titleManager = new TitleManagerComponent(this);
-	titleManager->Init();
-	this->componentList.push_back(titleManager);
+	TitleManagerComponent* titleManager = AddComponent<TitleManagerComponent>();
 
 
 }

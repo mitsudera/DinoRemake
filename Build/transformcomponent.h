@@ -13,7 +13,9 @@ public:
 	TransformComponent(GameObject* gameObject);
 	~TransformComponent();
 
-	virtual void Init(void) override;
+	virtual void Awake(void) override;
+
+	//virtual void Init(void) override;
 
 	virtual void Uninit(void) override;
 
@@ -121,6 +123,10 @@ protected:
 	XMMATRIX		lMtx;
 
 	BOOL			isMtxUpdate;
+
+	XMMATRIX		initPosMtx;
+	XMMATRIX		initRotMtx;
+	XMMATRIX		initSclMtx;
 
 };
 

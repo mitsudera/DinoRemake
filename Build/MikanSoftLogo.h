@@ -7,7 +7,7 @@ class MikanSoftLogo:public GameObject
 public:
 	MikanSoftLogo(Scene* scene);
 	~MikanSoftLogo();
-	virtual void Init(void) override;
+	virtual void Awake(void) override;
 
 
 

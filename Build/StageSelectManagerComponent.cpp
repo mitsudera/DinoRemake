@@ -32,6 +32,13 @@ StageSelectManagerComponent::~StageSelectManagerComponent()
 {
 }
 
+void StageSelectManagerComponent::Awake(void)
+{
+	Component::Awake();
+
+
+}
+
 void StageSelectManagerComponent::Init(void)
 {
 	Component::Init();
@@ -39,7 +46,7 @@ void StageSelectManagerComponent::Init(void)
 	cursor = pGameObject->GetScene()->GetGameObjectName("cursor");
 	select = Select::Stage1;
 	cursorIndex = 0;
-	soundPlayer= pGameObject->GetScene()->GetGameObjectName("BGMPlayer");
+	soundPlayer = pGameObject->GetScene()->GetGameObjectName("BGMPlayer");
 	soundPlayer->GetComponent<SoundSpeakerComponent>()->LoadSound("crick.wav", "crick", SoundType::SE);
 	soundPlayer->GetComponent<SoundSpeakerComponent>()->LoadSound("kettei.wav", "kettei", SoundType::SE);
 

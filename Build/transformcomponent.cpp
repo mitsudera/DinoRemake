@@ -1,6 +1,7 @@
 #include "transformcomponent.h"
 #include "math.h"
 #include"gameobject.h"
+#include "Scene.h"
 
 TransformComponent::TransformComponent()
 {
@@ -52,9 +53,10 @@ TransformComponent::~TransformComponent()
 
 
 }
-void TransformComponent::Init(void)
+void TransformComponent::Awake(void)
 {
-	Component::Init();
+	Component::Awake();
+	pGameObject->GetScene()->AddSceneTransformComponent(this);
 
 	attribute = Attribute::Transform;
 
@@ -78,9 +80,18 @@ void TransformComponent::Init(void)
 
 }
 
+//void TransformComponent::Init(void)
+//{
+//	this->mtxpos = initPosMtx;
+//	this->mtxrot = initRotMtx;
+//	this->mtxscl = initRotMtx;
+//}
+
 void TransformComponent::Uninit(void)
 {
 	Component::Uninit();
+	pGameObject->GetScene()->RemoveSceneTransformComponent(this);
+
 }
 
 void TransformComponent::Update(void)

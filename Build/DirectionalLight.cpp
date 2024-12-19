@@ -11,9 +11,9 @@ DirectionalLight::~DirectionalLight()
 {
 }
 
-void DirectionalLight::Init(void)
+void DirectionalLight::Awake(void)
 {
-	GameObject::Init();
+	GameObject::Awake();
 
 	DirectionalLightComponent* lcom = this->AddComponent<DirectionalLightComponent>();
 

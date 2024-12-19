@@ -28,11 +28,6 @@ MeshComponent::MeshComponent()
 MeshComponent::MeshComponent(GameObject* gameObject)
 {
 	pGameObject = gameObject;
-	attribute = Attribute::Primitive;
-
-	MeshDataIndex = 0;
-	cullMode = CULL_MODE::CULL_MODE_BACK;
-	this->alphaTest = FALSE;
 
 
 }
@@ -42,9 +37,16 @@ MeshComponent::~MeshComponent()
 
 }
 
-void MeshComponent::Init(void)
+void MeshComponent::Awake(void)
 {
-	PrimitiveComponent::Init();
+	PrimitiveComponent::Awake();
+
+	attribute = Attribute::Primitive;
+
+	MeshDataIndex = 0;
+	cullMode = CULL_MODE::CULL_MODE_BACK;
+	this->alphaTest = FALSE;
+
 
 	hasShadow = TRUE;
 

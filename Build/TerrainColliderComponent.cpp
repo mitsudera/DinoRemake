@@ -9,9 +9,9 @@ TerrainColliderComponent::~TerrainColliderComponent()
 {
 }
 
-void TerrainColliderComponent::Init(void)
+void TerrainColliderComponent::Awake(void)
 {
-	ColliderComponent::Init();
+	ColliderComponent::Awake();
 	this->shape = Shape::Terrain;
 	this->pHeightMap = nullptr;
 

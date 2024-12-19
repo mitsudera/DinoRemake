@@ -7,7 +7,7 @@ public:
 	SpriteComponent(GameObject* gameObject);
 	~SpriteComponent();
 
-	virtual void Init(void) override;
+	virtual void Awake(void) override;
 	virtual void Update(void) override;
 	virtual void Uninit(void) override;
 	virtual void Draw(void) override;

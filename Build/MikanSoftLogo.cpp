@@ -12,9 +12,9 @@ MikanSoftLogo::~MikanSoftLogo()
 {
 }
 
-void MikanSoftLogo::Init(void)
+void MikanSoftLogo::Awake(void)
 {
-	GameObject::Init();
+	GameObject::Awake();
 	this->layer = Layer::UI;
 
 	this->name = "MikanLogo";

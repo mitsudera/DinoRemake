@@ -16,9 +16,9 @@ MeshField::~MeshField()
 {
 }
 
-void MeshField::Init(void)
+void MeshField::Awake(void)
 {
-	GameObject::Init();
+	GameObject::Awake();
 	this->name = "Field";
 
 	this->layer = Layer::Field;

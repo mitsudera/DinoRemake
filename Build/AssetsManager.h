@@ -25,6 +25,7 @@ class LambartShader;
 class PhongShader;
 class UIShader;
 class ShadowShader;
+class TerrainShader;
 
 //posteffect
 class PostEffectShader;
@@ -39,7 +40,7 @@ public:
 	AssetsManager(GameEngine* pGameEngine);
 	~AssetsManager();
 
-	void Init(void);
+	void Awake(void);
 	void Uninit(void);
 
 
@@ -77,11 +78,13 @@ public:
 	void SetSkinMeshCompute(void);
 
 	void CreateAllShader(void);
+	void CreateDefaultMaterial(void);
 
 	LambartShader* GetLambartShader(void);
 	PhongShader* GetPhongShader(void);
 	UIShader* GetUIShader(void);
 	ShadowShader* GetShadowShader(void);
+	TerrainShader* GetTerrainShader(void);
 
 	GausianBlurShader* GetGausianBlurShader(void);
 	FadeShader* GetFadeShader(void);
@@ -92,9 +95,13 @@ public:
 
 	Material* GetMaterial(int index);
 
+	int GetMaterialIndex(string name);
+
 	int CreateRenderTexture(int widht, int height, string name);
 	int GetRenderTextureIndex(string name);
 	RenderTexture* GetRenderTexture(int index);
+
+	ShaderSet* GetShader(ShaderSet::ShaderIndex index);
 
 	void DeleteRenderTexture(int index);
 
@@ -121,6 +128,7 @@ private:
 	PhongShader* phongShader;
 	UIShader* uiShader;
 	ShadowShader* shadowShader;
+	TerrainShader* terrainShader;
 
 	GausianBlurShader* gausianBlur;
 	FadeShader* fadeShader;

@@ -21,12 +21,11 @@ SpriteComponent::~SpriteComponent()
 {
 }
 
-void SpriteComponent::Init(void)
+void SpriteComponent::Awake(void)
 {
-	PrimitiveComponent::Init();
+	PrimitiveComponent::Awake();
 	CreateVertexBuffer();
-	Material* uiMaterial = new UIMaterial(pGameObject->GetScene()->GetGameEngine()->GetAssetsManager());
-	this->materialIndex = pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->LoadMaterial(uiMaterial);
+	this->materialIndex = pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->GetMaterialIndex("UIMaterial");
 	texSlice.x = 1;
 	texSlice.y = 1;
 	texLRrev = FALSE;
@@ -105,7 +104,6 @@ void SpriteComponent::SetSpriteCenter(string texPath, XMFLOAT3 pos, float width,
 	float t = (pos.y / screenHW.y) - h * 0.5;
 
 
-	this->texIndex = pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->LoadTexture(texPath);
 
 
 
@@ -134,6 +132,7 @@ void SpriteComponent::SetSpriteCenter(string texPath, XMFLOAT3 pos, float width,
 
 void SpriteComponent::SetSpriteLeftDown(string texPath, XMFLOAT3 pos, float width, float height)
 {
+	this->texIndex = pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->LoadTexture(texPath);
 
 
 	XMFLOAT2 screenHW = pGameEngine->GetWindowSize();
@@ -145,7 +144,6 @@ void SpriteComponent::SetSpriteLeftDown(string texPath, XMFLOAT3 pos, float widt
 	float t = ((pos.y / screenHW.y) - 0.5f) * 2.0f;
 
 
-	this->texIndex = pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->LoadTexture(texPath);
 
 
 
@@ -166,16 +164,6 @@ void SpriteComponent::SetSpriteLeftDown(string texPath, XMFLOAT3 pos, float widt
 	vertexArray[3].Diffuse = { 1.0f,1.0f,1.0f,1.0f };
 	vertexArray[3].TexCoord = { 1.0f,1.0f };
 
-	//頂点バッファの中身を埋める
-
-	D3D11_MAPPED_SUBRESOURCE msr;
-	this->GetGameObject()->GetScene()->GetGameEngine()->GetRenderer()->GetDeviceContext()->Map(this->vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
-
-	VERTEX_3D* pVtx = (VERTEX_3D*)msr.pData;
-
-	memcpy(pVtx, vertexArray, sizeof(VERTEX_3D) * 4);
-
-	this->GetGameObject()->GetScene()->GetGameEngine()->GetRenderer()->GetDeviceContext()->Unmap(this->vertexBuffer, 0);
 
 }
 

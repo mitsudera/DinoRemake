@@ -9,9 +9,9 @@ LineColliderComponent::~LineColliderComponent()
 {
 }
 
-void LineColliderComponent::Init(void)
+void LineColliderComponent::Awake(void)
 {
-	ColliderComponent::Init();
+	ColliderComponent::Awake();
 	this->shape = Shape::Line;
 }
 

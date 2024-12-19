@@ -9,9 +9,9 @@ BoxColliderComponent::~BoxColliderComponent()
 {
 }
 
-void BoxColliderComponent::Init(void)
+void BoxColliderComponent::Awake(void)
 {
-	ColliderComponent::Init();
+	ColliderComponent::Awake();
 	this->shape = Shape::Box;
 }
 

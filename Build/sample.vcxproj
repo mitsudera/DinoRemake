@@ -106,11 +106,11 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>false</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\include;C:\github\dino\Build\lib\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\lib\x64\debug</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\lib\x64\debug;C:\github\dino\Build\lib\x64\Debug</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -139,13 +139,13 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>false</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\include;</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\include;C:\github\dino\Build\lib\include</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\lib\x64\release</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\lib\x64\release;C:\github\dino\Build\lib\x64\Release</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -199,7 +199,10 @@
     <ClInclude Include="PlayerComponent.h" />
     <ClInclude Include="PointColliderComponent.h" />
     <ClInclude Include="PointLightComponent.h" />
-    <ClInclude Include="PostEffectShader.h" />
+    <ClInclude Include="PostEffectShader.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
+    </ClInclude>
     <ClInclude Include="primitivecomponent.h" />
     <ClInclude Include="renderer.h" />
     <ClInclude Include="RenderTexture.h" />
@@ -234,6 +237,12 @@
     <ClInclude Include="StageSelectManagerComponent.h" />
     <ClInclude Include="StageSelectScene.h" />
     <ClInclude Include="TerrainColliderComponent.h" />
+    <ClInclude Include="TerrainMaterial.h" />
+    <ClInclude Include="TerrainShader.h" />
+    <ClInclude Include="Text.h" />
+    <ClInclude Include="TextMesh.h" />
+    <ClInclude Include="TextMeshComponent.h" />
+    <ClInclude Include="TextWriteComponent.h" />
     <ClInclude Include="TitleBG.h" />
     <ClInclude Include="TitleCursor.h" />
     <ClInclude Include="TitleLogo.h" />
@@ -333,6 +342,12 @@
     <ClCompile Include="StageSelectManagerComponent.cpp" />
     <ClCompile Include="StageSelectScene.cpp" />
     <ClCompile Include="TerrainColliderComponent.cpp" />
+    <ClCompile Include="TerrainMaterial.cpp" />
+    <ClCompile Include="TerrainShader.cpp" />
+    <ClCompile Include="Text.cpp" />
+    <ClCompile Include="TextMesh.cpp" />
+    <ClCompile Include="TextMeshComponent.cpp" />
+    <ClCompile Include="TextWriteComponent.cpp" />
     <ClCompile Include="TitleBG.cpp" />
     <ClCompile Include="TitleCursor.cpp" />
     <ClCompile Include="TitleLogo.cpp" />
@@ -373,6 +388,8 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="shaders\TerrainShader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

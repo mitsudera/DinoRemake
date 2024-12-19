@@ -11,10 +11,14 @@ Stage1ManagerComponent::~Stage1ManagerComponent()
 {
 }
 
+void Stage1ManagerComponent::Awake(void)
+{
+	Component::Awake();
+
+}
+
 void Stage1ManagerComponent::Init(void)
 {
-	Component::Init();
-	pGameEngine->GetShadowMap()->SetEnable(TRUE);
 
 }
 

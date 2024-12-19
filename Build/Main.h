@@ -40,7 +40,7 @@ public:
 	void Exit(void);
 
 protected:
-	void Init(void);
+	void Awake(void);
 	void Update(void);
 	void Draw(void);
 	void Uninit(void);

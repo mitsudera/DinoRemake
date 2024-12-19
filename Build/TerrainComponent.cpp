@@ -14,9 +14,9 @@ TerrainComponent::~TerrainComponent()
 {
 }
 
-void TerrainComponent::Init(void)
+void TerrainComponent::Awake(void)
 {
-	PrimitiveComponent::Init();
+	PrimitiveComponent::Awake();
 
 }
 
@@ -29,7 +29,7 @@ void TerrainComponent::Update(void)
 void TerrainComponent::Uninit(void)
 {
 	PrimitiveComponent::Uninit();
-
+	
 	if (vertexBuffer) vertexBuffer->Release();
 }
 

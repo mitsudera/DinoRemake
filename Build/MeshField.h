@@ -7,7 +7,7 @@ public:
 	MeshField(Scene* scene);
 	~MeshField();
 
-	virtual void Init(void) override;
+	virtual void Awake(void) override;
 
 
 };

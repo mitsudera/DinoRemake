@@ -10,9 +10,9 @@ Stage1Manager::~Stage1Manager()
 {
 }
 
-void Stage1Manager::Init(void)
+void Stage1Manager::Awake(void)
 {
-	GameObject::Init();
+	GameObject::Awake();
 	this->name = "Stage1Manager";
 	AddComponent<Stage1ManagerComponent>();
 

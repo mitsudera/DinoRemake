@@ -11,6 +11,9 @@
 #include "FadeShader.h"
 #include "BGMPlayer.h"
 #include "TitleCursor.h"
+#include "TextMesh.h"
+#include "TextMeshComponent.h"
+#include "Text.h"
 TitleScene::TitleScene(GameEngine* pGameEngine)
 {
 	this->pGameEngine = pGameEngine;
@@ -20,39 +23,29 @@ TitleScene::~TitleScene()
 {
 }
 
-void TitleScene::Init()
+void TitleScene::Awake()
 {
 
-	Scene::Init();
+	Scene::Awake();
 
 
+	CreateGameObject<TitleBG>();
 
+	CreateGameObject<TitleCursor>();
 
-	TitleBG* titlebg = new TitleBG(this);
-	this->gameObjectArray.push_back(titlebg);
+	CreateGameObject<TitleLogo>();
 
+	CreateGameObject<MikanSoftLogo>();
 
-	TitleCursor* cursor = new TitleCursor(this);
-	this->gameObjectArray.push_back(cursor);
+	CreateGameObject<Camera>();
 
-	TitleLogo* titleLogo = new TitleLogo(this);
-	this->gameObjectArray.push_back(titleLogo);
+	CreateGameObject<BGMPlayer>();
 
-	MikanSoftLogo* mikanLogo = new MikanSoftLogo(this);
-	this->gameObjectArray.push_back(mikanLogo);
+	CreateGameObject<Text>();
 
+	CreateGameObject<TitleManager>();
+	TitleManager* titleManager = new TitleManager(this);
+	this->gameObjectArray.push_back(titleManager);
 
-
-	Camera* titleCamera = new Camera(this);
-	this->gameObjectArray.push_back(titleCamera);
-
-	BGMPlayer* bgmPlayer = new BGMPlayer(this);
-	this->gameObjectArray.push_back(bgmPlayer);
-	
-	//他のオブジェクトを取得する可能性があるオブジェクトは後から
-	//TitleManager* titleManager = new TitleManager(this);
-	//this->gameObjectArray.push_back(titleManager);
-
-	Scene::InitAllObject();
 
 }

@@ -5,7 +5,7 @@ class TitleBG :public GameObject
 public:
 	TitleBG(Scene* scene);
 	~TitleBG();
-	virtual void Init(void) override;
+	virtual void Awake(void) override;
 
 
 };

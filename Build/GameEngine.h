@@ -20,7 +20,7 @@ public:
 	GameEngine(Main* main);
 	~GameEngine();
 
-	void Init();
+	void Awake();
 	void Update();
 	void Draw();
 	void Uninit();
@@ -62,6 +62,7 @@ public:
 
 	void SwichScene(void);
 
+
 private:
 
 	Main* main;
@@ -74,7 +75,6 @@ private:
 	CameraComponent* mainCamera;//バックバッファへの描画を行うカメラ
 	ShadowMap* shadowMap;
 	SoundEngine* soundEngine;
-
 
 	SceneManager* sceneManager;
 	Scene* activeScene;

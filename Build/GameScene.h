@@ -7,7 +7,7 @@ public:
 	~GameScene();
 
 
-	virtual void Init() override;
+	virtual void Awake() override;
 
 };
 

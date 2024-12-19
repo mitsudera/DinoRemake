@@ -69,6 +69,7 @@ public:
 	void SetViewPort(int m_type);
 	int GetViewPortType(void);
 
+	virtual void Awake(void) override;
 	virtual void Init(void) override;
 	virtual void Update(void) override;
 	virtual void Uninit(void) override;
@@ -121,7 +122,7 @@ private:
 	float				farZ;			// カメラのクリッピング最大値Z
 
 
-	BOOL layerCulling[GameObject::Layer::LayerMax];
+	BOOL layerCulling[(int)GameObject::Layer::LayerMax];
 
 	GameObject*			lookObject;
 	Renderer* pRenderer;

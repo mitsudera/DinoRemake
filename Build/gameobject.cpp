@@ -50,13 +50,29 @@ GameObject::GameObject(GameObject* parent)
 
 GameObject::~GameObject()
 {
+	Uninit();
+}
+
+void GameObject::Awake(void)
+{
+	this->pGameEngine = pScene->GetGameEngine();
+	this->isActive = TRUE;
+	this->transformComponent->Awake();
+
 }
 
 void GameObject::Init(void)
 {
-	this->pGameEngine = pScene->GetGameEngine();
-	this->isActive = TRUE;
 	this->transformComponent->Init();
+
+	for (Component* com : componentList)
+	{
+		com->Init();
+	}
+	for (GameObject* obj : childList)
+	{
+		obj->Init();
+	}
 
 }
 
@@ -65,7 +81,6 @@ void GameObject::Uninit(void)
 	for (int i = 0; i < this->componentList.size(); i++)
 	{
 		componentList[i]->Uninit();
-
 		delete componentList[i];
 	}
 	this->componentList.clear();
@@ -73,6 +88,8 @@ void GameObject::Uninit(void)
 	for (int i = 0; i < childList.size(); i++)
 	{
 		childList[i]->Uninit();
+		delete childList[i];
+
 	}
 	this->childList.clear();
 }
@@ -173,21 +190,6 @@ void GameObject::ShadowMapping(void)
 
 }
 
-void GameObject::InitAllComponentAndChild(void)
-{
-	this->isActive = TRUE;
-
-	for (Component* com : componentList)
-	{
-		com->Init();
-	}
-	for (GameObject* obj:childList)
-	{
-		obj->InitAllComponentAndChild();
-	}
-}
-
-
 Scene* GameObject::GetScene(void)
 {
 
@@ -218,6 +220,15 @@ BOOL GameObject::GetActive(void)
 void GameObject::SetActive(BOOL isActive)
 {
 	this->isActive = isActive;
+
+	for (Component* com : componentList)
+	{
+		com->SetActive(isActive);
+	}
+	for (GameObject* child: childList)
+	{
+		child->SetActive(isActive);
+	}
 }
 
 GameObject* GameObject::GetParent(void)
@@ -314,7 +325,7 @@ GameObject* GameObject::AddChild(string name)
 {
 	GameObject* newObj = new GameObject(this);
 	newObj->name = name;
-	newObj->Init();
+	newObj->Awake();
 	this->childList.push_back(newObj);
 	return newObj;
 }

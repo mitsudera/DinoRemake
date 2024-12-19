@@ -9,9 +9,9 @@ CapsuleColliderComponent::~CapsuleColliderComponent()
 {
 }
 
-void CapsuleColliderComponent::Init(void)
+void CapsuleColliderComponent::Awake(void)
 {
-	ColliderComponent::Init();
+	ColliderComponent::Awake();
 	this->shape = Shape::Capsule;
 }
 

@@ -5,7 +5,7 @@ class TitleLogo :public GameObject
 public:
 	TitleLogo(Scene* scene);
 	~TitleLogo();
-	virtual void Init(void) override;
+	virtual void Awake(void) override;
 
 
 };

@@ -9,9 +9,9 @@ StageSelectManager::~StageSelectManager()
 {
 }
 
-void StageSelectManager::Init(void)
+void StageSelectManager::Awake(void)
 {
-	GameObject::Init();
+	GameObject::Awake();
 	this->name = "StageSelectManager";
 	AddComponent<StageSelectManagerComponent>();
 }

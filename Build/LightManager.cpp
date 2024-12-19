@@ -17,7 +17,7 @@ LightManager::~LightManager()
 	if (pointLightBuffer) pointLightBuffer->Release();
 }
 
-void LightManager::Init()
+void LightManager::Awake()
 {
 
 	// 定数バッファ生成

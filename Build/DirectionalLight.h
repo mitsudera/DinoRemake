@@ -6,7 +6,7 @@ public:
 	DirectionalLight(Scene* scene);
 	~DirectionalLight();
 
-	virtual void Init(void) override;
+	virtual void Awake(void) override;
 
 };
 

@@ -7,7 +7,7 @@ public:
 	~Stage1Scene();
 
 
-	virtual void Init() override;
+	virtual void Awake() override;
 
 };
 

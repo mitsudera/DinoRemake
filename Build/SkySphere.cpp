@@ -16,9 +16,9 @@ SkySphere::~SkySphere()
 {
 }
 
-void SkySphere::Init(void)
+void SkySphere::Awake(void)
 {
-	GameObject::Init();
+	GameObject::Awake();
 
 	this->layer = Layer::Sky;
 	this->name = "SkySphere";

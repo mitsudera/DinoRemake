@@ -12,9 +12,9 @@ PointLightComponent::~PointLightComponent()
 {
 }
 
-void PointLightComponent::Init(void)
+void PointLightComponent::Awake(void)
 {
-	Component::Init();
+	Component::Awake();
 	index= pGameEngine->GetLightmanager()->AddLight(this);
 
 }

@@ -20,9 +20,9 @@ ColliderComponent::~ColliderComponent()
 
 }
 
-void ColliderComponent::Init(void)
+void ColliderComponent::Awake(void)
 {
-	Component::Init();
+	Component::Awake();
 	
 	this->attribute = Attribute::Collider;
 	result.hitObject.clear();
@@ -35,7 +35,13 @@ void ColliderComponent::Init(void)
 
 	}
 
+}
+
+void ColliderComponent::Init(void)
+{
+	Component::Init();
 	OnCollider();
+
 }
 
 void ColliderComponent::Uninit(void)

@@ -10,9 +10,9 @@ BGMPlayer::~BGMPlayer()
 {
 }
 
-void BGMPlayer::Init(void)
+void BGMPlayer::Awake(void)
 {
-	GameObject::Init();
+	GameObject::Awake();
 	this->name = "BGMPlayer";
 	SoundSpeakerComponent* speaker = AddComponent<SoundSpeakerComponent>();
 

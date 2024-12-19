@@ -6,7 +6,7 @@ public:
 	SkySphere(Scene* scene);
 	~SkySphere();
 
-	virtual void Init(void) override;
+	virtual void Awake(void) override;
 
 };
 

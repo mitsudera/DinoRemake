@@ -7,7 +7,7 @@ public:
 	TutorialScene(GameEngine* pGameEngine);
 	~TutorialScene();
 
-	virtual void Init() override;
+	virtual void Awake() override;
 
 
 };

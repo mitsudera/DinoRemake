@@ -10,9 +10,9 @@ TutorialManager::~TutorialManager()
 {
 }
 
-void TutorialManager::Init(void)
+void TutorialManager::Awake(void)
 {
-	GameObject::Init();
+	GameObject::Awake();
 	this->name = "TutorialManager";
 	AddComponent<TutorialManagerComponent>();
 

@@ -13,7 +13,6 @@ AnimationControlerComponent::AnimationControlerComponent(GameObject* gameObject)
 {
 	pGameObject = gameObject;
 	pAssetsManager = pGameObject->GetScene()->GetGameEngine()->GetAssetsManager();
-	//pMeshTree= pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->GetMeshTree(pGameObject->GetComponent<MeshComponent>()->)
 
 }
 
@@ -22,12 +21,19 @@ AnimationControlerComponent::~AnimationControlerComponent()
 
 }
 
+void AnimationControlerComponent::Awake(void)
+{
+	Component::Awake();
+	defaultAnimIndex = 0;
+	animindex = 0;
+}
+
 void AnimationControlerComponent::Init(void)
 {
 	Component::Init();
-	defaultAnimIndex = 0;
-	animindex = 0;
+
 	framecnt = 0.0f;
+	animindex = defaultAnimIndex;
 }
 
 void AnimationControlerComponent::Update(void)
@@ -107,7 +113,6 @@ int AnimationNode::GetAnimIndex(void)
 {
 	return animDataIndex;
 }
-
 string AnimationNode::GetName(void)
 {
 	return name;

@@ -45,13 +45,14 @@ public:
 	AnimationControlerComponent(GameObject* gameObject);
 	~AnimationControlerComponent();
 
+
+	virtual void Awake(void) override;
 	virtual void Init(void) override;
 	virtual void Update(void) override;
 	virtual void Uninit(void) override;
 
 	int LoadAnimationData(string fileName, string name);
 
-	void UpdateAnimation(MtxNode* node, GameObject* gameObject);
 
 	void SetAnimation(int index);//番号でセット
 	void SetAnimation(string name);//名前で探してセットこっちの方が安全
@@ -67,6 +68,8 @@ public:
 
 protected:
 	
+	void UpdateAnimation(MtxNode* node, GameObject* gameObject);
+
 	AssetsManager* pAssetsManager;
 
 	vector<int> animIndexArray;

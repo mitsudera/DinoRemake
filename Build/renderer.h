@@ -93,6 +93,9 @@ public:
 
 	IDXGISwapChain* GetSwapChain(void);
 
+	void DrawStringText(string text, float fontSize, XMFLOAT4 color, XMFLOAT2 pos, XMFLOAT2 size, string font, TEXT_ANCHOR textAnchor);
+
+
 	//void DrawStringText(string text, float fontSize, XMFLOAT4 color, XMFLOAT2 pos, XMFLOAT2 size, TEXT_ANCHOR anchor, string font);
 
 
@@ -104,7 +107,6 @@ public:
 	void DrawFullScreen(void);
 
 	void SetRenderTargetBackBuffer(void);
-
 
 private:
 
@@ -139,6 +141,10 @@ private:
 	ID3D11Texture2D* depthTexture;
 	ID3D11SamplerState* samplerWrap;
 	ID3D11SamplerState* samplerBorder;
+
+
+
+
 	//utility
 	FullScreenQuadVertex* fullScreenVertex;
 };

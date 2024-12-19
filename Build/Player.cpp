@@ -9,6 +9,7 @@
 #include "PlayerComponent.h"
 #include "SphereColliderComponent.h"
 #include "CapsuleColliderComponent.h"
+#include "SkySphere.h"
 
 Player::Player(Scene* scene)
 {
@@ -20,10 +21,10 @@ Player::~Player()
 {
 }
 
-void Player::Init(void)
+void Player::Awake(void)
 {
 
-	GameObject::Init();
+	GameObject::Awake();
 
 	this->name = "Player";
 	this->transformComponent->SetPosition(XMFLOAT3(0.0f, 0.0f, 10.0f));
@@ -31,7 +32,6 @@ void Player::Init(void)
 
 	this->LoadFbxFileMesh("PlayerRed.fbx");
 	AnimationControlerComponent* animControler = this->AddComponent<AnimationControlerComponent>();
-	animControler->Init();
 	animControler->LoadAnimationData("PlayerIdol.fbx", "Idol");
 	animControler->LoadAnimationData("PlayerAtack.fbx", "Atack");
 	PlayerComponent* playerCom = AddComponent<PlayerComponent>();
@@ -52,7 +52,7 @@ void Player::Init(void)
 		cameraComponent->Init();
 		cameraComponent->SetRenderTarget(pScene->GetGameEngine()->GetRenderer()->GetBackBuffer());
 		cameraComponent->SetDepthStencilView(pScene->GetGameEngine()->GetRenderer()->GetBackBufferDSV());
-		cameraComponent->SetSky(pScene->GetGameObjectName("SkySphere"));
+		cameraComponent->SetSky(pScene->GetGameObject<SkySphere>());
 		cameraComponent->SetTrackingMode(CameraComponent::TrackingMode::PARENT);
 		cameraComponent->SetNear(1.0f);
 		cameraComponent->SetFar(1000.0f);

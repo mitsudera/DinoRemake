@@ -12,9 +12,9 @@ RedEnemy::~RedEnemy()
 {
 }
 
-void RedEnemy::Init(void)
+void RedEnemy::Awake(void)
 {
-	GameObject::Init();
+	GameObject::Awake();
 
 	this->tag = ObjectTag::Enemy;
 	this->name = "Akamaru";

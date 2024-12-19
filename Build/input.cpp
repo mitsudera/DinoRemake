@@ -36,7 +36,7 @@ Input::~Input()
 //=============================================================================
 // “ü—Íˆ—‚Ì‰Šú‰»
 //=============================================================================
-HRESULT Input::Init(HINSTANCE hInst, HWND hWnd)
+HRESULT Input::Awake(HINSTANCE hInst, HWND hWnd)
 {
 	pDInput = NULL;
 	pDIDevKeyboard = NULL;

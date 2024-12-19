@@ -6,6 +6,6 @@ public:
 	Player(Scene* scene);
 	~Player();
 
-	virtual void Init(void) override;
+	virtual void Awake(void) override;
 };
 

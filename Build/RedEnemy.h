@@ -6,7 +6,7 @@ public:
 	RedEnemy(Scene* scene);
 	~RedEnemy();
 
-	virtual void Init(void) override;
+	virtual void Awake(void) override;
 
 
 };

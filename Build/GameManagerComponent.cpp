@@ -17,19 +17,26 @@ GameManagerComponent::~GameManagerComponent()
 {
 }
 
+void GameManagerComponent::Awake(void)
+{
+	Component::Awake();
+	attribute = Attribute::Manager;
+
+
+	pGameEngine->GetShadowMap()->SetEnable(TRUE);
+	pGameEngine->GetShadowMap()->SetVariance(TRUE);
+
+}
+
 void GameManagerComponent::Init(void)
 {
-	Component::Init();
-	attribute = Attribute::Manager;
 	this->gameScene = pGameObject->GetScene();
 	this->gameCamera = gameScene->GetGameObjectName("Player")->GetChild("Camera")->GetComponent<CameraComponent>();
 	this->debugCamera = gameScene->GetGameObjectName("DebugCamera")->GetComponent<CameraComponent>();
 	this->player = gameScene->GetGameObjectName("Player");
-
+	pGameEngine->GetShadowMap()->SetEnable(TRUE);
 	SetCameraModeGame();
 
-	pGameEngine->GetShadowMap()->SetEnable(TRUE);
-	pGameEngine->GetShadowMap()->SetVariance(TRUE);
 
 }
 

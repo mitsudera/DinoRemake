@@ -23,38 +23,24 @@ Stage2Scene::~Stage2Scene()
 {
 }
 
-void Stage2Scene::Init()
+void Stage2Scene::Awake()
 {
-	Scene::Init();
+	Scene::Awake();
 
 
-	DirectionalLight* light = new DirectionalLight(this);
-	this->gameObjectArray.push_back(light);
+	CreateGameObject<DirectionalLight>();
 
-
-	SkySphere* sky = new SkySphere(this);
-	this->gameObjectArray.push_back(sky);
+	SkySphere* sky = CreateGameObject<SkySphere>();
 	sky->SetHasShadowAll(FALSE);
 
+	CreateGameObject<DebugCamera>();
+
+	CreateGameObject<MeshField>();
+
+	CreateGameObject<BGMPlayer>();
 
 
+	CreateGameObject<GameManager>();
 
 
-
-	MeshField* field = new MeshField(this);
-	this->gameObjectArray.push_back(field);
-
-
-	DebugCamera* debugCamera=new DebugCamera(this);
-	this->gameObjectArray.push_back(debugCamera);
-
-
-	BGMPlayer* bgmPlayer = new BGMPlayer(this);
-	this->gameObjectArray.push_back(bgmPlayer);
-
-
-
-
-	//ç≈å„Ç…çsÇ§
-	Scene::InitAllObject();
 }

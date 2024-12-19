@@ -15,6 +15,9 @@
 #include "Player.h"
 #include "Stage1Manager.h"
 #include "RedEnemy.h"
+#include "CameraComponent.h"
+#include "TextMesh.h"
+#include "TextMeshComponent.h"
 
 Stage1Scene::Stage1Scene(GameEngine* pGameEngine)
 {
@@ -25,47 +28,35 @@ Stage1Scene::~Stage1Scene()
 {
 }
 
-void Stage1Scene::Init()
+void Stage1Scene::Awake()
 {
-	Scene::Init();
+	Scene::Awake();
 
 
-	DirectionalLight* light = new DirectionalLight(this);
-	this->gameObjectArray.push_back(light);
+	CreateGameObject<DirectionalLight>();
 
-
-	SkySphere* sky = new SkySphere(this);
-	this->gameObjectArray.push_back(sky);
+	SkySphere* sky=CreateGameObject<SkySphere>();
 	sky->SetHasShadowAll(FALSE);
 
-	DebugCamera* debugCamera = new DebugCamera(this);
-	this->gameObjectArray.push_back(debugCamera);
+	GameObject* dcamera= CreateGameObject<DebugCamera>();
+	dcamera->GetComponent<CameraComponent>()->SetSky(GetGameObject<SkySphere>());
+
+	CreateGameObject<Player>();
+
+	CreateGameObject<RedEnemy>();
+
+	CreateGameObject<MeshField>();
+
+	CreateGameObject<BGMPlayer>();
+
+	CreateGameObject<Stage1Manager>();
+
+	CreateGameObject<GameManager>();
+
+	TextMesh* test = CreateGameObject<TextMesh>();
+	TextMeshComponent* text = test->GetComponent<TextMeshComponent>();
+	text->CreateTextMeshCenter("test", XMFLOAT3(0.0f, 0.0f, 0.0f), 400.0f, 100.0f, XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
 
 
-	Player* player = new Player(this);
-	this->gameObjectArray.push_back(player);
 
-	RedEnemy* redEnemy = new RedEnemy(this);
-	this->gameObjectArray.push_back(redEnemy);
-
-	MeshField* field = new MeshField(this);
-	this->gameObjectArray.push_back(field);
-
-
-
-
-	BGMPlayer* bgmPlayer = new BGMPlayer(this);
-	this->gameObjectArray.push_back(bgmPlayer);
-
-	
-
-	Stage1Manager* st1Manager = new Stage1Manager(this);
-	this->gameObjectArray.push_back(st1Manager);
-
-	GameManager* gameManager = new GameManager(this);
-	this->gameObjectArray.push_back(gameManager);
-
-
-	//ç≈å„Ç…çsÇ§
-	Scene::InitAllObject();
 }

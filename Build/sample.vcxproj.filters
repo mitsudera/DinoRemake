@@ -64,9 +64,6 @@
     <Filter Include="gameobject\2D\Title">
       <UniqueIdentifier>{99e69468-4fa5-4056-9e5a-4eedb214fd84}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Shader\SkyShader">
-      <UniqueIdentifier>{57da6a5d-4755-47c1-8fc9-11b513d57d5a}</UniqueIdentifier>
-    </Filter>
     <Filter Include="GameEngine">
       <UniqueIdentifier>{b9dca675-2a2c-4887-b62c-0dc6ce728bd9}</UniqueIdentifier>
     </Filter>
@@ -156,6 +153,9 @@
     </Filter>
     <Filter Include="gameobject\3D\Sky">
       <UniqueIdentifier>{5cca2db8-f779-4585-a3e8-ed26443af99d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\TerrainShader">
+      <UniqueIdentifier>{0fc31a20-b1a4-438c-9787-ca00676a9003}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -426,6 +426,24 @@
     <ClInclude Include="SkySphere.h">
       <Filter>gameobject\3D\Sky</Filter>
     </ClInclude>
+    <ClInclude Include="TextMeshComponent.h">
+      <Filter>component\primitiveComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="TextMesh.h">
+      <Filter>gameobject\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="TextWriteComponent.h">
+      <Filter>component\primitiveComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Text.h">
+      <Filter>gameobject\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainMaterial.h">
+      <Filter>Shader\TerrainShader</Filter>
+    </ClInclude>
+    <ClInclude Include="TerrainShader.h">
+      <Filter>Shader\TerrainShader</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -692,12 +710,27 @@
     <ClCompile Include="SkySphere.cpp">
       <Filter>gameobject\3D\Sky</Filter>
     </ClCompile>
+    <ClCompile Include="TextMeshComponent.cpp">
+      <Filter>component\primitiveComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="TextMesh.cpp">
+      <Filter>gameobject\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="TextWriteComponent.cpp">
+      <Filter>component\primitiveComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>gameobject\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainMaterial.cpp">
+      <Filter>Shader\TerrainShader</Filter>
+    </ClCompile>
+    <ClCompile Include="TerrainShader.cpp">
+      <Filter>Shader\TerrainShader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\shader.hlsl">
-      <Filter>Shader\hlsl</Filter>
-    </FxCompile>
-    <FxCompile Include="shaders\TerrainShader.hlsl">
       <Filter>Shader\hlsl</Filter>
     </FxCompile>
     <FxCompile Include="shaders\LambartShader.hlsl">
@@ -717,6 +750,9 @@
     </FxCompile>
     <FxCompile Include="shaders\Fade.hlsl">
       <Filter>Shader\PostEffect\FadeShader</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\TerrainShader.hlsl">
+      <Filter>Shader\TerrainShader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

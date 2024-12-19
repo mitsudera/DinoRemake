@@ -9,7 +9,7 @@ public:
 	PointLightComponent(GameObject* gameObject);
 	~PointLightComponent();
 
-	virtual void Init(void) override;
+	virtual void Awake(void) override;
 	virtual void Uninit(void) override;
 	virtual void Update(void) override;
 

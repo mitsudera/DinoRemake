@@ -1,5 +1,4 @@
 #pragma once
-
 #include "Coreminimal.h"
 #include "component.h"
 #include "ShaderSet.h"
@@ -38,6 +37,7 @@ public:
 		Field,
 		Water,
 		UI,
+		Text,
 
 		LayerMax,
 	};
@@ -47,14 +47,14 @@ public:
 	GameObject(GameObject* parent);
 	~GameObject();
 
-	virtual void Init(void);
-	virtual void Uninit(void);
-	virtual void Update(void);
-	virtual void UpdateMatrix(void);
-	virtual void Draw(ShaderSet::ShaderIndex index);
-	virtual void ShadowMapping(void);
+	virtual void Awake(void);
+	void Init(void);
+	void Uninit(void);
+	void Update(void);
+	void UpdateMatrix(void);
+	void Draw(ShaderSet::ShaderIndex index);
+	void ShadowMapping(void);
 	
-	void InitAllComponentAndChild(void);
 
 	Scene* GetScene(void);
 	TransformComponent* GetTransFormComponent(void);
@@ -139,6 +139,6 @@ T* GameObject::AddComponent(void)
 	this->componentList.push_back(com);
 
 	Component* c = dynamic_cast<Component*>(com);
-	c->Init();
+	c->Awake();
 	return com;
 }

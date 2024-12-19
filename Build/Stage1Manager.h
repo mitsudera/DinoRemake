@@ -6,7 +6,7 @@ public:
 	Stage1Manager(Scene* scene);
 	~Stage1Manager();
 
-	virtual void Init(void) override;
+	virtual void Awake(void) override;
 
 };
 

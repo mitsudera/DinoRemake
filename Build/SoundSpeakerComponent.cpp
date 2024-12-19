@@ -16,9 +16,9 @@ SoundSpeakerComponent::~SoundSpeakerComponent()
 	
 }
 
-void SoundSpeakerComponent::Init(void)
+void SoundSpeakerComponent::Awake(void)
 {
-	Component::Init();
+	Component::Awake();
 	pSoundEngine = pGameEngine->GetSoundEngine();
 }
 

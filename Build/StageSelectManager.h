@@ -5,7 +5,7 @@ class StageSelectManager :public GameObject
 public:
 	StageSelectManager(Scene* scene);
 	~StageSelectManager();
-	virtual void Init(void) override;
+	virtual void Awake(void) override;
 
 };
 

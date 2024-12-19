@@ -151,7 +151,6 @@ void RenderTexture::CreateRenderTexture(int widht, int height, string name)
 		&dssrv);  // ó‚¯æ‚é•Ï”
 
 
-
 }
 
 ID3D11RenderTargetView* RenderTexture::GetRenderTargetView(void)
