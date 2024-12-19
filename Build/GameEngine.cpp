@@ -44,7 +44,6 @@ void GameEngine::Init()
 	this->lightManager = new LightManager(this);
 	lightManager->Init();
 
-	
 
 	this->assetsManager = new AssetsManager(this);
 	this->assetsManager->Init();
@@ -83,7 +82,7 @@ void GameEngine::Update()
 	this->input->Update();
  	this->activeScene->Update();
 	collisionManager->Update();
-
+	lightManager->Update();
 }
 
 void GameEngine::Draw()
@@ -93,7 +92,6 @@ void GameEngine::Draw()
 
 	renderer->Clear();
 	this->shadowMap->ShadowMapping();
-	
 
 	this->activeScene->Draw();
 
@@ -119,6 +117,7 @@ void GameEngine::Uninit()
 	delete cBufferManager;
 	delete lightManager;
 	delete shadowMap;
+	delete collisionManager;
 }
 
 long GameEngine::GetMouseMoveX(void)

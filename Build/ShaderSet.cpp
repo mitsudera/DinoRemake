@@ -10,6 +10,8 @@ ShaderSet::ShaderSet()
 ShaderSet::~ShaderSet()
 {
 	ShaderRelease();
+	if (materialBuffer) materialBuffer->Release();
+	VertexLayout->Release();
 }
 
 void ShaderSet::SetShaderRenderer(void)

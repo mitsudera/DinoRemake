@@ -30,6 +30,7 @@ void TerrainComponent::Uninit(void)
 {
 	PrimitiveComponent::Uninit();
 
+	if (vertexBuffer) vertexBuffer->Release();
 }
 
 void TerrainComponent::Draw(void)

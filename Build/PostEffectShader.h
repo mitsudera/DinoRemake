@@ -24,6 +24,7 @@ protected:
 	RenderTexture* renderTex2;
 	vector<ID3D11PixelShader*> PSArray;
 	void AddShader(string filePath, string shaderName);
+	ID3D11Buffer* cBuffer;
 
 };
 

@@ -17,7 +17,6 @@ public:
 private:
 
 	
-	ID3D11Buffer* gausBuffer;
 
 };
 

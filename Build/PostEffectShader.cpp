@@ -14,6 +14,8 @@ PostEffectShader::~PostEffectShader()
 	delete renderTex1;
 	delete renderTex2;
 
+	if (cBuffer) cBuffer->Release();
+
 	for (ID3D11PixelShader* ps : PSArray)
 	{
 		ps->Release();
@@ -94,7 +96,6 @@ void PostEffectShader::AddShader(string filePath, string shaderName)
 	pRenderer->GetDevice()->CreatePixelShader(pPSBlob->GetBufferPointer(), pPSBlob->GetBufferSize(), NULL, &ps);
 	//‰ð•ú
 	pPSBlob->Release();
-
 	PSArray.push_back(ps);
 
 }

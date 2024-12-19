@@ -33,16 +33,16 @@ void FadeShader::Init(void)
 	FadeCbuffer initData;
 
 	initData.fade.x = 1.0f;
-	pRenderer->GetDevice()->CreateBuffer(&hBufferDesc, nullptr, &this->fadeBuffer);
+	pRenderer->GetDevice()->CreateBuffer(&hBufferDesc, nullptr, &this->cBuffer);
 
-	pRenderer->GetDeviceContext()->UpdateSubresource(fadeBuffer, 0, NULL, &initData, 0, 0);
+	pRenderer->GetDeviceContext()->UpdateSubresource(cBuffer, 0, NULL, &initData, 0, 0);
 
 
 }
 
 void FadeShader::PostEffectDraw(ID3D11ShaderResourceView* srv, ID3D11RenderTargetView* rtv)
 {
-	pCBufferManager->SetCBufferVSPS(fadeBuffer, CBufferManager::BufferSlot::Free1);
+	pCBufferManager->SetCBufferVSPS(cBuffer, CBufferManager::BufferSlot::Free1);
 
 	PostEffectShader::PostEffectDraw(srv, rtv);
 }
@@ -52,6 +52,6 @@ void FadeShader::SetFade(float f)
 	FadeCbuffer data;
 
 	data.fade.x = f;
-	pRenderer->GetDeviceContext()->UpdateSubresource(fadeBuffer, 0, NULL, &data, 0, 0);
+	pRenderer->GetDeviceContext()->UpdateSubresource(cBuffer, 0, NULL, &data, 0, 0);
 
 }

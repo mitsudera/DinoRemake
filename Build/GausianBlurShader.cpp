@@ -11,7 +11,6 @@ GausianBlurShader::GausianBlurShader(Renderer* renderer)
 
 GausianBlurShader::~GausianBlurShader()
 {
-	if(gausBuffer) gausBuffer->Release();
 }
 
 void GausianBlurShader::Init(void)
@@ -52,16 +51,16 @@ void GausianBlurShader::Init(void)
 	}
 
 
-	pRenderer->GetDevice()->CreateBuffer(&hBufferDesc, nullptr, &this->gausBuffer);
+	pRenderer->GetDevice()->CreateBuffer(&hBufferDesc, nullptr, &this->cBuffer);
 
-	pRenderer->GetDeviceContext()->UpdateSubresource(gausBuffer, 0, NULL, &initData, 0, 0);
+	pRenderer->GetDeviceContext()->UpdateSubresource(cBuffer, 0, NULL, &initData, 0, 0);
 
 
 }
 
 void GausianBlurShader::PostEffectDraw(ID3D11ShaderResourceView* srv, ID3D11RenderTargetView* rtv)
 {
-	pCBufferManager->SetCBufferVSPS(gausBuffer, CBufferManager::BufferSlot::Free1);
+	pCBufferManager->SetCBufferVSPS(cBuffer, CBufferManager::BufferSlot::Free1);
 
 	PostEffectShader::PostEffectDraw(srv, rtv);
 }
