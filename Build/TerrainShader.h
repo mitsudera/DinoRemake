@@ -7,7 +7,7 @@ struct TessCBuffer
 {
 	float cbEdgeFactor; //4角形の辺の分割量の指定
 	float cbInsideFactor; //4角形の内部の分割量の指定
-	float dummy[2];
+	float dummy[10];
 
 };
 class TerrainShader : public ShaderSet

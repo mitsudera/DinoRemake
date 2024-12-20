@@ -194,7 +194,6 @@ HS_CONSTANT_DATA_OUTPUT CalcHSPatchConstants(
 [outputtopology("triangle_cw")]
 [outputcontrolpoints(4)]
 [patchconstantfunc("CalcHSPatchConstants")]
-[maxtessfactor(16.f)]
 HS_OUTPUT HSmain(InputPatch<VS_OUTPUT, 4> patch,
   uint i : SV_OutputControlPointID,
   uint PatchID : SV_PrimitiveID)
@@ -233,36 +232,38 @@ struct DS_OUTPUT
 [domain("quad")]
 DS_OUTPUT DSmain(
   HS_CONSTANT_DATA_OUTPUT input,
-  float2 uv : SV_DomainLocation,
+  float2 domain : SV_DomainLocation,
   const OutputPatch<HS_OUTPUT, 4> patch)
 {
     DS_OUTPUT output;
 // 頂点座標
-    float3 p1 = lerp(patch[1].Position, patch[0].Position, uv.x);
-    float3 p2 = lerp(patch[3].Position, patch[2].Position, uv.x);
-    float3 p3 = lerp(p1, p2, uv.y);
-    
+    float4 pos = float4(
+    patch[0].Position * (1 - domain.x) * (1 - domain.y) +
+    patch[1].Position * domain.x * (1 - domain.y) +
+    patch[2].Position * (1 - domain.x) * domain.y +
+    patch[3].Position * domain.x * domain.y);
+   
     matrix wvp;
     wvp = mul(World, View);
     wvp = mul(wvp, Projection);
-    output.Position = mul(float4(p3, 1.0f), wvp);
+    output.Position = mul(pos, wvp);
     
     
-    // テクセル
-    float2 t1 = lerp(patch[1].TexCoord, patch[0].TexCoord, uv.x);
-    float2 t2 = lerp(patch[3].TexCoord, patch[2].TexCoord, uv.x);
-    float2 t3 = lerp(t1, t2, uv.y);
+    // uv
+    float2 t1 = lerp(patch[1].TexCoord, patch[0].TexCoord, domain.x);
+    float2 t2 = lerp(patch[3].TexCoord, patch[2].TexCoord, domain.x);
+    float2 t3 = lerp(t1, t2, domain.y);
     output.TexCoord = t3;
 
     output.Diffuse = patch[0].Diffuse;
     
-    output.WorldPos = mul(float4(p3, 1.0f), World);
+    output.WorldPos = mul(pos, World);
 
     matrix SMWorldViewProj = mul(World, Shadow.wvp);
     wvp = mul(World, View);
     wvp = mul(wvp, Projection);
 
-    float4 pos4 = mul(float4(p3, 1.0f), SMWorldViewProj);
+    float4 pos4 = mul(pos, SMWorldViewProj);
     pos4.xyz = pos4.xyz / pos4.w;
     output.PosSM.x = (pos4.x + 1.0) / 2.0;
     output.PosSM.y = (-pos4.y + 1.0) / 2.0;
@@ -277,10 +278,6 @@ DS_OUTPUT DSmain(
     
     return output;
 }
-
-//=============================================================================
-// ピクセルシェーダ
-//=============================================================================
 
 
 float GetVarianceDirectionalShadowFactor(float4 shadowCoord)

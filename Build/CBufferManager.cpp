@@ -70,6 +70,30 @@ void CBufferManager::SetCBufferHSDS(ID3D11Buffer* buffer, BufferSlot slot)
 
 }
 
+void CBufferManager::SetCBufferVS(ID3D11Buffer* buffer, BufferSlot slot)
+{
+	pDeviceContext->VSSetConstantBuffers((UINT)slot, 1, &buffer);
+
+}
+
+void CBufferManager::SetCBufferHS(ID3D11Buffer* buffer, BufferSlot slot)
+{
+	pDeviceContext->HSSetConstantBuffers((UINT)slot, 1, &buffer);
+
+}
+
+void CBufferManager::SetCBufferDS(ID3D11Buffer* buffer, BufferSlot slot)
+{
+	pDeviceContext->DSSetConstantBuffers((UINT)slot, 1, &buffer);
+
+}
+
+void CBufferManager::SetCBufferPS(ID3D11Buffer* buffer, BufferSlot slot)
+{
+	pDeviceContext->PSSetConstantBuffers((UINT)slot, 1, &buffer);
+
+}
+
 void CBufferManager::SetWorldMtx(XMMATRIX* world)
 {
 	XMMATRIX mtx = XMMatrixTranspose(*world);
@@ -103,17 +127,20 @@ void CBufferManager::SetCameraBuffer(XMFLOAT3* pos)
 void CBufferManager::SetWorldBuffer(ID3D11Buffer* world)
 {
 	SetCBufferVSPS(world, BufferSlot::World);
+	SetCBufferDS(world, BufferSlot::World);
 }
 
 void CBufferManager::SetViewBuffer(ID3D11Buffer* view)
 {
 	SetCBufferVSPS(view, BufferSlot::View);
+	SetCBufferDS(view, BufferSlot::View);
 
 }
 
 void CBufferManager::SetProjectionBuffer(ID3D11Buffer* projection)
 {
 	SetCBufferVSPS(projection, BufferSlot::Projection);
+	SetCBufferDS(projection, BufferSlot::Projection);
 
 }
 
@@ -144,5 +171,6 @@ void CBufferManager::SetCameraBuffer(ID3D11Buffer* camera)
 void CBufferManager::SetShadowBuffer(ID3D11Buffer* shadow)
 {
 	SetCBufferVSPS(shadow, BufferSlot::Shadow);
+	SetCBufferDS(shadow, BufferSlot::Shadow);
 
 }
