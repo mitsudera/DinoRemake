@@ -63,6 +63,13 @@ void CBufferManager::SetCBufferCS(ID3D11Buffer* buffer, BufferSlot slot)
 
 }
 
+void CBufferManager::SetCBufferHSDS(ID3D11Buffer* buffer, BufferSlot slot)
+{
+	pDeviceContext->HSSetConstantBuffers((UINT)slot, 1, &buffer);
+	pDeviceContext->DSSetConstantBuffers((UINT)slot, 1, &buffer);
+
+}
+
 void CBufferManager::SetWorldMtx(XMMATRIX* world)
 {
 	XMMATRIX mtx = XMMatrixTranspose(*world);
@@ -85,29 +92,6 @@ void CBufferManager::SetProjectionMtx(XMMATRIX* projection)
 	pDeviceContext->UpdateSubresource(ProjectionBuffer, 0, NULL, &mtx, 0, 0);
 
 }
-
-void CBufferManager::SetWorldViewProjection2D(void)
-{
-
-	XMMATRIX world;
-	world = XMMatrixTranspose(XMMatrixIdentity());
-	pDeviceContext->UpdateSubresource(WorldBuffer, 0, NULL, &world, 0, 0);
-
-	XMMATRIX view;
-	view = XMMatrixTranspose(XMMatrixIdentity());
-	pDeviceContext->UpdateSubresource(ViewBuffer, 0, NULL, &view, 0, 0);
-
-	XMFLOAT2 screen = pGameEngine->GetWindowSize();
-
-	XMMATRIX worldViewProjection;
-	worldViewProjection = XMMatrixOrthographicOffCenterLH(0.0f, screen.x, screen.y, 0.0f, 0.0f, 1.0f);
-	worldViewProjection = XMMatrixTranspose(worldViewProjection);
-
-	
-	pDeviceContext->UpdateSubresource(ProjectionBuffer, 0, NULL, &worldViewProjection, 0, 0);
-
-}
-
 void CBufferManager::SetCameraBuffer(XMFLOAT3* pos)
 {
 	XMFLOAT4 float4 = { pos->x,pos->y,pos->z,1.0f };

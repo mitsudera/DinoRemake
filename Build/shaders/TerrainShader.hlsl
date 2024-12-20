@@ -93,71 +93,13 @@ cbuffer ShadowBuffer : register(b7)
 }
 cbuffer TessellationBuffer : register(b8)
 {
-    float tessellationFactor;
-    float3 dummy;
+    float cbEdgeFactor; //4角形の辺の分割量の指定
+    float cbInsideFactor; //4角形の内部の分割量の指定
+    float dummy[2];
+   
 };
 
 
-
-
-
-
-
-//=============================================================================
-// 頂点シェーダ
-//=============================================================================
-void VSmain(in float4 inPosition : POSITION0,
-						  in float4 inNormal : NORMAL0,
-						  in float4 inDiffuse : COLOR0,
-						  in float2 inTexCoord : TEXCOORD0,
-                          in float4 inTangent : TANGENT0,
-                          in float4 inBiNoramal : BINORMAL0,
-
-						  out float4 outPosition : SV_POSITION,
-						  out float4 outNormal : NORMAL0,
-						  out float2 outTexCoord : TEXCOORD0,
-						  out float4 outDiffuse : COLOR0,
-						  out float4 outWorldPos : POSITION0,
-						  out float4 outPosSM : POSITION1,
-						  out float4 outTangent : TANGENT0,
-						  out float4 outBiNormal : BINORMAL0
-)
-{
-    matrix wvp;
-    wvp = mul(World, View);
-    wvp = mul(wvp, Projection);
-    outPosition = mul(inPosition, wvp);
-
-    outNormal = normalize(mul(float4(inNormal.xyz, 0.0f), World));
-    outTangent = normalize(mul(float4(inTangent.xyz, 0.0f), World));
-    outBiNormal = normalize(mul(float4(inBiNoramal.xyz, 0.0f), World));
-
-    outTexCoord = inTexCoord;
-
-    outWorldPos = mul(inPosition, World);
-
-    outDiffuse = inDiffuse;
-	
-	
-	 //頂点座標　モデル座標系→透視座標系(シャドウマップ)
-    matrix SMWorldViewProj = mul(World, Shadow.wvp);
-    wvp = mul(World, View);
-    wvp = mul(wvp, Projection);
-
-    float4 pos4 = mul(inPosition, SMWorldViewProj);
-    pos4.xyz = pos4.xyz / pos4.w;
-    outPosSM.x = (pos4.x + 1.0) / 2.0;
-    outPosSM.y = (-pos4.y + 1.0) / 2.0;
-    outPosSM.z = pos4.z;
-
-
-}
-
-
-
-//*****************************************************************************
-// グローバル変数
-//*****************************************************************************
 Texture2D DiffuseTexture : register(t0);
 Texture2D NormalTex : register(t1);
 Texture2D armTex : register(t2);
@@ -174,57 +116,98 @@ SamplerState BorderSampler : register(s1);
 
 
 
+struct VS_in
+{
+    float4 Position : POSITION;
+    float4 Normal : NORMAL0;
+    float4 Diffuse : COLOR0;
+    float2 TexCoord : TEXCOORD0;
+    float4 Tangent : TANGENT0;
+    float4 BiNoramal : BINORMAL0;
 
-
-//テッセレーション
-//ハルシェーダー
-struct HS_INPUT
+};
+struct VS_OUTPUT
 {
     float4 Position : SV_POSITION;
-    float4 Normal : NORMAL0;
     float2 TexCoord : TEXCOORD0;
     float4 Diffuse : COLOR0;
-    float4 WorldPos : POSITION0;
-    float4 PosSM : POSITION1;
+    float4 Normal : NORMAL0;
     float4 Tangent : TANGENT0;
     float4 BiNormal : BINORMAL0;
     
 };
 
+
+
+VS_OUTPUT VSmain(VS_in vsin)
+{
+    VS_OUTPUT output;
+    output.Position = vsin.Position;
+    output.Normal = vsin.Normal;
+    output.Tangent = vsin.Tangent;
+    output.BiNormal = vsin.BiNoramal;
+    output.TexCoord = vsin.TexCoord;
+    output.Diffuse = vsin.Diffuse;
+	
+	
+
+    return output;
+}
+
+//テッセレーション
+//ハルシェーダー
 struct HS_OUTPUT
 {
     float4 Position : SV_POSITION;
-    float4 Normal : NORMAL0;
     float2 TexCoord : TEXCOORD0;
     float4 Diffuse : COLOR0;
-    float4 WorldPos : POSITION0;
-    float4 PosSM : POSITION1;
+    float4 Normal : NORMAL0;
     float4 Tangent : TANGENT0;
     float4 BiNormal : BINORMAL0;
 };
 
-HS_OUTPUT HS_ControlPoint(HS_INPUT input)
+struct HS_CONSTANT_DATA_OUTPUT
 {
-    HS_OUTPUT output;
-    output.Position = input.Position;
-    output.Normal = input.Normal;
-    output.TexCoord = input.TexCoord;
-    output.Diffuse = input.Diffuse;
-    output.WorldPos = input.WorldPos;
-    output.PosSM = input.PosSM;
-    output.Tangent = input.Tangent;
-    output.BiNormal = input.BiNormal;
-    return output;
+    float EdgeTessFactor[4] : SV_TessFactor;
+    float InsideTessFactor[2] : SV_InsideTessFactor;
+};
+
+
+
+HS_CONSTANT_DATA_OUTPUT CalcHSPatchConstants(
+  InputPatch<VS_OUTPUT, 4> ip,
+  uint PatchID : SV_PrimitiveID)
+{
+    HS_CONSTANT_DATA_OUTPUT Output;
+  [unroll]
+    for (uint i = 0; i < 4; ++i)
+    {
+        Output.EdgeTessFactor[i] = cbEdgeFactor;
+    }
+    Output.InsideTessFactor[0] = Output.InsideTessFactor[1] = cbInsideFactor;
+    return Output;
 }
+
 
 [domain("quad")]
 [partitioning("integer")]
 [outputtopology("triangle_cw")]
 [outputcontrolpoints(4)]
-[patchconstantfunc("HS_PatchConstants")]
-HS_OUTPUT HSmain(InputPatch<HS_INPUT, 4> patch, uint id : SV_OutputControlPointID)
+[patchconstantfunc("CalcHSPatchConstants")]
+[maxtessfactor(16.f)]
+HS_OUTPUT HSmain(InputPatch<VS_OUTPUT, 4> patch,
+  uint i : SV_OutputControlPointID,
+  uint PatchID : SV_PrimitiveID)
 {
-    return HS_ControlPoint(patch[id]);
+    
+    HS_OUTPUT Output;
+    Output.Position = patch[i].Position;
+    Output.TexCoord = patch[i].TexCoord;
+    Output.Diffuse = patch[i].Diffuse;
+    Output.Normal = patch[i].Normal;
+    Output.Tangent = patch[i].Tangent;
+    Output.BiNormal = patch[i].BiNormal;
+    return Output;
 }
 
 struct HS_CONSTANT_DATA
@@ -233,70 +216,67 @@ struct HS_CONSTANT_DATA
     float inside[2] : SV_InsideTessFactor;
 };
 
-HS_CONSTANT_DATA HS_PatchConstants(InputPatch<HS_INPUT, 4> patch)
-{
-    HS_CONSTANT_DATA output;
-    output.edges[0] = tessellationFactor;
-    output.edges[1] = tessellationFactor;
-    output.edges[2] = tessellationFactor;
-    output.edges[3] = tessellationFactor;
-    output.inside[0] = tessellationFactor;
-    output.inside[1] = tessellationFactor; // 必ず全ての要素を初期化
-    return output;
-}
 
 
 struct DS_OUTPUT
 {
     float4 Position : SV_POSITION;
-    float4 Normal : NORMAL0;
     float2 TexCoord : TEXCOORD0;
     float4 Diffuse : COLOR0;
     float4 WorldPos : POSITION0;
     float4 PosSM : POSITION1;
+    float4 Normal : NORMAL0;
     float4 Tangent : TANGENT0;
     float4 BiNormal : BINORMAL0;
 };
 
 [domain("quad")]
-DS_OUTPUT DSmain(HS_CONSTANT_DATA input, float2 uv : SV_DomainLocation, const OutputPatch<HS_OUTPUT, 4> patch)
+DS_OUTPUT DSmain(
+  HS_CONSTANT_DATA_OUTPUT input,
+  float2 uv : SV_DomainLocation,
+  const OutputPatch<HS_OUTPUT, 4> patch)
 {
     DS_OUTPUT output;
-    float3 pos = patch[0].Position * (1.0f - uv.x) * (1.0f - uv.y) +
-                 patch[1].Position * uv.x * (1.0f - uv.y) +
-                 patch[2].Position * uv.x * uv.y +
-                 patch[3].Position * (1.0f - uv.x) * uv.y;
-
+// 頂点座標
+    float3 p1 = lerp(patch[1].Position, patch[0].Position, uv.x);
+    float3 p2 = lerp(patch[3].Position, patch[2].Position, uv.x);
+    float3 p3 = lerp(p1, p2, uv.y);
     
-    float3 wpos = patch[0].WorldPos * (1.0f - uv.x) * (1.0f - uv.y) +
-                 patch[1].WorldPos * uv.x * (1.0f - uv.y) +
-                 patch[2].WorldPos * uv.x * uv.y +
-                 patch[3].WorldPos * (1.0f - uv.x) * uv.y;
-
-
+    matrix wvp;
+    wvp = mul(World, View);
+    wvp = mul(wvp, Projection);
+    output.Position = mul(float4(p3, 1.0f), wvp);
     
     
-    // Heightmapのデータを使用して高さを調整
-    float height = HeightMap.SampleLevel(WrapSampler, uv, 0);
-    pos.y += height;
-    
+    // テクセル
+    float2 t1 = lerp(patch[1].TexCoord, patch[0].TexCoord, uv.x);
+    float2 t2 = lerp(patch[3].TexCoord, patch[2].TexCoord, uv.x);
+    float2 t3 = lerp(t1, t2, uv.y);
+    output.TexCoord = t3;
 
-    output.Position = float4(pos, 1.0f);
-        
-    float4 nor = (patch[0].Normal + patch[1].Normal + patch[2].Normal + patch[3].Normal) / 4.0f;
+    output.Diffuse = patch[0].Diffuse;
     
-    nor = normalize(nor);
-    output.Normal = nor;
-    output.TexCoord = uv;
-    output.Diffuse = patch[0].Diffuse; // 必要に応じて補間することも可能
-    output.WorldPos = wpos; // 必要に応じて補間することも可能
-    output.PosSM = patch[0].PosSM; // 必要に応じて補間することも可能
-    output.Tangent = patch[0].Tangent; // 必要に応じて補間することも可能
-    output.BiNormal = patch[0].BiNormal; // 必要に応じて補間することも可能
+    output.WorldPos = mul(float4(p3, 1.0f), World);
 
+    matrix SMWorldViewProj = mul(World, Shadow.wvp);
+    wvp = mul(World, View);
+    wvp = mul(wvp, Projection);
+
+    float4 pos4 = mul(float4(p3, 1.0f), SMWorldViewProj);
+    pos4.xyz = pos4.xyz / pos4.w;
+    output.PosSM.x = (pos4.x + 1.0) / 2.0;
+    output.PosSM.y = (-pos4.y + 1.0) / 2.0;
+    output.PosSM.z = pos4.z;
+
+    
+    output.Normal = normalize(mul(float4(patch[0].Normal.xyz, 0.0f), World));
+    output.Tangent = normalize(mul(float4(patch[0].Tangent.xyz, 0.0f), World));
+    output.BiNormal = normalize(mul(float4(patch[0].BiNormal.xyz, 0.0f), World));
+
+
+    
     return output;
 }
-
 
 //=============================================================================
 // ピクセルシェーダ
@@ -319,29 +299,28 @@ float GetVarianceDirectionalShadowFactor(float4 shadowCoord)
 }
 
 
-void PSmain(in float4 inPosition : SV_POSITION,
-						 in float4 inNormal : NORMAL0,
-						 in float2 inTexCoord : TEXCOORD0,
-						 in float4 inDiffuse : COLOR0,
-						 in float4 inWorldPos : POSITION0,
-						 in float4 inPosSM : POSITION1,
-						 in float4 inTangent : TANGENT0,
-						 in float4 inBiNormal : BINORMAL0,
 
-						 out float4 outDiffuse : SV_Target)
+
+struct PSout
+{
+    float4 outDiffuse : SV_Target;
+};
+
+PSout PSmain(DS_OUTPUT dsout)
 {
     float4 color;
 
     float sma = 1.0;
     bool shadow;
     
+    PSout psout;
     
-    float4 normal = inNormal;
+    float4 normal = dsout.Normal;
     
     if (Material.noNormalTex == 0)
     {
         // Sample the normal map
-        float3 normalMap = NormalTex.Sample(WrapSampler, inTexCoord).rgb;
+        float3 normalMap = NormalTex.Sample(WrapSampler, dsout.TexCoord).rgb;
         
         normalMap.x = 1.0 - normalMap.x;
         normalMap.y = 1.0 - normalMap.y;
@@ -351,7 +330,7 @@ void PSmain(in float4 inPosition : SV_POSITION,
         
         
         
-        float3x3 TBN = float3x3(inTangent.xyz, inBiNormal.xyz, inNormal.xyz);
+        float3x3 TBN = float3x3(dsout.Tangent.xyz, dsout.BiNormal.xyz, dsout.Normal.xyz);
         normal.xyz = mul(normalMap, TBN);
         
         
@@ -360,16 +339,16 @@ void PSmain(in float4 inPosition : SV_POSITION,
     					//影
     if (Shadow.enable == 1)
     {
-        if (inPosSM.z > 1.0)
+        if (dsout.PosSM.z > 1.0)
         {
             sma = 1.0;
         }
         else if (Shadow.mode == 0)
         {
-            float sm0 = ShadowMapNear.Sample(BorderSampler, inPosSM.xy);
+            float sm0 = ShadowMapNear.Sample(BorderSampler, dsout.PosSM.xy);
 
             
-            if (inPosSM.z - 0.0002 > sm0)
+            if (dsout.PosSM.z - 0.0002 > sm0)
             {
                 sma = 0.5;
 
@@ -378,7 +357,7 @@ void PSmain(in float4 inPosition : SV_POSITION,
         }
         else if (Shadow.mode == 1)
         {
-            sma = GetVarianceDirectionalShadowFactor(inPosSM);
+            sma = GetVarianceDirectionalShadowFactor(dsout.PosSM);
             if (sma < 0.99f)
             {
                 sma = sma * sma;
@@ -398,13 +377,13 @@ void PSmain(in float4 inPosition : SV_POSITION,
 	
     if (Material.noDiffuseTex == 0)
     {
-        color = DiffuseTexture.Sample(WrapSampler, inTexCoord);
+        color = DiffuseTexture.Sample(WrapSampler, dsout.TexCoord);
 
-        color *= inDiffuse;
+        color *= dsout.Diffuse;
     }
     else
     {
-        color = inDiffuse;
+        color = dsout.Diffuse;
     }
 
     float alpha = color.a;
@@ -438,7 +417,7 @@ void PSmain(in float4 inPosition : SV_POSITION,
 
                 float3 r = 2.0 * normal.xyz * light - lightDir;
 
-                float3 v = normalize(Camera.xyz - inWorldPos.xyz);
+                float3 v = normalize(Camera.xyz - dsout.WorldPos.xyz);
                         
                         
                 iA = color.xyz * Material.Ambient.xyz * direcLight.m_Ambient[i].xyz;
@@ -489,7 +468,10 @@ void PSmain(in float4 inPosition : SV_POSITION,
 
     
     
-    outDiffuse = color;
+    psout.outDiffuse = color;
+    
+    
+    return psout;
 }
 
         

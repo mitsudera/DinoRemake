@@ -20,7 +20,7 @@ public:
 
 private:
 
-	VERTEX_3D vertexArray[4];
+	VERTEX_3D vertexArray[6];
 	ID3D11Buffer* vertexBuffer;
 	ID3D11Texture2D* heightMap;
 

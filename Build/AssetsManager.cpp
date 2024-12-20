@@ -70,6 +70,7 @@ void AssetsManager::Uninit(void)
 
 	for (ShaderSet* data: ShaderSetArray)
 	{
+		data->Uninit();
 		if (data) delete data;
 	}
 	ShaderSetArray.clear();
@@ -464,7 +465,8 @@ void AssetsManager::SetShader(ShaderSet::ShaderIndex index)
 
 		this->shadowShader->SetShaderRenderer();
 		break;
-
+	case ShaderSet::Terrain:
+		this->terrainShader->SetShaderRenderer();
 	}
 }
 

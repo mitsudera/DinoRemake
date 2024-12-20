@@ -56,6 +56,12 @@ void DX11Texture::SetShaderResourcePS(int n)
 	this->pManager->GetGameEngine()->GetRenderer()->GetDeviceContext()->PSSetShaderResources(n, 1, &SRV);
 }
 
+void DX11Texture::SetShaderResourceDS(int n)
+{
+	this->pManager->GetGameEngine()->GetRenderer()->GetDeviceContext()->DSSetShaderResources(n, 1, &SRV);
+
+}
+
 void DX11Texture::SetManager(AssetsManager* Manager)
 {
 	this->pManager = Manager;

@@ -102,6 +102,9 @@ void Scene::Uninit()
 	}
 	gameObjectArray.clear();
 	
+	allComponent.clear();
+	allTransformComponent.clear();
+	allPrimitiveComponent.clear();
 
 }
 

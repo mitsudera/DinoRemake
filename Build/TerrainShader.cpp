@@ -1,5 +1,8 @@
 #include "TerrainShader.h"
 #include"renderer.h"
+#include "GameEngine.h"
+#include "CBufferManager.h"
+
 
 TerrainShader::TerrainShader(Renderer* renderer)
 {
@@ -24,12 +27,21 @@ TerrainShader::TerrainShader(Renderer* renderer)
         throw std::runtime_error("Failed to create buffer");
     }
 
+    bufferDesc.ByteWidth = sizeof(TessCBuffer);
+    bufferDesc.StructureByteStride = sizeof(float);
+
+    hr = pRenderer->GetDevice()->CreateBuffer(&bufferDesc, NULL, &tessBuffer);
+    if (FAILED(hr)) {
+        throw std::runtime_error("Failed to create buffer");
+    }
+
 }
 
 TerrainShader::~TerrainShader()
 {
     ShaderRelease();
     if (materialBuffer) materialBuffer->Release();
+    if (tessBuffer) tessBuffer->Release();
 }
 
 void TerrainShader::SetMaterialCbuffer(MaterialCBuffer data)
@@ -37,3 +49,16 @@ void TerrainShader::SetMaterialCbuffer(MaterialCBuffer data)
     pRenderer->GetDeviceContext()->UpdateSubresource(this->materialBuffer, 0, nullptr, &data, 0, 0);
 
 }
+
+void TerrainShader::SetTessBuffer(TessCBuffer data)
+{
+    pRenderer->GetDeviceContext()->UpdateSubresource(this->tessBuffer, 0, nullptr, &data, 0, 0);
+
+    pRenderer->GetGameEngine()->GetCBufferManager()->SetCBufferHSDS(tessBuffer,CBufferManager::BufferSlot::Free1);
+}
+
+void TerrainShader::Uninit(void)
+{
+    if(tessBuffer) tessBuffer->Release();
+}
+

@@ -51,6 +51,8 @@ public:
 
 	void ShaderRelease(void);
 
+	virtual void Uninit(void);
+
 	void CreateVS(string filePath,string shaderName);
 	void CreateHS(string filePath,string shaderName);
 	void CreateDS(string filePath,string shaderName);

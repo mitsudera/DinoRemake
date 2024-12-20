@@ -56,7 +56,7 @@ void TerrainComponent::Draw(void)
 
 	pAssetsManager->GetMaterial(this->materialIndex)->SetBufferMaterial();
 
-	this->pRenderer->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+	this->pRenderer->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_4_CONTROL_POINT_PATCHLIST);
 	this->pRenderer->GetDeviceContext()->Draw(4, 0);
 
 	this->pRenderer->SetAlphaTestEnable(FALSE);
@@ -78,44 +78,46 @@ void TerrainComponent::CreateVetexBuffer(XMFLOAT2 scale,XMFLOAT2 uvScale,XMFLOAT
 	this->pRenderer->GetDevice()->CreateBuffer(&bd, NULL, &this->vertexBuffer);
 
 
-
-	vertexArray[0].Position = { -scale.x,0.0f,scale.y };
-	vertexArray[0].Normal = { 0.0f,1.0f,0.0 };
-	vertexArray[0].Diffuse = color;
-	vertexArray[0].TexCoord = { 0.0f,0.0f };
+	VERTEX_3D vert[4];
 
 
-	vertexArray[1].Position = { scale.x,0.0f,scale.y };
-	vertexArray[1].Normal = { 0.0f,1.0f,0.0 };
-	vertexArray[1].Diffuse = color;
-	vertexArray[1].TexCoord = { uvScale.x,0.0f };
+	vert[0].Position = { -scale.x,0.0f,scale.y };
+	vert[0].Normal = { 0.0f,1.0f,0.0 };
+	vert[0].Diffuse = color;
+	vert[0].TexCoord = { 0.0f,0.0f };
 
-	vertexArray[2].Position = { -scale.x,0.0f ,-scale.y };
-	vertexArray[2].Normal = { 0.0f,1.0f,0.0 };
-	vertexArray[2].Diffuse = color;
-	vertexArray[2].TexCoord = { 0.0f,uvScale.y };
 
-	vertexArray[3].Position = { scale.x ,0.0f,-scale.y };
-	vertexArray[3].Normal = { 0.0f,1.0f,0.0 };
-	vertexArray[3].Diffuse = color;
-	vertexArray[3].TexCoord = { uvScale.x,uvScale.y };
+	vert[1].Position = { scale.x,0.0f,scale.y };
+	vert[1].Normal = { 0.0f,1.0f,0.0 };
+	vert[1].Diffuse = color;
+	vert[1].TexCoord = { uvScale.x,0.0f };
+
+	vert[2].Position = { -scale.x,0.0f ,-scale.y };
+	vert[2].Normal = { 0.0f,1.0f,0.0 };
+	vert[2].Diffuse = color;
+	vert[2].TexCoord = { 0.0f,uvScale.y };
+
+	vert[3].Position = { scale.x ,0.0f,-scale.y };
+	vert[3].Normal = { 0.0f,1.0f,0.0 };
+	vert[3].Diffuse = color;
+	vert[3].TexCoord = { uvScale.x,uvScale.y };
 
 	// タンジェントベクトルの計算
 	XMFLOAT3 edge1, edge2;
-	edge1.x = vertexArray[1].Position.x - vertexArray[0].Position.x;
-	edge1.y = vertexArray[1].Position.y - vertexArray[0].Position.y;
-	edge1.z = vertexArray[1].Position.z - vertexArray[0].Position.z;
+	edge1.x = vert[1].Position.x - vert[0].Position.x;
+	edge1.y = vert[1].Position.y - vert[0].Position.y;
+	edge1.z = vert[1].Position.z - vert[0].Position.z;
 
-	edge2.x = vertexArray[2].Position.x - vertexArray[0].Position.x;
-	edge2.y = vertexArray[2].Position.y - vertexArray[0].Position.y;
-	edge2.z = vertexArray[2].Position.z - vertexArray[0].Position.z;
+	edge2.x = vert[2].Position.x - vert[0].Position.x;
+	edge2.y = vert[2].Position.y - vert[0].Position.y;
+	edge2.z = vert[2].Position.z - vert[0].Position.z;
 
 	XMFLOAT2 deltaUV1, deltaUV2;
-	deltaUV1.x = vertexArray[1].TexCoord.x - vertexArray[0].TexCoord.x;
-	deltaUV1.y = vertexArray[1].TexCoord.y - vertexArray[0].TexCoord.y;
+	deltaUV1.x = vert[1].TexCoord.x - vert[0].TexCoord.x;
+	deltaUV1.y = vert[1].TexCoord.y - vert[0].TexCoord.y;
 
-	deltaUV2.x = vertexArray[2].TexCoord.x - vertexArray[0].TexCoord.x;
-	deltaUV2.y = vertexArray[2].TexCoord.y - vertexArray[0].TexCoord.y;
+	deltaUV2.x = vert[2].TexCoord.x - vert[0].TexCoord.x;
+	deltaUV2.y = vert[2].TexCoord.y - vert[0].TexCoord.y;
 
 	float f = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV2.x * deltaUV1.y);
 
@@ -129,12 +131,12 @@ void TerrainComponent::CreateVetexBuffer(XMFLOAT2 scale,XMFLOAT2 uvScale,XMFLOAT
 	// 各頂点にタンジェントベクトルを設定
 	for (int n = 0; n < 4; n++)
 	{
-		vertexArray[n].Tangent = tangent;
+		vert[n].Tangent = tangent;
 
 
 
-		XMVECTOR nv = XMLoadFloat3(&vertexArray[n].Normal);
-		XMVECTOR tv = XMLoadFloat3(&vertexArray[n].Tangent);
+		XMVECTOR nv = XMLoadFloat3(&vert[n].Normal);
+		XMVECTOR tv = XMLoadFloat3(&vert[n].Tangent);
 
 		XMVECTOR binv = XMVector3Cross(nv, tv);
 		binv = XMVector3Normalize(binv);
@@ -143,10 +145,14 @@ void TerrainComponent::CreateVetexBuffer(XMFLOAT2 scale,XMFLOAT2 uvScale,XMFLOAT
 
 		XMStoreFloat3(&binor, binv);
 
-		vertexArray[n].BiNormal = binor;
+		vert[n].BiNormal = binor;
 
 	}
 
+	vertexArray[0] = vert[0];
+	vertexArray[1] = vert[1];
+	vertexArray[2] = vert[2];
+	vertexArray[3] = vert[3];
 
 	//頂点バッファの中身を埋める
 

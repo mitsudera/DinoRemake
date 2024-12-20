@@ -1,5 +1,4 @@
 #include "TerrainMaterial.h"
-#include "TerrainShader.h"
 #include "DX11Texture.h"
 #include "AssetsManager.h"
 
@@ -54,7 +53,29 @@ void TerrainMaterial::SetBufferMaterial(void)
 	if (!noArmTex) pAssetsManager->GetTexture(textureArmIndex)->SetShaderResourcePS(2);
 
 
+	TessCBuffer data;
+	data.cbEdgeFactor = tessEdgeFacter;
+	data.cbInsideFactor = tessInsideFacter;
+	this->pTerrainShader->SetTessBuffer(data);
+
+	pAssetsManager->GetTexture(heightMapTexIndex)->SetShaderResourceDS(5);
 }
+
+void TerrainMaterial::LoadHeghtMap(string filePath)
+{
+	this->heightMapTexIndex = pAssetsManager->LoadTexture(filePath);
+}
+
+void TerrainMaterial::SetTessEdgeFacter(float facter)
+{
+	this->tessEdgeFacter = facter;
+}
+
+void TerrainMaterial::SetTessInsideFacter(float facter)
+{
+	this->tessInsideFacter = facter;
+}
+
 
 
 

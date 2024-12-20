@@ -33,11 +33,11 @@ public:
 	void SetCBufferOtherCS(ID3D11Buffer* buffer, BufferSlot slot);//コンピュートシェーダー以外の定数バッファ
 	void SetCBufferVSPS(ID3D11Buffer* buffer, BufferSlot slot);//頂点シェーダーとピクセルシェーダー
 	void SetCBufferCS(ID3D11Buffer* buffer, BufferSlot slot);//コンピュートシェーダーの定数バッファ
+	void SetCBufferHSDS(ID3D11Buffer* buffer, BufferSlot slot);//コンピュートシェーダーの定数バッファ
 
 	void SetWorldMtx(XMMATRIX* world);
 	void SetViewMtx(XMMATRIX* view);
 	void SetProjectionMtx(XMMATRIX* projection);
-	void SetWorldViewProjection2D(void);
 	void SetCameraBuffer(XMFLOAT3* pos);
 
 

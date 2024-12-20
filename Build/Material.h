@@ -40,14 +40,11 @@ public:
 	int			noNormalTex;
 	int			noArmTex;
 
-
-
 	int textureDiffuseIndex;
 	int textureNormalIndex;
 	int textureArmIndex;
 
 
-private:
 
 protected:
 

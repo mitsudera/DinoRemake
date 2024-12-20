@@ -438,6 +438,7 @@ HRESULT Renderer::InitRenderer(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	m_D3DDevice->CreateSamplerState( &samplerDesc, &samplerWrap );
 
 	m_ImmediateContext->PSSetSamplers( 0, 1, &samplerWrap );
+	m_ImmediateContext->DSSetSamplers( 0, 1, &samplerWrap );
 
 	// Borderサンプラーステート設定
 	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_BORDER;
@@ -451,6 +452,7 @@ HRESULT Renderer::InitRenderer(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	samplerBorder = NULL;
 	m_D3DDevice->CreateSamplerState(&samplerDesc, &samplerBorder);
 	m_ImmediateContext->PSSetSamplers(1, 1, &samplerBorder);
+	m_ImmediateContext->DSSetSamplers(1, 1, &samplerBorder);
 
 	this->fullScreenVertex = new FullScreenQuadVertex(this);
 
