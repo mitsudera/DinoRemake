@@ -243,17 +243,23 @@ DS_OUTPUT DSmain(
     patch[2].Position * (1 - domain.x) * domain.y +
     patch[3].Position * domain.x * domain.y);
    
+        // uv
+    float2 t1 = lerp(patch[1].TexCoord, patch[0].TexCoord, domain.x);
+    float2 t2 = lerp(patch[3].TexCoord, patch[2].TexCoord, domain.x);
+    float2 t3 = lerp(t1, t2, domain.y);
+    output.TexCoord = t3;
+
+    // Heightmapのデータを使用して高さを調整
+    float height = HeightMap.SampleLevel(WrapSampler, t3, 0).r;
+    pos.y += height*10;
+
+    
     matrix wvp;
     wvp = mul(World, View);
     wvp = mul(wvp, Projection);
     output.Position = mul(pos, wvp);
     
-    
-    // uv
-    float2 t1 = lerp(patch[1].TexCoord, patch[0].TexCoord, domain.x);
-    float2 t2 = lerp(patch[3].TexCoord, patch[2].TexCoord, domain.x);
-    float2 t3 = lerp(t1, t2, domain.y);
-    output.TexCoord = t3;
+
 
     output.Diffuse = patch[0].Diffuse;
     

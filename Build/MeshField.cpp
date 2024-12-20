@@ -33,13 +33,13 @@ void MeshField::Awake(void)
 	//PhongMaterial* mat = new PhongMaterial(pScene->GetGameEngine()->GetAssetsManager());
 	mat->LoadDiffuseTex("data/texture/gravel_diff.png");
 	mat->LoadNormalTex("data/texture/gravel_nor.png");
-	mat->LoadHeghtMap("heightmap_1.png");
+	mat->LoadHeghtMap("data/texture/heightmap_1.png");
 	mat->diffuse = { 1.0f, 1.0f, 1.0f, 1.0f };
 	mat->ambient = { 0.2f,0.2f,0.2f,1.0f };
 	mat->shininess = 20.0f;
 	mat->specular= { 0.2f,0.2f,0.2f,1.0f };
-	mat->SetTessEdgeFacter(4.0f);
-	mat->SetTessInsideFacter(4.0f);
+	mat->SetTessEdgeFacter(1000.0f);
+	mat->SetTessInsideFacter(1000.0f);
 	meshField->LoadMaterial(mat);
 	meshField->SetHasShadow(FALSE);
 
