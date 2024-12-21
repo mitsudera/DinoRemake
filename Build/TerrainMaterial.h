@@ -15,11 +15,14 @@ public:
 	// Material ÇâÓÇµÇƒåpè≥Ç≥ÇÍÇ‹ÇµÇΩ
 	virtual void SetBufferMaterial(void) override;
 
-	void LoadHeghtMap(string filePath);
 
 	void SetTessEdgeFacter(float facter);
 	void SetTessInsideFacter(float facter);
 	void SetHeightFacter(float facter);
+	void SetUVScale(XMFLOAT2 scale);
+	void SetHeghtMapUVScale(XMFLOAT2 scale);
+	float GetHeightFacter(void);
+
 private:
 	TerrainShader* pTerrainShader;
 
@@ -28,6 +31,8 @@ private:
 	float tessEdgeFacter;
 	float tessInsideFacter;
 	float heightFacter;
+	XMFLOAT2 uvScale;
+	XMFLOAT2 heightMapUvScale;
 
 };
 

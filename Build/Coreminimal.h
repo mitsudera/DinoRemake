@@ -4,6 +4,7 @@
 #pragma warning(push)
 #define _CRT_SECURE_NO_WARNINGS			// scanf ‚Ìwarning–h~
 #include "windows.h"
+#include <wincodec.h>
 
 // DirectX11 “±“ü
 #pragma warning(disable:4005)
@@ -11,7 +12,6 @@
 #include <d3dx11.h>
 #include <d3dcompiler.h>
 #include <DirectXMath.h>
-
 
 #define DIRECTINPUT_VERSION 0x0800		// Œx‘Îˆ
 #include "dinput.h"

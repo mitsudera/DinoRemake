@@ -516,6 +516,7 @@ void Renderer::UninitRenderer(void)
 	if (samplerWrap)			samplerWrap->Release();
 	if (samplerBorder)			samplerBorder->Release();
 	if (samplerClamp)			samplerClamp->Release();
+	if (samplerMirror)			samplerMirror->Release();
 
 	if (SwapChain)				SwapChain->Release();
 

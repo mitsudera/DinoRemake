@@ -1,6 +1,7 @@
 #pragma once
 #include "primitivecomponent.h"
 #include "ShaderSet.h"
+#include "WicFactory.h"
 class TerrainComponent :public PrimitiveComponent
 {
 public:
@@ -12,12 +13,12 @@ public:
 
 	virtual void Draw(void) override;
 
-	//void CreateVetexBuffer(XMFLOAT2 uvScale, XMFLOAT2 scale, XMFLOAT4 color);
 
-	void CreateVetexBuffer(XMINT2 resolution, XMFLOAT2 size, XMFLOAT2 uvScale);
+	void CreateVetexBuffer(XMINT2 resolution, XMFLOAT2 size);
+
+	void LoadHeightMap(string path);
 
 
-	ID3D11Texture2D* GetHeightMap(void);
 
 	float GetHeight(XMFLOAT3 pos);
 
@@ -31,8 +32,8 @@ private:
 	int* indexArray;
 	ID3D11Buffer* vertexBuffer;
 	ID3D11Buffer* indexBuffer;
-	ID3D11Texture2D* heightMap;
-
+	ID3D11ShaderResourceView* heightMapSRV;
+	FileTexture* heightMap;
 
 };
 

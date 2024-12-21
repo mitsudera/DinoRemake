@@ -11,6 +11,7 @@ TerrainShader::TerrainShader(Renderer* renderer)
     this->CreatePS("shaders/TerrainShader.hlsl", "PSmain");
     this->CreateDS("shaders/TerrainShader.hlsl", "DSmain");
     this->CreateHS("shaders/TerrainShader.hlsl", "HSmain");
+    this->CreateGS("shaders/TerrainShader.hlsl", "GSmain");
 
     shaderIndex = ShaderIndex::Terrain;
 

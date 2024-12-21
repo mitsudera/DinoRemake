@@ -157,6 +157,9 @@
     <Filter Include="Shader\TerrainShader">
       <UniqueIdentifier>{0fc31a20-b1a4-438c-9787-ca00676a9003}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shader\PostEffect\NotEffect">
+      <UniqueIdentifier>{abb7fd20-7613-409c-bdd4-e76e68a67055}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Coreminimal.h">
@@ -444,6 +447,12 @@
     <ClInclude Include="TerrainShader.h">
       <Filter>Shader\TerrainShader</Filter>
     </ClInclude>
+    <ClInclude Include="NotEffectShader.h">
+      <Filter>Shader\PostEffect\NotEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="WicFactory.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -728,6 +737,12 @@
     <ClCompile Include="TerrainShader.cpp">
       <Filter>Shader\TerrainShader</Filter>
     </ClCompile>
+    <ClCompile Include="NotEffectShader.cpp">
+      <Filter>Shader\PostEffect\NotEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="WicFactory.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\shader.hlsl">
@@ -753,6 +768,9 @@
     </FxCompile>
     <FxCompile Include="shaders\TerrainShader.hlsl">
       <Filter>Shader\TerrainShader</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\NotEffect.hlsl">
+      <Filter>Shader\PostEffect\NotEffect</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

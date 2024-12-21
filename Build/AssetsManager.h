@@ -31,6 +31,7 @@ class TerrainShader;
 class PostEffectShader;
 class GausianBlurShader;
 class FadeShader;
+class NotEffectShader;
 class AssetsManager
 {
 
@@ -88,6 +89,7 @@ public:
 
 	GausianBlurShader* GetGausianBlurShader(void);
 	FadeShader* GetFadeShader(void);
+	NotEffectShader* GetNotEffectShader(void);
 
 	void SetShader(ShaderSet::ShaderIndex index);
 
@@ -132,5 +134,6 @@ private:
 
 	GausianBlurShader* gausianBlur;
 	FadeShader* fadeShader;
+	NotEffectShader* notEffectShader;
 };
 

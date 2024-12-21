@@ -17,6 +17,7 @@
 #include "FadeShader.h"
 #include "UIMaterial.h"
 #include "TerrainShader.h"
+#include "NotEffectShader.h"
 
 #define MESH_PATH "data/MODEL/mesh/"
 #define SKINMESH_PATH "data/MODEL/skinmesh/"
@@ -396,6 +397,9 @@ void AssetsManager::CreateAllShader(void)
 	fadeShader = new FadeShader(this->pGameEngine->GetRenderer());
 	PostEffectShaderArray.push_back(fadeShader);
 
+	notEffectShader = new NotEffectShader(this->pGameEngine->GetRenderer());
+	PostEffectShaderArray.push_back(notEffectShader);
+
 
 }
 
@@ -440,6 +444,11 @@ GausianBlurShader* AssetsManager::GetGausianBlurShader(void)
 FadeShader* AssetsManager::GetFadeShader(void)
 {
 	return this->fadeShader;
+}
+
+NotEffectShader* AssetsManager::GetNotEffectShader(void)
+{
+	return this->notEffectShader;
 }
 
 void AssetsManager::SetShader(ShaderSet::ShaderIndex index)

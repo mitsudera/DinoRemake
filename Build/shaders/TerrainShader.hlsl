@@ -95,8 +95,10 @@ cbuffer TessellationBuffer : register(b8)
 {
     float cbEdgeFactor; //4角形の辺の分割量の指定
     float cbInsideFactor; //4角形の内部の分割量の指定
-    float heightFacter;
-    float dummy;
+    float heightFactor; //heightMapの高さに対してかける値
+    float d1;
+    float2 uvScale; //uvスケール
+    float2 heghtMapUVScale; //heightmapのuvスケール
    
 };
 
@@ -134,9 +136,6 @@ struct VS_OUTPUT
     float4 Position : SV_POSITION;
     float2 TexCoord : TEXCOORD0;
     float4 Diffuse : COLOR0;
-    float4 Normal : NORMAL0;
-    float4 Tangent : TANGENT0;
-    float4 BiNormal : BINORMAL0;
     
 };
 
@@ -146,9 +145,6 @@ VS_OUTPUT VSmain(VS_in vsin)
 {
     VS_OUTPUT output;
     output.Position = vsin.Position;
-    output.Normal = vsin.Normal;
-    output.Tangent = vsin.Tangent;
-    output.BiNormal = vsin.BiNoramal;
     output.TexCoord = vsin.TexCoord;
     output.Diffuse = vsin.Diffuse;
 	
@@ -164,9 +160,6 @@ struct HS_OUTPUT
     float4 Position : SV_POSITION;
     float2 TexCoord : TEXCOORD0;
     float4 Diffuse : COLOR0;
-    float4 Normal : NORMAL0;
-    float4 Tangent : TANGENT0;
-    float4 BiNormal : BINORMAL0;
 };
 
 struct HS_CONSTANT_DATA_OUTPUT
@@ -206,9 +199,6 @@ HS_OUTPUT HSmain(InputPatch<VS_OUTPUT, 4> patch,
     Output.Position = patch[i].Position;
     Output.TexCoord = patch[i].TexCoord;
     Output.Diffuse = patch[i].Diffuse;
-    Output.Normal = patch[i].Normal;
-    Output.Tangent = patch[i].Tangent;
-    Output.BiNormal = patch[i].BiNormal;
     return Output;
 }
 
@@ -227,9 +217,6 @@ struct DS_OUTPUT
     float4 Diffuse : COLOR0;
     float4 WorldPos : POSITION0;
     float4 PosSM : POSITION1;
-    float4 Normal : NORMAL0;
-    float4 Tangent : TANGENT0;
-    float4 BiNormal : BINORMAL0;
 };
 
 [domain("quad")]
@@ -245,7 +232,6 @@ DS_OUTPUT DSmain(
     patch[1].Position * domain.x * (1 - domain.y) +
     patch[2].Position * (1 - domain.x) * domain.y +
     patch[3].Position * domain.x * domain.y);
-   
             // uv
 
     float2 uv = float2(
@@ -254,11 +240,11 @@ DS_OUTPUT DSmain(
     patch[2].TexCoord * (1 - domain.x) * domain.y +
     patch[3].TexCoord * domain.x * domain.y);
    
-    output.TexCoord = uv;
+    output.TexCoord = uv*uvScale;
 
     // Heightmapのデータを使用して高さを調整
-    float height = HeightMap.SampleLevel(MirrorSampler, uv, 0).r;
-    pos.y += height * heightFacter;
+    float height = HeightMap.SampleLevel(MirrorSampler, uv*heghtMapUVScale, 0).r;
+    pos.y += height * heightFactor;
 
     
     matrix wvp;
@@ -273,24 +259,74 @@ DS_OUTPUT DSmain(
     output.WorldPos = mul(pos, World);
 
     matrix SMWorldViewProj = mul(World, Shadow.wvp);
-    wvp = mul(World, View);
-    wvp = mul(wvp, Projection);
 
+    output.PosSM = float4(0.0f, 0.0f, 0.0f, 1.0f);
+    
     float4 pos4 = mul(pos, SMWorldViewProj);
     pos4.xyz = pos4.xyz / pos4.w;
     output.PosSM.x = (pos4.x + 1.0) / 2.0;
     output.PosSM.y = (-pos4.y + 1.0) / 2.0;
     output.PosSM.z = pos4.z;
-
-    
-    output.Normal = normalize(mul(float4(patch[0].Normal.xyz, 0.0f), World));
-    output.Tangent = normalize(mul(float4(patch[0].Tangent.xyz, 0.0f), World));
-    output.BiNormal = normalize(mul(float4(patch[0].BiNormal.xyz, 0.0f), World));
-
-
-    
     return output;
 }
+
+
+
+struct GS_OUTPUT
+{
+    float4 Position : SV_POSITION;
+    float2 TexCoord : TEXCOORD0;
+    float4 Diffuse : COLOR0;
+    float4 WorldPos : POSITION0;
+    float4 PosSM : POSITION1;
+    float4 Normal : NORMAL0;
+    float4 Tangent : TANGENT0;
+    float4 BiNormal : BINORMAL0;
+};
+
+
+//面ごとの法線を計算するためのジオメトリシェーダー
+
+[maxvertexcount(3)]
+void GSmain(triangle DS_OUTPUT input[3], inout TriangleStream<GS_OUTPUT> TriStream)
+{
+    GS_OUTPUT output;
+
+    
+    //法線
+    float3 edge1 = input[1].Position.xyz - input[0].Position.xyz;
+    float3 edge2 = input[2].Position.xyz - input[0].Position.xyz;
+    float3 faceNormal = normalize(cross(edge1, edge2));
+
+    //tangent
+    float2 deltaUV1 = input[1].TexCoord - input[0].TexCoord;
+    float2 deltaUV2 = input[2].TexCoord - input[0].TexCoord;
+
+    float3 tangent = (deltaUV2.y * edge1 - deltaUV1.y * edge2) / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+    tangent = normalize(tangent);
+
+    
+    //binormal
+    float3 binormal = cross(faceNormal, tangent);
+    binormal = normalize(binormal);
+
+    // Output vertices with the calculated normal, tangent, and binormal
+    for (int i = 0; i < 3; ++i)
+    {
+        output.Position = input[i].Position;
+        output.Diffuse = input[i].Diffuse;
+        output.Normal = float4(faceNormal, 1.0f);
+        output.Tangent = float4(tangent, 1.0f);
+        output.BiNormal = float4(binormal, 1.0f);
+        output.TexCoord = input[i].TexCoord;
+        output.WorldPos = input[i].WorldPos;
+        output.PosSM = input[i].PosSM;
+        TriStream.Append(output);
+    }
+}
+
+
+
 
 
 float GetVarianceDirectionalShadowFactor(float4 shadowCoord)
@@ -316,7 +352,7 @@ struct PSout
     float4 outDiffuse : SV_Target;
 };
 
-PSout PSmain(DS_OUTPUT dsout)
+PSout PSmain(GS_OUTPUT input)
 {
     float4 color;
 
@@ -325,12 +361,12 @@ PSout PSmain(DS_OUTPUT dsout)
     
     PSout psout;
     
-    float4 normal = dsout.Normal;
+    float4 normal = input.Normal;
     
     if (Material.noNormalTex == 0)
     {
         // Sample the normal map
-        float3 normalMap = NormalTex.Sample(WrapSampler, dsout.TexCoord).rgb;
+        float3 normalMap = NormalTex.Sample(WrapSampler, input.TexCoord).rgb;
         
         normalMap.x = 1.0 - normalMap.x;
         normalMap.y = 1.0 - normalMap.y;
@@ -340,7 +376,7 @@ PSout PSmain(DS_OUTPUT dsout)
         
         
         
-        float3x3 TBN = float3x3(dsout.Tangent.xyz, dsout.BiNormal.xyz, dsout.Normal.xyz);
+        float3x3 TBN = float3x3(input.Tangent.xyz, input.BiNormal.xyz, input.Normal.xyz);
         normal.xyz = mul(normalMap, TBN);
         
         
@@ -349,16 +385,16 @@ PSout PSmain(DS_OUTPUT dsout)
     					//影
     if (Shadow.enable == 1)
     {
-        if (dsout.PosSM.z > 1.0)
+        if (input.PosSM.z > 1.0)
         {
             sma = 1.0;
         }
         else if (Shadow.mode == 0)
         {
-            float sm0 = ShadowMapNear.Sample(BorderSampler, dsout.PosSM.xy);
+            float sm0 = ShadowMapNear.Sample(BorderSampler, input.PosSM.xy);
 
             
-            if (dsout.PosSM.z - 0.0002 > sm0)
+            if (input.PosSM.z - 0.0002 > sm0)
             {
                 sma = 0.5;
 
@@ -367,7 +403,7 @@ PSout PSmain(DS_OUTPUT dsout)
         }
         else if (Shadow.mode == 1)
         {
-            sma = GetVarianceDirectionalShadowFactor(dsout.PosSM);
+            sma = GetVarianceDirectionalShadowFactor(input.PosSM);
             if (sma < 0.99f)
             {
                 sma = sma * sma;
@@ -387,13 +423,13 @@ PSout PSmain(DS_OUTPUT dsout)
 	
     if (Material.noDiffuseTex == 0)
     {
-        color = DiffuseTexture.Sample(WrapSampler, dsout.TexCoord);
+        color = DiffuseTexture.Sample(WrapSampler, input.TexCoord);
 
-        color *= dsout.Diffuse;
+        color *= input.Diffuse;
     }
     else
     {
-        color = dsout.Diffuse;
+        color = input.Diffuse;
     }
 
     float alpha = color.a;
@@ -427,7 +463,7 @@ PSout PSmain(DS_OUTPUT dsout)
 
                 float3 r = 2.0 * normal.xyz * light - lightDir;
 
-                float3 v = normalize(Camera.xyz - dsout.WorldPos.xyz);
+                float3 v = normalize(Camera.xyz - input.WorldPos.xyz);
                         
                         
                 iA = color.xyz * Material.Ambient.xyz * direcLight.m_Ambient[i].xyz;

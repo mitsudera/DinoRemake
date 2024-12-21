@@ -8,6 +8,7 @@ TerrainMaterial::TerrainMaterial(AssetsManager* assetsManager)
 	this->pTerrainShader = assetsManager->GetTerrainShader();
 	this->pShader = assetsManager->GetTerrainShader();
 
+
 }
 
 TerrainMaterial::TerrainMaterial(TerrainMaterial* terrain)
@@ -57,15 +58,14 @@ void TerrainMaterial::SetBufferMaterial(void)
 	data.cbEdgeFactor = tessEdgeFacter;
 	data.cbInsideFactor = tessInsideFacter;
 	data.heightFactor = heightFacter;
+	data.uvScale[0] = uvScale.x;
+	data.uvScale[1] = uvScale.y;
+	data.heghtMapUVScale[0] = heightMapUvScale.x;
+	data.heghtMapUVScale[1] = heightMapUvScale.y;
 	this->pTerrainShader->SetTessBuffer(data);
 
-	pAssetsManager->GetTexture(heightMapTexIndex)->SetShaderResourceDS(5);
 }
 
-void TerrainMaterial::LoadHeghtMap(string filePath)
-{
-	this->heightMapTexIndex = pAssetsManager->LoadTexture(filePath);
-}
 
 void TerrainMaterial::SetTessEdgeFacter(float facter)
 {
@@ -80,6 +80,21 @@ void TerrainMaterial::SetTessInsideFacter(float facter)
 void TerrainMaterial::SetHeightFacter(float facter)
 {
 	heightFacter = facter;
+}
+
+void TerrainMaterial::SetUVScale(XMFLOAT2 scale)
+{
+	uvScale = scale;
+}
+
+void TerrainMaterial::SetHeghtMapUVScale(XMFLOAT2 scale)
+{
+	heightMapUvScale = scale;
+}
+
+float TerrainMaterial::GetHeightFacter(void)
+{
+	return this->heightFacter;
 }
 
 

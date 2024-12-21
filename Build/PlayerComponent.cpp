@@ -95,14 +95,14 @@ void PlayerComponent::Update(void)
 	ColliderComponent* collider = GetComponent<ColliderComponent>();
 
 	BOOL eHit= collider->GetHitTag(GameObject::ObjectTag::Enemy);
-	if (eHit)
-	{
-		this->PlayerOffset = 1.0f;
-	}
-	else
-	{
-		this->PlayerOffset = 2.0f;
-	}
+	//if (eHit)
+	//{
+	//	this->PlayerOffset = 1.0f;
+	//}
+	//else
+	//{
+	//	this->PlayerOffset = 2.0f;
+	//}
 }
 
 void PlayerComponent::SetContorol(BOOL enable)

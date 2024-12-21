@@ -11,6 +11,7 @@
 #include "CameraComponent.h"
 #include "ShadowMap.h"
 #include "SoundEngine.h"
+#include "WicFactory.h"
 
 GameEngine::GameEngine(Main* main)
 {
@@ -48,7 +49,7 @@ void GameEngine::Awake()
 	this->assetsManager = new AssetsManager(this);
 	this->assetsManager->Awake();
 
-
+	this->wicFactory = new WicFactory(this);
 
 	this->input = new Input();
 	this->input->Awake(*main->GetInstanceHandle(), main->GetWindowHangle());
@@ -120,6 +121,7 @@ void GameEngine::Uninit()
 
 	delete shadowMap;
 
+	delete wicFactory;
 
 	delete sceneManager;
 	delete soundEngine;
@@ -188,6 +190,11 @@ ShadowMap* GameEngine::GetShadowMap(void)
 SoundEngine* GameEngine::GetSoundEngine(void)
 {
 	return this->soundEngine;
+}
+
+WicFactory* GameEngine::GetWicFactory(void)
+{
+	return this->wicFactory;
 }
 
 

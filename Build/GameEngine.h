@@ -13,6 +13,7 @@ class LightManager;
 class CollisionManager;
 class ShadowMap;
 class SoundEngine;
+class WicFactory;
 
 class GameEngine
 {
@@ -41,6 +42,7 @@ public:
 	LightManager* GetLightmanager(void);
 	ShadowMap* GetShadowMap(void);
 	SoundEngine* GetSoundEngine(void);
+	WicFactory* GetWicFactory(void);
 
 	Scene* GetActiveScene(void);
 	void SetActiveScene(Scene* scene);
@@ -75,6 +77,7 @@ private:
 	CameraComponent* mainCamera;//バックバッファへの描画を行うカメラ
 	ShadowMap* shadowMap;
 	SoundEngine* soundEngine;
+	WicFactory* wicFactory;
 
 	SceneManager* sceneManager;
 	Scene* activeScene;
