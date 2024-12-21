@@ -28,7 +28,7 @@ void MeshField::Awake(void)
 	TerrainColliderComponent* collider = AddComponent<TerrainColliderComponent>();
 
 
-	meshField->CreateVetexBuffer(XMFLOAT2(1000.0f, 1000.0f), XMFLOAT2(10.0f, 10.0f), XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f));
+	meshField->CreateVetexBuffer(XMINT2(5, 5), XMFLOAT2(65536.0f, 65536.0f), XMFLOAT2(100.0f, 100.0f));
 	TerrainMaterial* mat = new TerrainMaterial(pScene->GetGameEngine()->GetAssetsManager());
 	//PhongMaterial* mat = new PhongMaterial(pScene->GetGameEngine()->GetAssetsManager());
 	mat->LoadDiffuseTex("data/texture/gravel_diff.png");
@@ -40,6 +40,7 @@ void MeshField::Awake(void)
 	mat->specular= { 0.2f,0.2f,0.2f,1.0f };
 	mat->SetTessEdgeFacter(1000.0f);
 	mat->SetTessInsideFacter(1000.0f);
+	mat->SetHeightFacter(100.0f);
 	meshField->LoadMaterial(mat);
 	meshField->SetHasShadow(FALSE);
 

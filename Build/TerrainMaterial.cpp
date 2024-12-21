@@ -56,6 +56,7 @@ void TerrainMaterial::SetBufferMaterial(void)
 	TessCBuffer data;
 	data.cbEdgeFactor = tessEdgeFacter;
 	data.cbInsideFactor = tessInsideFacter;
+	data.heightFactor = heightFacter;
 	this->pTerrainShader->SetTessBuffer(data);
 
 	pAssetsManager->GetTexture(heightMapTexIndex)->SetShaderResourceDS(5);
@@ -74,6 +75,11 @@ void TerrainMaterial::SetTessEdgeFacter(float facter)
 void TerrainMaterial::SetTessInsideFacter(float facter)
 {
 	this->tessInsideFacter = facter;
+}
+
+void TerrainMaterial::SetHeightFacter(float facter)
+{
+	heightFacter = facter;
 }
 
 

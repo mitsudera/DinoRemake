@@ -454,6 +454,29 @@ HRESULT Renderer::InitRenderer(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	m_ImmediateContext->PSSetSamplers(1, 1, &samplerBorder);
 	m_ImmediateContext->DSSetSamplers(1, 1, &samplerBorder);
 
+	// Clampサンプラーステート設定
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_CLAMP;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_CLAMP;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_CLAMP;
+	samplerClamp = NULL;
+	m_D3DDevice->CreateSamplerState(&samplerDesc, &samplerClamp);
+	m_ImmediateContext->PSSetSamplers(2, 1, &samplerClamp);
+	m_ImmediateContext->DSSetSamplers(2, 1, &samplerClamp);
+
+
+	// Mirrorサンプラーステート設定
+	samplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_MIRROR;
+	samplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_MIRROR;
+	samplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_MIRROR;
+	samplerMirror = NULL;
+	m_D3DDevice->CreateSamplerState(&samplerDesc, &samplerMirror);
+	m_ImmediateContext->PSSetSamplers(3, 1, &samplerMirror);
+	m_ImmediateContext->DSSetSamplers(3, 1, &samplerMirror);
+
+
+
+
+
 	this->fullScreenVertex = new FullScreenQuadVertex(this);
 
 
@@ -492,6 +515,7 @@ void Renderer::UninitRenderer(void)
 	if (depthTexture)			depthTexture->Release();
 	if (samplerWrap)			samplerWrap->Release();
 	if (samplerBorder)			samplerBorder->Release();
+	if (samplerClamp)			samplerClamp->Release();
 
 	if (SwapChain)				SwapChain->Release();
 

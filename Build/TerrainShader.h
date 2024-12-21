@@ -7,7 +7,9 @@ struct TessCBuffer
 {
 	float cbEdgeFactor; //4角形の辺の分割量の指定
 	float cbInsideFactor; //4角形の内部の分割量の指定
-	float dummy[10];
+	float heightFactor; //heightMapの高さに対してかける値
+	float heightMapUvScale; //heightMapの高さに対してかける値
+	float dummy[8];
 
 };
 class TerrainShader : public ShaderSet

@@ -95,7 +95,8 @@ cbuffer TessellationBuffer : register(b8)
 {
     float cbEdgeFactor; //4角形の辺の分割量の指定
     float cbInsideFactor; //4角形の内部の分割量の指定
-    float dummy[2];
+    float heightFacter;
+    float dummy;
    
 };
 
@@ -109,6 +110,8 @@ Texture2D HeightMap : register(t5);
 
 SamplerState WrapSampler : register(s0);
 SamplerState BorderSampler : register(s1);
+SamplerState ClampSampler : register(s2);
+SamplerState MirrorSampler : register(s3);
 
 
 
@@ -243,15 +246,19 @@ DS_OUTPUT DSmain(
     patch[2].Position * (1 - domain.x) * domain.y +
     patch[3].Position * domain.x * domain.y);
    
-        // uv
-    float2 t1 = lerp(patch[1].TexCoord, patch[0].TexCoord, domain.x);
-    float2 t2 = lerp(patch[3].TexCoord, patch[2].TexCoord, domain.x);
-    float2 t3 = lerp(t1, t2, domain.y);
-    output.TexCoord = t3;
+            // uv
+
+    float2 uv = float2(
+    patch[0].TexCoord * (1 - domain.x) * (1 - domain.y) +
+    patch[1].TexCoord * domain.x * (1 - domain.y) +
+    patch[2].TexCoord * (1 - domain.x) * domain.y +
+    patch[3].TexCoord * domain.x * domain.y);
+   
+    output.TexCoord = uv;
 
     // Heightmapのデータを使用して高さを調整
-    float height = HeightMap.SampleLevel(WrapSampler, t3, 0).r;
-    pos.y += height*10;
+    float height = HeightMap.SampleLevel(MirrorSampler, uv, 0).r;
+    pos.y += height * heightFacter;
 
     
     matrix wvp;

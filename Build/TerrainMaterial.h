@@ -19,7 +19,7 @@ public:
 
 	void SetTessEdgeFacter(float facter);
 	void SetTessInsideFacter(float facter);
-
+	void SetHeightFacter(float facter);
 private:
 	TerrainShader* pTerrainShader;
 
@@ -27,6 +27,7 @@ private:
 
 	float tessEdgeFacter;
 	float tessInsideFacter;
+	float heightFacter;
 
 };
 

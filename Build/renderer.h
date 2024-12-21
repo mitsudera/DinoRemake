@@ -141,6 +141,8 @@ private:
 	ID3D11Texture2D* depthTexture;
 	ID3D11SamplerState* samplerWrap;
 	ID3D11SamplerState* samplerBorder;
+	ID3D11SamplerState* samplerClamp;
+	ID3D11SamplerState* samplerMirror;
 
 
 
