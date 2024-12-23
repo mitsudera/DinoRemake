@@ -19,9 +19,6 @@
     <Filter Include="misc">
       <UniqueIdentifier>{c7d76af9-1c49-4485-bee2-982201477c30}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ModelAnimation">
-      <UniqueIdentifier>{068f0cf0-e300-4e51-9f3d-ce27d8a92a2e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Scene">
       <UniqueIdentifier>{92240370-249c-4cc6-b751-f4db8574ec29}</UniqueIdentifier>
     </Filter>
@@ -159,6 +156,12 @@
     </Filter>
     <Filter Include="Shader\PostEffect\NotEffect">
       <UniqueIdentifier>{abb7fd20-7613-409c-bdd4-e76e68a67055}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\WicFactory">
+      <UniqueIdentifier>{c7473a2f-af3d-4d3a-91d4-ed8608e2a70a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\GameEngine">
+      <UniqueIdentifier>{485d611e-5224-40f2-99ca-1b30f4feb778}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -299,9 +302,6 @@
     </ClInclude>
     <ClInclude Include="BoxColliderComponent.h">
       <Filter>component\ColliderComponent</Filter>
-    </ClInclude>
-    <ClInclude Include="GameEngine.h">
-      <Filter>GameEngine</Filter>
     </ClInclude>
     <ClInclude Include="SkeletonAnimData.h">
       <Filter>misc</Filter>
@@ -451,7 +451,10 @@
       <Filter>Shader\PostEffect\NotEffect</Filter>
     </ClInclude>
     <ClInclude Include="WicFactory.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>GameEngine\WicFactory</Filter>
+    </ClInclude>
+    <ClInclude Include="GameEngine.h">
+      <Filter>GameEngine\GameEngine</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -586,9 +589,6 @@
     </ClCompile>
     <ClCompile Include="BoxColliderComponent.cpp">
       <Filter>component\ColliderComponent</Filter>
-    </ClCompile>
-    <ClCompile Include="GameEngine.cpp">
-      <Filter>GameEngine</Filter>
     </ClCompile>
     <ClCompile Include="SkeletonAnimData.cpp">
       <Filter>misc</Filter>
@@ -741,7 +741,10 @@
       <Filter>Shader\PostEffect\NotEffect</Filter>
     </ClCompile>
     <ClCompile Include="WicFactory.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>GameEngine\WicFactory</Filter>
+    </ClCompile>
+    <ClCompile Include="GameEngine.cpp">
+      <Filter>GameEngine\GameEngine</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

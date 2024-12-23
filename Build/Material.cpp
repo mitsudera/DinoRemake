@@ -38,20 +38,20 @@ ShaderSet* Material::GetShaderSet(void)
 
 void Material::LoadDiffuseTex(string fName)
 {
-	textureDiffuseIndex = pAssetsManager->LoadTexture(fName);
+	textureDiffuse = pAssetsManager->LoadTexture(fName);
 	this->noDiffuseTex = 0;
 }
 
 void Material::LoadNormalTex(string fName)
 {
-	textureNormalIndex = pAssetsManager->LoadTexture(fName);
+	textureNormal = pAssetsManager->LoadTexture(fName);
 	this->noNormalTex = 0;
 
 }
 
 void Material::LoadArmTex(string fName)
 {
-	textureArmIndex = pAssetsManager->LoadTexture(fName);
+	textureArm = pAssetsManager->LoadTexture(fName);
 	this->noArmTex = 0;
 
 }
@@ -64,4 +64,9 @@ void Material::SetName(string name)
 string Material::GetName(void)
 {
 	return this->name;
+}
+
+DX11Texture* Material::GetDiffuseTexture(void)
+{
+	return this->textureDiffuse;
 }

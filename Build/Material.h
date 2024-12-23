@@ -7,7 +7,7 @@ class ShaderSet;
 
 class AssetsManager;
 
-
+class DX11Texture;
 
 class Material
 {
@@ -31,6 +31,8 @@ public:
 	void SetName(string name);
 	string GetName(void);
 
+	DX11Texture* GetDiffuseTexture(void);
+
 	XMFLOAT4	ambient;
 	XMFLOAT4	diffuse;
 	XMFLOAT4	specular;
@@ -40,13 +42,12 @@ public:
 	int			noNormalTex;
 	int			noArmTex;
 
-	int textureDiffuseIndex;
-	int textureNormalIndex;
-	int textureArmIndex;
-
 
 
 protected:
+	DX11Texture* textureDiffuse;
+	DX11Texture* textureNormal;
+	DX11Texture* textureArm;
 
 
 

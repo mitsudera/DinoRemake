@@ -132,14 +132,14 @@ AssetsManager* MeshData::GetpAssetsManager(void)
 	return this->pAssetsManager;
 }
 
-int MeshData::GetMaterialIndex(void)
+Material* MeshData::GetMaterial(void)
 {
-	return this->materialIndex;
+	return this->material;
 }
 
-int MeshData::GetShadowMaterialIndex(void)
+Material* MeshData::GetShadowMaterial(void)
 {
-	return shadowMaterialIndex;
+	return shadowMaterial;
 }
 
 
@@ -148,10 +148,6 @@ BOOL MeshData::GetIsRoot(void)
 	return this->isRoot;
 }
 
-int MeshData::GetIndex(void)
-{
-	return this->index;
-}
 
 XMFLOAT3 MeshData::GetPosOffset(void)
 {
@@ -542,7 +538,7 @@ void MeshData::LoadFbxMesh(FbxMesh* mesh,AssetsManager* ap,MeshData* parent)
 
 				lambart->SetName(this->fileName + fbxmaterial->GetName());
 
-				this->materialIndex = pAssetsManager->LoadMaterial(lambart);
+				this->material = pAssetsManager->LoadMaterial(lambart);
 
 
 			}
@@ -557,7 +553,7 @@ void MeshData::LoadFbxMesh(FbxMesh* mesh,AssetsManager* ap,MeshData* parent)
 				phong->SetName(this->fileName + fbxmaterial->GetName());
 
 
-				this->materialIndex = pAssetsManager->LoadMaterial(phong);
+				this->material = pAssetsManager->LoadMaterial(phong);
 
 
 			}
@@ -567,9 +563,9 @@ void MeshData::LoadFbxMesh(FbxMesh* mesh,AssetsManager* ap,MeshData* parent)
 			}
 			ShadowMappingMaterial* shadowMat = new ShadowMappingMaterial(this->GetpAssetsManager());
 
-			shadowMat->SetShadowMaterial(pAssetsManager->GetMaterial(this->materialIndex));
+			shadowMat->SetShadowMaterial(this->material);
 
-			this->shadowMaterialIndex = pAssetsManager->LoadMaterial(shadowMat);
+			this->shadowMaterial = pAssetsManager->LoadMaterial(shadowMat);
 
 
 

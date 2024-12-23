@@ -317,7 +317,7 @@ void CameraComponent::Render(void)
 				continue;
 
 			//現在セットしてるシェーダーを使っている場合描画
-			if (pGameEngine->GetAssetsManager()->GetMaterial(com->GetMaterialIndex())->GetShaderSet()->GetShaderIndex() != i)
+			if (com->GetMaterial()->GetShaderSet()->GetShaderIndex() != i)
 				continue;
 
 

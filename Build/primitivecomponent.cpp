@@ -74,21 +74,21 @@ void PrimitiveComponent::ShadowMapping(void)
 		return;
 }
 
-int PrimitiveComponent::GetMaterialIndex(void)
+Material* PrimitiveComponent::GetMaterial(void)
 {
-	return this->materialIndex;
+	return this->material;
 }
 
-void PrimitiveComponent::SetMaterialIndex(int index)
+void PrimitiveComponent::SetMaterial(Material* matelial)
 {
-	this->materialIndex = index;
+	this->material = matelial;
 }
 
-int PrimitiveComponent::LoadMaterial(Material* material)
+Material* PrimitiveComponent::LoadMaterial(Material* material)
 {
 
-	materialIndex = pGameEngine->GetAssetsManager()->LoadMaterial(material);
-	return materialIndex;
+	this->material = pGameEngine->GetAssetsManager()->LoadMaterial(material);
+	return this->material;
 }
 
 void PrimitiveComponent::SetAlphaTest(BOOL enable)

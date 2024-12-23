@@ -120,7 +120,7 @@ void CBufferManager::SetCameraBuffer(XMFLOAT3* pos)
 {
 	XMFLOAT4 float4 = { pos->x,pos->y,pos->z,1.0f };
 
-	pDeviceContext->UpdateSubresource(ProjectionBuffer, 0, NULL, &float4, 0, 0);
+	pDeviceContext->UpdateSubresource(CameraBuffer, 0, NULL, &float4, 0, 0);
 
 }
 

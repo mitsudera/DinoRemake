@@ -78,14 +78,9 @@ void PlayerComponent::Update(void)
 
 
 	}
-
 	if (input->GetKeyboardPress(DIK_1))
 	{
-		GetComponent<AnimationControlerComponent>()->SetAnimation("Idol");
-	}
-	if (input->GetKeyboardPress(DIK_2))
-	{
-		GetComponent<AnimationControlerComponent>()->SetAnimation("Atack");
+		GetComponent<AnimationControlerComponent>()->SetCondition("AtackTrigger",TRUE);
 	}
 
 	float height = PlayerOffset + pGameObject->GetScene()->GetGameObjectName("Field")->GetComponent<TerrainComponent>()->GetHeight(GetTransFormComponent()->GetWorldPos());

@@ -147,7 +147,7 @@ void GameObject::Draw(ShaderSet::ShaderIndex index)
 		PrimitiveComponent* primitiveComponent = static_cast<PrimitiveComponent*>(component);
 
 		//現在セットしてるシェーダーを使っている場合描画
-		if (pScene->GetGameEngine()->GetAssetsManager()->GetMaterial(primitiveComponent->GetMaterialIndex())->GetShaderSet()->GetShaderIndex() != index)
+		if (primitiveComponent->GetMaterial()->GetShaderSet()->GetShaderIndex() != index)
 			continue;
 
 		primitiveComponent->Draw();
@@ -342,10 +342,7 @@ void GameObject::SetName(string name)
 
 void GameObject::LoadFbxFileMesh(string fName)
 {
-	int treeIndex = pScene->GetGameEngine()->GetAssetsManager()->LoadMeshNode(fName);
-
-	MeshData* root = pScene->GetGameEngine()->GetAssetsManager()->GetMeshTree(treeIndex);
-
+	MeshData* root = pScene->GetGameEngine()->GetAssetsManager()->LoadMeshFileFbx(fName);
 	LoadMeshNode(root);
 }
 
@@ -354,18 +351,14 @@ void GameObject::LoadMeshNode(MeshData* node)
 	if (!node->GetIsRoot())
 	{
 		MeshComponent* mesh = this->AddComponent<MeshComponent>();
-		mesh->SetMeshDataIndex(node->GetIndex());
+		mesh->SetMeshData(node);
 
 	}
 
 
 	for (MeshData* childData: node->GetChild())
 	{
-
 		AddChild(childData->GetName())->LoadMeshNode(childData);
-
-
-
 	}
 
 

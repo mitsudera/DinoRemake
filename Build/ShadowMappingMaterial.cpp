@@ -21,7 +21,7 @@ void ShadowMappingMaterial::SetBufferMaterial(void)
 	mCBuffer.diffuse = this->diffuse;
 	mCBuffer.noDiffuseTex = this->noDiffuseTex;
 	this->shadowShader->SetMaterialCbuffer(mCBuffer);
-	if (!noDiffuseTex) pAssetsManager->GetTexture(textureDiffuseIndex)->SetShaderResourcePS(0);
+	if (!noDiffuseTex) textureDiffuse->SetShaderResourcePS(0);
 
 
 }
@@ -30,5 +30,6 @@ void ShadowMappingMaterial::SetShadowMaterial(Material* material)
 {
 	this->diffuse = material->diffuse;
 	this->noDiffuseTex = material->noDiffuseTex;
-	this->textureDiffuseIndex = material->textureDiffuseIndex;
+
+	this->textureDiffuse = material->GetDiffuseTexture();
 }

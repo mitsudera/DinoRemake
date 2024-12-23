@@ -19,7 +19,6 @@
 
 MeshComponent::MeshComponent()
 {
-	MeshDataIndex = 0;
 	cullMode = CULL_MODE::CULL_MODE_FRONT;
 	this->alphaTest = FALSE;
 
@@ -43,7 +42,6 @@ void MeshComponent::Awake(void)
 
 	attribute = Attribute::Primitive;
 
-	MeshDataIndex = 0;
 	cullMode = CULL_MODE::CULL_MODE_BACK;
 	this->alphaTest = FALSE;
 
@@ -80,7 +78,6 @@ void MeshComponent::Draw(void)
 		this->pRenderer->SetAlphaTestEnable(TRUE);
 	}
 	
-	MeshData* meshData = this->pGameEngine->GetAssetsManager()->GetMeshData(this->MeshDataIndex);
 
 
 	this->pRenderer->SetCullingMode((CULL_MODE)cullMode);
@@ -94,7 +91,7 @@ void MeshComponent::Draw(void)
 	this->pGameEngine->GetCBufferManager()->SetWorldMtx(&world);
 
 
-	this->pGameEngine->GetAssetsManager()->GetMaterial(this->materialIndex)->SetBufferMaterial();
+	this->material->SetBufferMaterial();
 
 	this->pRenderer->GetDeviceContext()->DrawIndexed(meshData->GetIndexNum(), 0, 0);
 
@@ -115,7 +112,6 @@ void MeshComponent::ShadowMapping(void)
 		this->pRenderer->SetAlphaTestEnable(TRUE);
 	}
 
-	MeshData* meshData = this->pGameEngine->GetAssetsManager()->GetMeshData(this->MeshDataIndex);
 
 
 	this->pRenderer->SetCullingMode((CULL_MODE)cullMode);
@@ -129,7 +125,7 @@ void MeshComponent::ShadowMapping(void)
 	this->pGameEngine->GetCBufferManager()->SetWorldMtx(&world);
 
 
-	this->pGameEngine->GetAssetsManager()->GetMaterial(this->shadowMaterialIndex)->SetBufferMaterial();
+	this->shadowMaterial->SetBufferMaterial();
 
 	this->pRenderer->GetDeviceContext()->DrawIndexed(meshData->GetIndexNum(), 0, 0);
 
@@ -159,16 +155,15 @@ BOOL MeshComponent::GetAlphaTest(void)
 }
 
 
-void MeshComponent::SetMeshDataIndex(int index)
+void MeshComponent::SetMeshData(MeshData* data)
 {
-	this->MeshDataIndex = index;
 
 
 
-	MeshData* meshData = this->pGameEngine->GetAssetsManager()->GetMeshData(index);
+	meshData = data;
 
-	this->materialIndex = meshData->GetMaterialIndex();
-	this->shadowMaterialIndex = meshData->GetShadowMaterialIndex();
+	this->material = meshData->GetMaterial();
+	this->shadowMaterial = meshData->GetShadowMaterial();
 
 	this->GetTransFormComponent()->SetPosition(meshData->GetPosOffset());
 	this->GetTransFormComponent()->SetRotation(meshData->GetRotOffset());

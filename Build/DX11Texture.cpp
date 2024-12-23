@@ -4,10 +4,12 @@
 #include "renderer.h"
 #include "GameEngine.h"
 
-DX11Texture::DX11Texture()
+
+DX11Texture::DX11Texture(AssetsManager* Manager)
 {
-	pManager = nullptr;
+	pManager = Manager;
 	this->SRV = nullptr;
+
 
 }
 

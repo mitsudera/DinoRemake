@@ -25,7 +25,7 @@ void SpriteComponent::Awake(void)
 {
 	PrimitiveComponent::Awake();
 	CreateVertexBuffer();
-	this->materialIndex = pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->GetMaterialIndex("UIMaterial");
+	this->material = pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->GetMaterial("UIMaterial");
 	texSlice.x = 1;
 	texSlice.y = 1;
 	texLRrev = FALSE;
@@ -69,7 +69,7 @@ void SpriteComponent::Draw(void)
 	pRenderer->GetDeviceContext()->IASetVertexBuffers(0, 1, &this->vertexBuffer, &stride, &offset);
 	pRenderer->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 	
-	pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->GetTexture(texIndex)->SetShaderResourcePS(0);
+	texture->SetShaderResourcePS(0);
 
 
 	pRenderer->GetDeviceContext()->Draw(4, 0);
@@ -93,7 +93,7 @@ void SpriteComponent::CreateVertexBuffer(void)
 
 void SpriteComponent::SetSpriteCenter(string texPath, XMFLOAT3 pos, float width, float height)
 {
-	this->texIndex = pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->LoadTexture(texPath);
+	this->texture = pAssetsManager->LoadTexture(texPath);
 
 	XMFLOAT2 screenHW = pGameEngine->GetWindowSize();
 	float z = pos.z;
@@ -132,7 +132,7 @@ void SpriteComponent::SetSpriteCenter(string texPath, XMFLOAT3 pos, float width,
 
 void SpriteComponent::SetSpriteLeftDown(string texPath, XMFLOAT3 pos, float width, float height)
 {
-	this->texIndex = pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->LoadTexture(texPath);
+	this->texture = pAssetsManager->LoadTexture(texPath);
 
 
 	XMFLOAT2 screenHW = pGameEngine->GetWindowSize();
@@ -169,7 +169,7 @@ void SpriteComponent::SetSpriteLeftDown(string texPath, XMFLOAT3 pos, float widt
 
 void SpriteComponent::SetFullScreen(string texPath)
 {
-	this->texIndex = pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->LoadTexture(texPath);
+	this->texture = pAssetsManager->LoadTexture(texPath);
 
 
 
@@ -251,7 +251,7 @@ void SpriteComponent::SetColor(XMFLOAT4 diffuse)
 
 void SpriteComponent::SetTexture(string path)
 {
-	this->texIndex = pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->LoadTexture(path);
+	this->texture = pAssetsManager->LoadTexture(path);
 
 }
 

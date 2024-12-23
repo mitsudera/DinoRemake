@@ -16,7 +16,7 @@ class DX11_SUBSET;
 class MeshData;
 class MeshDataList;
 class AssetsManager;
-
+class Material;
 
 
 
@@ -54,12 +54,11 @@ class AssetsManager;
 
 	 AssetsManager* GetpAssetsManager(void);
 
-	 int GetMaterialIndex(void);
-	 int GetShadowMaterialIndex(void);
+	 Material* GetMaterial(void);
+	 Material* GetShadowMaterial(void);
 
 	 BOOL GetIsRoot(void);
 
-	 int GetIndex(void);
 
 	 XMFLOAT3 GetPosOffset(void);
 	 XMFLOAT3 GetSclOffset(void);
@@ -82,8 +81,8 @@ class AssetsManager;
 	 int childcnt;
 	 vector <MeshData*> childArray;
 
-	 int materialIndex;
-	 int shadowMaterialIndex;
+	 Material* material;
+	 Material* shadowMaterial;
 	 BOOL isRoot;
 
 	 string name;

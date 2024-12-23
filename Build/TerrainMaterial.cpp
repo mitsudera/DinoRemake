@@ -26,9 +26,9 @@ TerrainMaterial::TerrainMaterial(TerrainMaterial* terrain)
 	this->noDiffuseTex = terrain->noDiffuseTex;
 	this->noNormalTex = terrain->noNormalTex;
 	this->noArmTex = terrain->noArmTex;
-	this->textureDiffuseIndex = terrain->textureDiffuseIndex;
-	this->textureNormalIndex = terrain->textureNormalIndex;
-	this->textureArmIndex = terrain->textureArmIndex;
+	this->textureDiffuse = terrain->textureDiffuse;
+	this->textureNormal = terrain->textureNormal;
+	this->textureArm = terrain->textureArm;
 
 }
 
@@ -49,10 +49,9 @@ void TerrainMaterial::SetBufferMaterial(void)
 	mCBuffer.noArmTex = this->noArmTex;
 	this->pTerrainShader->SetMaterialCbuffer(mCBuffer);
 
-	if (!noDiffuseTex) pAssetsManager->GetTexture(textureDiffuseIndex)->SetShaderResourcePS(0);
-	if (!noNormalTex) pAssetsManager->GetTexture(textureNormalIndex)->SetShaderResourcePS(1);
-	if (!noArmTex) pAssetsManager->GetTexture(textureArmIndex)->SetShaderResourcePS(2);
-
+	if (!noDiffuseTex) textureDiffuse->SetShaderResourcePS(0);
+	if (!noNormalTex)textureNormal->SetShaderResourcePS(1);
+	if (!noArmTex) textureArm->SetShaderResourcePS(2);
 
 	TessCBuffer data;
 	data.cbEdgeFactor = tessEdgeFacter;

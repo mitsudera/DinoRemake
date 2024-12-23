@@ -26,9 +26,9 @@ PhongMaterial::PhongMaterial(PhongMaterial* phong)
 	this->noDiffuseTex = phong->noDiffuseTex;
 	this->noNormalTex = phong->noNormalTex;
 	this->noArmTex = phong->noArmTex;
-	this->textureDiffuseIndex = phong->textureDiffuseIndex;
-	this->textureNormalIndex = phong->textureNormalIndex;
-	this->textureArmIndex = phong->textureArmIndex;
+	this->textureDiffuse = phong->textureDiffuse;
+	this->textureNormal = phong->textureNormal;
+	this->textureArm = phong->textureArm;
 
 }
 
@@ -49,9 +49,9 @@ void PhongMaterial::SetBufferMaterial(void)
 	mCBuffer.noArmTex = this->noArmTex;
 	this->pPhongShader->SetMaterialCbuffer(mCBuffer);
 
-	if (!noDiffuseTex) pAssetsManager->GetTexture(textureDiffuseIndex)->SetShaderResourcePS(0);
-	if (!noNormalTex) pAssetsManager->GetTexture(textureNormalIndex)->SetShaderResourcePS(1);
-	if (!noArmTex) pAssetsManager->GetTexture(textureArmIndex)->SetShaderResourcePS(2);
+	if (!noDiffuseTex) textureDiffuse->SetShaderResourcePS(0);
+	if (!noNormalTex)textureNormal->SetShaderResourcePS(1);
+	if (!noArmTex) textureArm->SetShaderResourcePS(2);
 
 
 }

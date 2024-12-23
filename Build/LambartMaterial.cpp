@@ -15,9 +15,9 @@ LambartMaterial::LambartMaterial(AssetsManager* assetsManager)
 	this->noDiffuseTex = 1;
 	this->noNormalTex = 1;
 	this->noArmTex = 1;
-	this->textureDiffuseIndex = 0;
-	this->textureNormalIndex = 0;
-	this->textureArmIndex = 0;
+	this->textureDiffuse = 0;
+	this->textureNormal = 0;
+	this->textureArm = 0;
 
 
 }
@@ -33,9 +33,9 @@ LambartMaterial::LambartMaterial(LambartMaterial* lambart)
 	this->noDiffuseTex = lambart->noDiffuseTex;
 	this->noNormalTex = lambart->noNormalTex;
 	this->noArmTex = lambart->noArmTex;
-	this->textureDiffuseIndex = lambart->textureDiffuseIndex;
-	this->textureNormalIndex = lambart->textureNormalIndex;
-	this->textureArmIndex = lambart->textureArmIndex;
+	this->textureDiffuse = lambart->textureDiffuse;
+	this->textureNormal = lambart->textureNormal;
+	this->textureArm = lambart->textureArm;
 
 
 
@@ -54,9 +54,9 @@ void LambartMaterial::SetBufferMaterial(void)
 	mCBuffer.noArmTex = this->noArmTex;
 	this->pLambartShader->SetMaterialCbuffer(mCBuffer);
 
-	if (!noDiffuseTex) pAssetsManager->GetTexture(textureDiffuseIndex)->SetShaderResourcePS(0);
-	if (!noNormalTex) pAssetsManager->GetTexture(textureNormalIndex)->SetShaderResourcePS(1);
-	if (!noArmTex) pAssetsManager->GetTexture(textureArmIndex)->SetShaderResourcePS(2);
+	if (!noDiffuseTex) textureDiffuse->SetShaderResourcePS(0);
+	if (!noNormalTex)textureNormal->SetShaderResourcePS(1);
+	if (!noArmTex) textureArm->SetShaderResourcePS(2);
 
 
 }

@@ -69,7 +69,7 @@ void TerrainComponent::Draw(void)
 	pCBufferManager->SetWorldMtx(&world);
 
 
-	pAssetsManager->GetMaterial(this->materialIndex)->SetBufferMaterial();
+	this->material->SetBufferMaterial();
 	pRenderer->GetDeviceContext()->DSSetShaderResources(5, 1, &this->heightMapSRV);
 
 	this->pRenderer->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_4_CONTROL_POINT_PATCHLIST);
@@ -236,7 +236,7 @@ float TerrainComponent::GetHeight(XMFLOAT3 pos)
 	sampleUV.x = ((terrainSize.x * 0.5) + length.x) / terrainSize.x;
 	sampleUV.y = ((terrainSize.y * 0.5) - length.y) / terrainSize.y;
 
-	TerrainMaterial* mat = dynamic_cast<TerrainMaterial*>(this->pAssetsManager->GetMaterial(this->materialIndex));
+	TerrainMaterial* mat = dynamic_cast<TerrainMaterial*>(this->material);
 
 	float heighFacter = mat->GetHeightFacter();
 

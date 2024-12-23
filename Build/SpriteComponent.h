@@ -1,6 +1,9 @@
 #pragma once
 #include "primitivecomponent.h"
 #include "ShaderSet.h"
+
+class DX11Texture;
+
 class SpriteComponent : public PrimitiveComponent
 {
 public:
@@ -32,7 +35,7 @@ public:
 private:
 	VERTEX_3D vertexArray[4];
 
-	int texIndex;
+	DX11Texture* texture;
 	ID3D11Buffer* vertexBuffer;
 	XMINT2 texSlice;//テクスチャスライス数
 	int sliceIndex;

@@ -1,14 +1,13 @@
 ﻿#pragma once
 #include "PrimitiveComponent.h"
 
-class MeshDataList;
 
-class KeyFrameAnimData;
 
 class GameEngine;
 
 class DX11Texture;
 
+class MeshData;
 
 class Mesh
 {
@@ -40,7 +39,7 @@ public:
 
 	void SetAlphaTest(BOOL enable);
 	BOOL GetAlphaTest(void);
-	void SetMeshDataIndex(int index);
+	void SetMeshData(MeshData* data);
 
 
 
@@ -48,7 +47,7 @@ protected:
 
 	string meshFilePath;
 	
-	int MeshDataIndex;
+	MeshData* meshData;
 
 
 

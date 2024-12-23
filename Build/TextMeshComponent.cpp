@@ -27,7 +27,7 @@ void TextMeshComponent::Awake(void)
 {
 	PrimitiveComponent::Awake();
 	CreateVertexBuffer();
-	this->materialIndex = pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->GetMaterialIndex("UIMaterial");
+	this->material = pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->GetMaterial("UIMaterial");
 	SetAlphaTest(TRUE);
 }
 

@@ -32,8 +32,15 @@ void Player::Awake(void)
 
 	this->LoadFbxFileMesh("PlayerRed.fbx");
 	AnimationControlerComponent* animControler = this->AddComponent<AnimationControlerComponent>();
-	animControler->LoadAnimationData("PlayerIdol.fbx", "Idol");
-	animControler->LoadAnimationData("PlayerAtack.fbx", "Atack");
+	animControler->LoadDefaulAnimation("PlayerIdol.fbx", "Idol");
+	animControler->LoadAnimation("PlayerAtack.fbx", "Atack",FALSE);
+	AnimParameter para;
+	para.value = FALSE;
+	para.isTrigger = TRUE;
+	animControler->CreateCondition("AtackTrigger", para);
+	animControler->CreateTransition("Idol", "Atack", "AtackTrigger", TRUE);
+	animControler->CreateNotLoopAnimExitTransition("Atack", "Idol");
+
 	PlayerComponent* playerCom = AddComponent<PlayerComponent>();
 	playerCom->SetOffSet(2.0f);
 

@@ -23,7 +23,7 @@ public:
 	
 	void CreateFrameMtxArray(int n);
 
-	XMMATRIX GetFrameMtx(float frame);
+	XMMATRIX GetFrameMtx(float time);
 
 	int GetChildCnt(void);
 	MtxNode* GetChild(int n);

@@ -11,7 +11,7 @@ class DX11Texture
 	string filepath;
 
 public:
-	DX11Texture();
+	DX11Texture(AssetsManager* Manager);
 	~DX11Texture();
 
 	ID3D11ShaderResourceView* GetTexture(void);

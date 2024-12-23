@@ -48,13 +48,13 @@ void SkinMeshComponent::Update(void)
 	if (animstate == ANIM_STATE::DATA_ANIM)
 	{
 		
-		int frame1 = (int)(framecnt);
-		int frame2 = (int)(framecnt)+1;
+		int frame1 = (int)(timeCnt);
+		int frame2 = (int)(timeCnt)+1;
 		if (frame2 >= framenum)
 		{
 			frame2 = 0;
 		}
-		float w2 = framecnt - (float)(int)(framecnt);
+		float w2 = timeCnt - (float)(int)(timeCnt);
 		float w1 = 1.0f - w2;
 
 
@@ -70,10 +70,10 @@ void SkinMeshComponent::Update(void)
 
 		UpdateSkinMeshForCS();
 
-		framecnt += animSpeed*dFrame;
-		if (framecnt >= framenum)
+		timeCnt += animSpeed*dFrame;
+		if (timeCnt >= framenum)
 		{
-			framecnt = framecnt - (float)framenum;
+			timeCnt = timeCnt - (float)framenum;
 
 			if (isOneTime)
 			{
@@ -95,13 +95,13 @@ void SkinMeshComponent::Update(void)
 		float blendweight2 = 1.0f - blendweight1;
 
 
-		int frame1 = (int)(framecnt);
-		int frame2 = (int)(framecnt)+1;
+		int frame1 = (int)(timeCnt);
+		int frame2 = (int)(timeCnt)+1;
 		if (frame2 >= framenum)
 		{
 			frame2 = 0;
 		}
-		float w2 = framecnt - (float)(int)(framecnt);
+		float w2 = timeCnt - (float)(int)(timeCnt);
 		float w1 = 1.0f - w2;
 
 
@@ -139,13 +139,13 @@ void SkinMeshComponent::Update(void)
 		float blendweight2 = 1.0f - blendweight1;
 
 
-		int frame1 = (int)(framecnt);
-		int frame2 = (int)(framecnt)+1;
+		int frame1 = (int)(timeCnt);
+		int frame2 = (int)(timeCnt)+1;
 		if (frame2 >= framenum)
 		{
 			frame2 = 0;
 		}
-		float w2 = framecnt - (float)(int)(framecnt);
+		float w2 = timeCnt - (float)(int)(timeCnt);
 		float w1 = 1.0f - w2;
 
 
@@ -174,10 +174,10 @@ void SkinMeshComponent::Update(void)
 		{
 			animstate = ANIM_STATE::DATA_ANIM;
 		}
-		framecnt += animSpeed * dFrame;
-		if (framecnt >= framenum)
+		timeCnt += animSpeed * dFrame;
+		if (timeCnt >= framenum)
 		{
-			framecnt = framecnt - (float)framenum;
+			timeCnt = timeCnt - (float)framenum;
 		}
 
 
@@ -458,7 +458,7 @@ void SkinMeshComponent::SetSkinMesh(void)
 			int n = this->GetWorld()->GetGameEngine()->GetAssetsManager()->LoadSkeletonAnimData(this->animFilePath[i]);
 			this->AnimDataIndexArray.push_back(n);
 		}
-		framecnt = 0;
+		timeCnt = 0;
 		framenum = this->GetWorld()->GetGameEngine()->GetAssetsManager()->GetSkeletonAnimData(this->AnimDataIndexArray[this->animindex])->GetFrameNum();
 
 	}
@@ -480,7 +480,7 @@ void SkinMeshComponent::SetBlendBone(void)
 void SkinMeshComponent::SwichAnimIndex(int n)
 {
 	animindex = n;
-	framecnt = 0;
+	timeCnt = 0;
 	framenum = this->GetWorld()->GetGameEngine()->GetAssetsManager()->GetSkeletonAnimData(AnimDataIndexArray[n])->GetFrameNum();
 	if (motionblend)
 	{
@@ -505,7 +505,7 @@ void SkinMeshComponent::StartOneTimeAnimIndex(int n)
 {
 
 	animindex = n;
-	framecnt = 0;
+	timeCnt = 0;
 	framenum = this->GetWorld()->GetGameEngine()->GetAssetsManager()->GetSkeletonAnimData(AnimDataIndexArray[n])->GetFrameNum();
 	SetBlendMtxArray();
 	SetBlendBone();

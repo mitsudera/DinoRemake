@@ -93,9 +93,10 @@ void MtxNode::CreateFrameMtxArray(int n)
 
 }
 
-XMMATRIX MtxNode::GetFrameMtx(float frame)
+XMMATRIX MtxNode::GetFrameMtx(float time)
 {
 
+	float frame = time * 60.0f;
 	float frame2weight = frame - (float)(int)frame;
 	float frame1weight = 1.0f - frame2weight;;
 

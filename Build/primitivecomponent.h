@@ -30,9 +30,9 @@ public:
 	virtual void ShadowMapping(void);
 
 
-	int GetMaterialIndex(void);
-	void SetMaterialIndex(int index);
-	int LoadMaterial(Material* material);
+	Material* GetMaterial(void);
+	void SetMaterial(Material* material);
+	Material* LoadMaterial(Material* material);
 
 	void SetAlphaTest(BOOL enable);
 
@@ -40,8 +40,8 @@ protected:
 	Renderer* pRenderer;
 	BOOL hasShadow;
 	BOOL drawShadow;
-	int materialIndex;
-	int shadowMaterialIndex;
+	Material* material;
+	Material* shadowMaterial;
 	BOOL alphaTest;
 	CBufferManager* pCBufferManager;
 	AssetsManager* pAssetsManager;

@@ -126,87 +126,49 @@ void AssetsManager::Uninit(void)
 	if (skinMeshCompute) skinMeshCompute->Release();
 }
 
-int AssetsManager::LoadMeshNode(string filepath)
+MeshData* AssetsManager::LoadMeshFileFbx(string fileName)
 {
-	int p = -1;
-	BOOL find = FALSE;
-	for (int i = 0; i < MeshDataTree.size(); i++)
+	//既にロードしているデータか調べる
+	for (MeshData* mesh : MeshDataTree)
 	{
-		 
-		string filename = MeshDataTree[i]->GetFileName();
-		if ((MESH_PATH+ filepath) == filename)
+		string filePath = mesh->GetFileName();
+		if ((MESH_PATH + fileName) == filePath)
 		{
-			p = i;
-			find = TRUE;
-			break;
+			return mesh;
 		}
 	}
-
-	if (find == FALSE)
-	{
-
-		MeshData* meshdata = new MeshData;
-
-
-		string path = MESH_PATH+filepath;
-
-		
-		meshdata->LoadFbxFile(path, this);
-
-		this->MeshDataTree.push_back(meshdata);
-		p = (int)MeshDataTree.size() - 1;
-
-	}
-
-	return p;
+	//ロードしてなかったら追加
+	MeshData* meshdata = new MeshData;
+	string path = MESH_PATH + fileName;
+	meshdata->LoadFbxFile(path, this);
+	this->MeshDataTree.push_back(meshdata);
+	return meshdata;
 }
 
-int AssetsManager::LoadAnimationData(string filepath)
+AnimationData* AssetsManager::LoadAnimationData(string fileName)
 {
-	int p = -1;
-	BOOL find = FALSE;
+
 	for (int i = 0; i < AnimDataArray.size(); i++)
 	{
-		 
-		string filename = AnimDataArray[i]->GetFileName();
-		if ((ANIMATION_PATH+ filepath) == filename)
+
+		string filePath = AnimDataArray[i]->GetFileName();
+		if ((ANIMATION_PATH + fileName) == filePath)
 		{
-			p = i;
-			find = TRUE;
-			break;
+			return AnimDataArray[i];
 		}
 	}
 
-	if (find == FALSE)
-	{
-
-		AnimationData* animdata = new AnimationData;
-
-
-		string path = ANIMATION_PATH+filepath;
-
-		
-		animdata->LoadAnimation(path, this);
-
-		this->AnimDataArray.push_back(animdata);
-		p = (int)AnimDataArray.size() - 1;
-
-	}
-
-	return p;
-}
-
-AnimationData* AssetsManager::GetAnimationData(int index)
-{
-	return AnimDataArray[index];
+	
+	AnimationData* animdata = new AnimationData;
+	string path = ANIMATION_PATH + fileName;
+	animdata->LoadAnimation(path, this);
+	this->AnimDataArray.push_back(animdata);
+	return animdata;
 }
 
 
 
-MeshData* AssetsManager::GetMeshTree(int n)
-{
-	return MeshDataTree[n];
-}
+
 int AssetsManager::AddMesh(MeshData* data)
 {
 	MeshDataArray.push_back(data);
@@ -329,41 +291,27 @@ GameEngine* AssetsManager::GetGameEngine(void)
 
 
 
-DX11Texture* AssetsManager::GetTexture(int n)
+//DX11Texture* AssetsManager::GetTexture(int n)
+//{
+//
+//
+//	return this->TextureArray[n];
+//}
+DX11Texture* AssetsManager::LoadTexture(string filepath)
 {
-
-
-	return this->TextureArray[n];
-}
-int AssetsManager::LoadTexture(string filepath)
-{
-	int p = -1;
-	BOOL find = FALSE;
-	for (int i = 0; i < TextureArray.size(); i++)
+	for (DX11Texture* tex : TextureArray)
 	{
-		string  fp = TextureArray[i]->GetFilePath();
-		if (filepath == TextureArray[i]->GetFilePath())
+		if (filepath == tex->GetFilePath())
 		{
-			p = i;
-			find = TRUE;
-			break;
+			return tex;
 		}
 	}
 
-	if (find == FALSE)
-	{
 
-		DX11Texture* tex = new DX11Texture;
-		tex->SetManager(this);
-
-		tex->CreateSRV(filepath);
-
-		this->TextureArray.push_back(tex);
-		p = (int)TextureArray.size() - 1;
-
-	}
-
-	return p;
+	DX11Texture* tex = new DX11Texture(this);
+	tex->CreateSRV(filepath);
+	this->TextureArray.push_back(tex);
+	return tex;
 }
 
 void AssetsManager::SetSkinMeshCompute(void)
@@ -479,22 +427,7 @@ void AssetsManager::SetShader(ShaderSet::ShaderIndex index)
 	}
 }
 
-Material* AssetsManager::GetMaterial(int index)
-{
-	return MaterialArray[index];
-}
 
-int AssetsManager::GetMaterialIndex(string name)
-{
-	for (int i = 0; i < MaterialArray.size(); i++)
-	{
-		if (MaterialArray[i]->GetName()==name)
-		{
-			return i;
-		}
-	}
-	return 0;
-}
 
 int AssetsManager::CreateRenderTexture(int widht, int height, string name)
 {
@@ -537,22 +470,34 @@ void AssetsManager::DeleteRenderTexture(int index)
 	this->RenderTextureArray[index] = nullptr;
 }
 
-int AssetsManager::LoadMaterial(Material* material)
+Material* AssetsManager::LoadMaterial(Material* material)
 {
 	if (material->GetName() != "")
 	{
-		for (int i = 0; i < MaterialArray.size(); i++)
+		for (Material* mat:MaterialArray)
 		{
-			if (MaterialArray[i]->GetName() == material->GetName())
+			if (mat->GetName() == material->GetName())
 			{
 
 				delete material;
-				return i;
+				return mat;
 			}
 		}
 
 	}
 
 	this->MaterialArray.push_back(material);
-	return (int)MaterialArray.size() - 1;
+	return material;
+}
+
+Material* AssetsManager::GetMaterial(string name)
+{
+	for (Material* mat : MaterialArray)
+	{
+		if (mat->GetName() == name)
+		{
+			return mat;
+		}
+	}
+	return nullptr;
 }

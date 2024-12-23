@@ -47,34 +47,30 @@ public:
 
 
 
-	int LoadMeshNode(string filepath);
-
-	int LoadAnimationData(string filepath);
-	AnimationData* GetAnimationData(int index);
+	MeshData* LoadMeshFileFbx(string fileName);
 
 
-	MeshData* GetMeshTree(int n);
+
+	AnimationData* LoadAnimationData(string fileName);
 
 	int AddMesh(MeshData* data);
 
 
 	MeshData* GetMeshData(int n);
 
-	//KeyFrameAnimData* GetKeyFrameAnimData(int n);
 
 
 	GameEngine* GetGameEngine(void);
 
-
-	//SkinMeshDataList* GetSkinMeshDataList(int n);
-	//int LoadSkinMesh(string filepath);
-
-	//SkeletonAnimData* GetSkeletonAnimData(int n);
-	//int LoadSkeletonAnimData(string filepath);
+	Material* LoadMaterial(Material* material);
 
 
-	DX11Texture* GetTexture(int n);
-	int LoadTexture(string filepath);
+	Material* GetMaterial(string name);
+
+
+
+	//DX11Texture* GetTexture(int n);
+	DX11Texture* LoadTexture(string filepath);
 
 	void SetSkinMeshCompute(void);
 
@@ -93,11 +89,6 @@ public:
 
 	void SetShader(ShaderSet::ShaderIndex index);
 
-	int LoadMaterial(Material* material);
-
-	Material* GetMaterial(int index);
-
-	int GetMaterialIndex(string name);
 
 	int CreateRenderTexture(int widht, int height, string name);
 	int GetRenderTextureIndex(string name);

@@ -298,6 +298,7 @@ void PSmain(in float4 inPosition : SV_POSITION,
                 light = dot(lightDir, normal.xyz);
                 light = (0.5 - 0.5 * light);
 
+                
          
 
                 float3 r = 2.0 * normal.xyz * light - lightDir;
@@ -309,7 +310,7 @@ void PSmain(in float4 inPosition : SV_POSITION,
                         
                         
                         
-                iD = color * Material.Diffuse * light * direcLight.m_Diffuse[i]*sma;
+                iD = color * Material.Diffuse * light * direcLight.m_Diffuse[i] * sma;
                 iS = color.xyz * pow(saturate(dot(r, v)), Material.Shininess) * Material.Specular.xyz;
 
                 //if (light > 0.5)
