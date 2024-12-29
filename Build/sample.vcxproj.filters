@@ -163,6 +163,24 @@
     <Filter Include="GameEngine\GameEngine">
       <UniqueIdentifier>{485d611e-5224-40f2-99ca-1b30f4feb778}</UniqueIdentifier>
     </Filter>
+    <Filter Include="component\SkinMesh">
+      <UniqueIdentifier>{56ab0ddc-40f5-4840-9351-4484a49046a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\ComputeShader">
+      <UniqueIdentifier>{0291956e-5292-4840-bbcb-a1f1c79a16af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\ComputeShader\skinmesh">
+      <UniqueIdentifier>{5e17ab3a-9ac3-4862-81a7-ab5ca32f42e7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\SkinMeshShader">
+      <UniqueIdentifier>{02c92251-632d-42cd-8f63-b0c02579bbd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\ShaderSet\DebugLineShader">
+      <UniqueIdentifier>{3b1ae6d9-7bc0-4266-a3e7-e2dcf12cafaf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\DebugLineShader">
+      <UniqueIdentifier>{b68691fe-34ea-476c-99c3-9f773b15aa62}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Coreminimal.h">
@@ -302,15 +320,6 @@
     </ClInclude>
     <ClInclude Include="BoxColliderComponent.h">
       <Filter>component\ColliderComponent</Filter>
-    </ClInclude>
-    <ClInclude Include="SkeletonAnimData.h">
-      <Filter>misc</Filter>
-    </ClInclude>
-    <ClInclude Include="SkinMeshComponent.h">
-      <Filter>misc</Filter>
-    </ClInclude>
-    <ClInclude Include="SkinMeshDataList.h">
-      <Filter>misc</Filter>
     </ClInclude>
     <ClInclude Include="DirectionalLightComponent.h">
       <Filter>component\LightComponent</Filter>
@@ -456,6 +465,51 @@
     <ClInclude Include="GameEngine.h">
       <Filter>GameEngine\GameEngine</Filter>
     </ClInclude>
+    <ClInclude Include="SkinMeshTreeData.h">
+      <Filter>Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="TestScene.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinMeshTest.h">
+      <Filter>gameobject\3D</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinMeshComponent.h">
+      <Filter>component\SkinMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="BoneComponent.h">
+      <Filter>component\SkinMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinMeshLinkerComponent.h">
+      <Filter>component\SkinMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="ComputeShader.h">
+      <Filter>Shader\ComputeShader</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinMeshComputeShader.h">
+      <Filter>Shader\ComputeShader\skinmesh</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveTestComponent.h">
+      <Filter>component</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinMeshPhongMaterial.h">
+      <Filter>Shader\SkinMeshShader</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinMeshPhongShader.h">
+      <Filter>Shader\SkinMeshShader</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinMeshShadowMappingMaterial.h">
+      <Filter>Shader\ShadowShader</Filter>
+    </ClInclude>
+    <ClInclude Include="SkinMeshShadowShader.h">
+      <Filter>Shader\ShadowShader</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugLineShader.h">
+      <Filter>Shader\DebugLineShader</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugUtility.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -589,15 +643,6 @@
     </ClCompile>
     <ClCompile Include="BoxColliderComponent.cpp">
       <Filter>component\ColliderComponent</Filter>
-    </ClCompile>
-    <ClCompile Include="SkeletonAnimData.cpp">
-      <Filter>misc</Filter>
-    </ClCompile>
-    <ClCompile Include="SkinMeshComponent.cpp">
-      <Filter>misc</Filter>
-    </ClCompile>
-    <ClCompile Include="SkinMeshDataList.cpp">
-      <Filter>misc</Filter>
     </ClCompile>
     <ClCompile Include="DirectionalLightComponent.cpp">
       <Filter>component\LightComponent</Filter>
@@ -746,6 +791,51 @@
     <ClCompile Include="GameEngine.cpp">
       <Filter>GameEngine\GameEngine</Filter>
     </ClCompile>
+    <ClCompile Include="SkinMeshTreeData.cpp">
+      <Filter>Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="TestScene.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="SkinMeshTest.cpp">
+      <Filter>gameobject\3D</Filter>
+    </ClCompile>
+    <ClCompile Include="SkinMeshComponent.cpp">
+      <Filter>component\SkinMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="BoneComponent.cpp">
+      <Filter>component\SkinMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="SkinMeshLinkerComponent.cpp">
+      <Filter>component\SkinMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="ComputeShader.cpp">
+      <Filter>Shader\ComputeShader</Filter>
+    </ClCompile>
+    <ClCompile Include="SkinMeshComputeShader.cpp">
+      <Filter>Shader\ComputeShader\skinmesh</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveTestComponent.cpp">
+      <Filter>component</Filter>
+    </ClCompile>
+    <ClCompile Include="SkinMeshPhongMaterial.cpp">
+      <Filter>Shader\SkinMeshShader</Filter>
+    </ClCompile>
+    <ClCompile Include="SkinMeshPhongShader.cpp">
+      <Filter>Shader\SkinMeshShader</Filter>
+    </ClCompile>
+    <ClCompile Include="SkinMeshShadowShader.cpp">
+      <Filter>Shader\ShadowShader</Filter>
+    </ClCompile>
+    <ClCompile Include="SkinMeshShadowMappingMaterial.cpp">
+      <Filter>Shader\ShadowShader</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugLineShader.cpp">
+      <Filter>Shader\DebugLineShader</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugUtility.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\shader.hlsl">
@@ -774,6 +864,24 @@
     </FxCompile>
     <FxCompile Include="shaders\NotEffect.hlsl">
       <Filter>Shader\PostEffect\NotEffect</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\CSskinmesh.hlsl">
+      <Filter>Shader\ComputeShader\skinmesh</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\SkinMeshPhongShaderEasyLight.hlsl">
+      <Filter>misc</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\SkinMeshPhongShaderRealLight.hlsl">
+      <Filter>misc</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\SkinMeshPhongShader.hlsl">
+      <Filter>Shader\SkinMeshShader</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\SkinMeshShadowShader.hlsl">
+      <Filter>Shader\ShadowShader</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\DebugLineShader.hlsl">
+      <Filter>Shader\DebugLineShader</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

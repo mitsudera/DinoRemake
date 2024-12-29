@@ -19,6 +19,7 @@
 #include "transformcomponent.h"
 #include "RenderTexture.h"
 #include "PostEffectShader.h"
+#include "DebugUtility.h"
 //*****************************************************************************
 // マクロ定義
 //*****************************************************************************
@@ -95,7 +96,7 @@ void CameraComponent::Awake(void)
 	this->aspect = 16.0f / 9.0f;	// アスペクト比 
 	this->angle = XMConvertToRadians(90.0f);	// 視野角
 	this->nearZ = 10.0f;
-	this->farZ = 10000.0f;
+	this->farZ = 1000.0f;
 
 	this->len = 50.0f;
 
@@ -158,7 +159,7 @@ void CameraComponent::Render(void)
 		break;
 	case TrackingMode::NONE:
 
-		this->mtxView = XMMatrixLookToLH(XMLoadFloat3(&this->GetWorldPos()), XMLoadFloat3(&GetTransFormComponent()->GetForward()), this->GetTransFormComponent()->GetAxisY());
+		this->mtxView = XMMatrixLookToLH(XMLoadFloat3(&this->GetWorldPos()), GetTransFormComponent()->GetAxisZ(), this->GetTransFormComponent()->GetAxisY());
 		break;
 
 	default:
@@ -209,19 +210,17 @@ void CameraComponent::Render(void)
 			pRenderer->SetDepthEnable(FALSE);
 			this->sky->GetTransFormComponent()->SetPosition(this->GetWorldPos());
 
-			this->sky->GetTransFormComponent()->UpdateMatrix();
 
-			for (int j = 0; j < ShaderSet::ShaderIndex::MAX; j++)
+			for (PrimitiveComponent* com : skyComArray)
 			{
-				pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->SetShader((ShaderSet::ShaderIndex)j);
-
-
-				sky->Draw((ShaderSet::ShaderIndex)j);
-
-
-
-
+				com->GetTransFormComponent()->UpdateMatrix();
+				com->GetMaterial()->GetShaderSet()->SetShaderRenderer();
+				com->Draw();
 			}
+
+
+
+
 			pRenderer->SetDepthEnable(TRUE);
 
 
@@ -259,19 +258,15 @@ void CameraComponent::Render(void)
 			pRenderer->SetDepthEnable(FALSE);
 			this->sky->GetTransFormComponent()->SetPosition(this->GetWorldPos());
 
-			this->sky->GetTransFormComponent()->UpdateMatrix();
 
-			for (int j = 0; j < ShaderSet::ShaderIndex::MAX; j++)
+			for (PrimitiveComponent* com:skyComArray)
 			{
-				pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->SetShader((ShaderSet::ShaderIndex)j);
-
-
-				sky->Draw((ShaderSet::ShaderIndex)j);
-
-
-
-
+				com->GetTransFormComponent()->UpdateMatrix();
+				com->GetMaterial()->GetShaderSet()->SetShaderRenderer();
+				com->Draw();
 			}
+
+
 			pRenderer->SetDepthEnable(TRUE);
 
 
@@ -281,29 +276,8 @@ void CameraComponent::Render(void)
 	}
 
 
-
-	
-
-
-
-	////シェーダー毎に描画
-	//for (int i = 0; i < ShaderSet::ShaderIndex::MAX; i++)
-	//{
-	//	pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->SetShader((ShaderSet::ShaderIndex)i);
-	////	描画処理
-	//	for (GameObject* gameObject : pGameObject->GetScene()->GetGameObject())
-	//	{
-	////		レイヤーのカリングチェック
-	//		if (layerCulling[(int)gameObject->GetLayer()]||gameObject->GetLayer()==GameObject::Layer::Text)
-	//			continue;
-
-	//		gameObject->Draw((ShaderSet::ShaderIndex)i);
-	//	}
-	//}
-
-
 	//シェーダー毎に描画
-	for (int i = 0; i < ShaderSet::ShaderIndex::MAX; i++)
+	for (int i = 0; i < ShaderSet::ShaderIndex::MAXShader; i++)
 	{
 			pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->SetShader((ShaderSet::ShaderIndex)i);
 
@@ -316,6 +290,13 @@ void CameraComponent::Render(void)
 			if (layerCulling[(int)com->GetGameObject()->GetLayer()] || com->GetGameObject()->GetLayer() == GameObject::Layer::Text)
 				continue;
 
+			if (com->GetMaterial() == nullptr)
+			{
+				com->Draw();
+				continue;
+
+			}
+
 			//現在セットしてるシェーダーを使っている場合描画
 			if (com->GetMaterial()->GetShaderSet()->GetShaderIndex() != i)
 				continue;
@@ -326,6 +307,18 @@ void CameraComponent::Render(void)
 
 		}
 	}
+
+	pGameEngine->GetDebugUtility()->SetDebugLineShader();
+	
+	for (Component* com : pGameObject->GetScene()->GetAllComponent())
+	{
+		if (!com->GetActive())
+			continue;
+		com->DebugDraw();
+	}
+
+
+
 	pRenderer->GetDeviceContext()->OMSetRenderTargets(0, nullptr, nullptr);
 
 	if (postEffectEnable)
@@ -394,10 +387,23 @@ void CameraComponent::SetClearColor(XMFLOAT4 color)
 	this->clearColor = color;
 }
 
+void CameraComponent::SetSkyCom(GameObject* sky)
+{
+	PrimitiveComponent* com = sky->GetComponent<PrimitiveComponent>();
+	if (com != nullptr)
+		skyComArray.push_back(com);
+
+	for (GameObject* obj : sky->GetChild())
+	{
+		SetSkyCom(obj);
+	}
+	clearMode = ClearMode::SkySphere;
+}
+
 void CameraComponent::SetSky(GameObject* sky)
 {
 	this->sky = sky;
-	clearMode = ClearMode::SkySphere;
+	SetSkyCom(sky);
 }
 
 void CameraComponent::SetMainCamera(void)

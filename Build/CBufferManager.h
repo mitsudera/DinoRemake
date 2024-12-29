@@ -22,12 +22,12 @@ public:
 		PointLight,
 		Camera,
 		Shadow,
+		Bone,
 		Free1,
 		Free2,
 		Free3,
 		Free4,
 		Free5,
-		Free6,
 	};
 
 	void SetCBufferOtherCS(ID3D11Buffer* buffer, BufferSlot slot);//コンピュートシェーダー以外の定数バッファ

@@ -5,7 +5,7 @@ struct GAUSSIAN
 
 };
 
-cbuffer GaussianBuffer : register(b8)
+cbuffer GaussianBuffer : register(b9)
 {
     GAUSSIAN gaus;
 

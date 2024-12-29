@@ -21,6 +21,7 @@ public:
 	void LoadAnimation(FbxNode* node, MtxNode* parent, AnimationData* animdata);
 
 	
+
 	void CreateFrameMtxArray(int n);
 
 	XMMATRIX GetFrameMtx(float time);
@@ -35,8 +36,6 @@ private:
 	MtxNode* parent;
 
 	Attribute attribute;
-
-
 
 	string name;
 	BOOL isRoot;

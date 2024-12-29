@@ -153,6 +153,7 @@
     <ClInclude Include="AnimationData.h" />
     <ClInclude Include="AssetsManager.h" />
     <ClInclude Include="BGMPlayer.h" />
+    <ClInclude Include="BoneComponent.h" />
     <ClInclude Include="BoxColliderComponent.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraComponent.h" />
@@ -163,8 +164,11 @@
     <ClInclude Include="collision.h" />
     <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="component.h" />
+    <ClInclude Include="ComputeShader.h" />
     <ClInclude Include="Coreminimal.h" />
     <ClInclude Include="DebugCamera.h" />
+    <ClInclude Include="DebugLineShader.h" />
+    <ClInclude Include="DebugUtility.h" />
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="DirectionalLightComponent.h" />
     <ClInclude Include="DX11Texture.h" />
@@ -189,8 +193,18 @@
     <ClInclude Include="MeshAnimData.h" />
     <ClInclude Include="MeshComponent.h" />
     <ClInclude Include="MeshData.h" />
+    <ClInclude Include="MoveTestComponent.h" />
     <ClInclude Include="NotEffectShader.h" />
     <ClInclude Include="RedEnemy.h" />
+    <ClInclude Include="SkinMeshComponent.h" />
+    <ClInclude Include="SkinMeshComputeShader.h" />
+    <ClInclude Include="SkinMeshLinkerComponent.h" />
+    <ClInclude Include="SkinMeshPhongMaterial.h" />
+    <ClInclude Include="SkinMeshPhongShader.h" />
+    <ClInclude Include="SkinMeshShadowMappingMaterial.h" />
+    <ClInclude Include="SkinMeshShadowShader.h" />
+    <ClInclude Include="SkinMeshTest.h" />
+    <ClInclude Include="SkinMeshTreeData.h" />
     <ClInclude Include="TerrainComponent.h" />
     <ClInclude Include="MeshFieldVertex.h" />
     <ClInclude Include="MikanSoftLogo.h" />
@@ -213,18 +227,6 @@
     <ClInclude Include="ShadowMap.h" />
     <ClInclude Include="ShadowMappingMaterial.h" />
     <ClInclude Include="ShadowShader.h" />
-    <ClInclude Include="SkeletonAnimData.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="SkinMeshComponent.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
-    <ClInclude Include="SkinMeshDataList.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClInclude>
     <ClInclude Include="SkySphere.h" />
     <ClInclude Include="SoundSpeakerComponent.h" />
     <ClInclude Include="SoundEngine.h" />
@@ -240,6 +242,7 @@
     <ClInclude Include="TerrainColliderComponent.h" />
     <ClInclude Include="TerrainMaterial.h" />
     <ClInclude Include="TerrainShader.h" />
+    <ClInclude Include="TestScene.h" />
     <ClInclude Include="Text.h" />
     <ClInclude Include="TextMesh.h" />
     <ClInclude Include="TextMeshComponent.h" />
@@ -264,6 +267,7 @@
     <ClCompile Include="AnimationData.cpp" />
     <ClCompile Include="AssetsManager.cpp" />
     <ClCompile Include="BGMPlayer.cpp" />
+    <ClCompile Include="BoneComponent.cpp" />
     <ClCompile Include="BoxColliderComponent.cpp" />
     <ClCompile Include="Camera.cpp" />
     <ClCompile Include="CameraComponent.cpp" />
@@ -274,7 +278,10 @@
     <ClCompile Include="collision.cpp" />
     <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="component.cpp" />
+    <ClCompile Include="ComputeShader.cpp" />
     <ClCompile Include="DebugCamera.cpp" />
+    <ClCompile Include="DebugLineShader.cpp" />
+    <ClCompile Include="DebugUtility.cpp" />
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="DirectionalLightComponent.cpp" />
     <ClCompile Include="DX11Texture.cpp" />
@@ -299,8 +306,18 @@
     <ClCompile Include="MeshAnimData.cpp" />
     <ClCompile Include="MeshComponent.cpp" />
     <ClCompile Include="MeshData.cpp" />
+    <ClCompile Include="MoveTestComponent.cpp" />
     <ClCompile Include="NotEffectShader.cpp" />
     <ClCompile Include="RedEnemy.cpp" />
+    <ClCompile Include="SkinMeshComponent.cpp" />
+    <ClCompile Include="SkinMeshComputeShader.cpp" />
+    <ClCompile Include="SkinMeshLinkerComponent.cpp" />
+    <ClCompile Include="SkinMeshPhongMaterial.cpp" />
+    <ClCompile Include="SkinMeshPhongShader.cpp" />
+    <ClCompile Include="SkinMeshShadowMappingMaterial.cpp" />
+    <ClCompile Include="SkinMeshShadowShader.cpp" />
+    <ClCompile Include="SkinMeshTest.cpp" />
+    <ClCompile Include="SkinMeshTreeData.cpp" />
     <ClCompile Include="TerrainComponent.cpp" />
     <ClCompile Include="MeshFieldVertex.cpp" />
     <ClCompile Include="MikanSoftLogo.cpp" />
@@ -320,18 +337,6 @@
     <ClCompile Include="ShadowMap.cpp" />
     <ClCompile Include="ShadowMappingMaterial.cpp" />
     <ClCompile Include="ShadowShader.cpp" />
-    <ClCompile Include="SkeletonAnimData.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="SkinMeshComponent.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
-    <ClCompile Include="SkinMeshDataList.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
-    </ClCompile>
     <ClCompile Include="SkySphere.cpp" />
     <ClCompile Include="SoundSpeakerComponent.cpp" />
     <ClCompile Include="SoundEngine.cpp" />
@@ -347,6 +352,7 @@
     <ClCompile Include="TerrainColliderComponent.cpp" />
     <ClCompile Include="TerrainMaterial.cpp" />
     <ClCompile Include="TerrainShader.cpp" />
+    <ClCompile Include="TestScene.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="TextMesh.cpp" />
     <ClCompile Include="TextMeshComponent.cpp" />
@@ -367,6 +373,18 @@
     <ClCompile Include="WicFactory.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <FxCompile Include="shaders\CSskinmesh.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shaders\DebugLineShader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="shaders\Fade.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
@@ -394,6 +412,30 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="shaders\ShadowShader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shaders\SkinMeshPhongShader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shaders\SkinMeshPhongShaderEasyLight.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shaders\SkinMeshPhongShaderRealLight.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shaders\SkinMeshShadowShader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>

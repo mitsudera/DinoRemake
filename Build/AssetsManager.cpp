@@ -18,6 +18,11 @@
 #include "UIMaterial.h"
 #include "TerrainShader.h"
 #include "NotEffectShader.h"
+#include "SkinMeshTreeData.h"
+#include "SkinMeshComputeShader.h"
+#include "SkinMeshPhongShader.h"
+#include "SkinMeshShadowShader.h"
+#include "DebugLineShader.h"
 
 #define MESH_PATH "data/MODEL/mesh/"
 #define SKINMESH_PATH "data/MODEL/skinmesh/"
@@ -62,6 +67,13 @@ void AssetsManager::Uninit(void)
 	}
 	this->MeshDataArray.clear();
 
+	for (int i = 0; i < this->SkinMeshTreeDataArray.size(); i++)
+	{
+		if(this->SkinMeshTreeDataArray[i]) delete this->SkinMeshTreeDataArray[i];
+
+	}
+	this->SkinMeshTreeDataArray.clear();
+
 
 	for (AnimationData* data: AnimDataArray)
 	{
@@ -82,6 +94,13 @@ void AssetsManager::Uninit(void)
 	}
 	PostEffectShaderArray.clear();
 
+	for (ComputeShader* data:ComputeShaderArray)
+	{
+		data->Destroy();
+		if (data) delete data;
+	}
+	ComputeShaderArray.clear();
+
 	for (Material* data:MaterialArray)
 	{
 		if (data) delete data;
@@ -96,24 +115,6 @@ void AssetsManager::Uninit(void)
 	RenderTextureArray.clear();
 
 
-	//for (int i = 0; i < this->KeyFrameAnimDataArray.size(); i++)
-	//{
-	//	delete this->KeyFrameAnimDataArray[i];
-	//}
-	//this->KeyFrameAnimDataArray.clear();
-
-	//for (int i = 0; i < this->SkinMeshDataListArray.size(); i++)
-	//{
-	//	delete this->SkinMeshDataListArray[i];
-	//}
-	//this->SkinMeshDataListArray.clear();
-
-
-	//for (int i = 0; i < this->SkeletonAnimDataArray.size(); i++)
-	//{
-	//	delete this->SkeletonAnimDataArray[i];
-	//}
-	//this->SkeletonAnimDataArray.clear();
 
 
 	for (int i = 0; i < this->TextureArray.size(); i++)
@@ -123,8 +124,8 @@ void AssetsManager::Uninit(void)
 	this->TextureArray.clear();
 
 
-	if (skinMeshCompute) skinMeshCompute->Release();
 }
+
 
 MeshData* AssetsManager::LoadMeshFileFbx(string fileName)
 {
@@ -180,6 +181,25 @@ MeshData* AssetsManager::GetMeshData(int n)
 	return this->MeshDataArray[n];
 }
 
+SkinMeshTreeData* AssetsManager::LoadSkinMeshFileFbx(string fileName)
+{
+	//既にロードしているデータか調べる
+	for (SkinMeshTreeData* skinMesh : SkinMeshTreeDataArray)
+	{
+		string filePath = skinMesh->GetFileName();
+		if ((SKINMESH_PATH + fileName) == filePath)
+		{
+			return skinMesh;
+		}
+	}
+	//ロードしてなかったら追加
+	SkinMeshTreeData* skinMeshdata = new SkinMeshTreeData(this);
+	string path = SKINMESH_PATH + fileName;
+	skinMeshdata->LoadFbxFile(path);
+	this->SkinMeshTreeDataArray.push_back(skinMeshdata);
+	return skinMeshdata;
+}
+
 
 
 GameEngine* AssetsManager::GetGameEngine(void)
@@ -188,115 +208,6 @@ GameEngine* AssetsManager::GetGameEngine(void)
 }
 
 
-//int AssetsManager::LoadMeshAnim(string filepath)
-//{
-//	int p = -1;
-//	BOOL find = FALSE;
-//	for (int i = 0; i < KeyFrameAnimDataArray.size(); i++)
-//	{
-//		if ((MESH_ANIM_PATH + filepath) == KeyFrameAnimDataArray[i]->GetFilePath())
-//		{
-//			p = i;
-//			find = TRUE;
-//			break;
-//		}
-//	}
-//
-//	if (find == FALSE)
-//	{
-//
-//		string path = MESH_ANIM_PATH + filepath;
-//
-//		KeyFrameAnimData* animdata = new KeyFrameAnimData;
-//		animdata->LoadKeyFrameAnim(path);
-//
-//		this->KeyFrameAnimDataArray.push_back(animdata);
-//		p = (int)KeyFrameAnimDataArray.size() - 1;
-//	}
-//
-//	return p;
-//}
-
-//int AssetsManager::LoadSkinMesh(string filepath)
-//{
-//	int p = -1;
-//	BOOL find = FALSE;
-//	for (int i = 0; i < SkinMeshDataListArray.size(); i++)
-//	{
-//		if ((SKINMESH_PATH + filepath) == SkinMeshDataListArray[i]->GetFilePath())
-//		{
-//			p = i;
-//			find = TRUE;
-//			break;
-//		}
-//	}
-//
-//	if (find == FALSE)
-//	{
-//		string path = SKINMESH_PATH + filepath;
-//
-//
-//		SkinMeshDataList* skinmeshdatalist = new SkinMeshDataList;
-//
-//		skinmeshdatalist->LoadSkinMeshDataList(path, this);
-//
-//		this->SkinMeshDataListArray.push_back(skinmeshdatalist);
-//		p = (int)SkinMeshDataListArray.size() - 1;
-//
-//	}
-//
-//	return p;
-//}
-//
-//SkinMeshDataList* AssetsManager::GetSkinMeshDataList(int n)
-//{
-//	return this->SkinMeshDataListArray[n];
-//}
-//
-//SkeletonAnimData* AssetsManager::GetSkeletonAnimData(int n)
-//{
-//	return this->SkeletonAnimDataArray[n];
-//}
-//int AssetsManager::LoadSkeletonAnimData(string filepath)
-//{
-//	int p = -1;
-//	BOOL find = FALSE;
-//	for (int i = 0; i < SkeletonAnimDataArray.size(); i++)
-//	{
-//		if ((SKINMESH_ANIM_PATH + filepath) == SkeletonAnimDataArray[i]->GetFilePath())
-//		{
-//			p = i;
-//			find = TRUE;
-//			break;
-//		}
-//	}
-//
-//	if (find == FALSE)
-//	{
-//		string path = SKINMESH_ANIM_PATH + filepath;
-//
-//
-//		SkeletonAnimData* skeletonAnimdata = new SkeletonAnimData;
-//
-//		
-//		skeletonAnimdata->LoadSkeletonAnimData(path);
-//
-//		this->SkeletonAnimDataArray.push_back(skeletonAnimdata);
-//		p = (int)SkeletonAnimDataArray.size() - 1;
-//
-//	}
-//
-//	return p;
-//}
-
-
-
-//DX11Texture* AssetsManager::GetTexture(int n)
-//{
-//
-//
-//	return this->TextureArray[n];
-//}
 DX11Texture* AssetsManager::LoadTexture(string filepath)
 {
 	for (DX11Texture* tex : TextureArray)
@@ -314,10 +225,6 @@ DX11Texture* AssetsManager::LoadTexture(string filepath)
 	return tex;
 }
 
-void AssetsManager::SetSkinMeshCompute(void)
-{
-	GetGameEngine()->GetRenderer()->GetDeviceContext()->CSSetShader(skinMeshCompute, nullptr, 0);
-}
 
 void AssetsManager::CreateAllShader(void)
 {
@@ -331,12 +238,18 @@ void AssetsManager::CreateAllShader(void)
 	uiShader = new UIShader(this->pGameEngine->GetRenderer());
 	ShaderSetArray.push_back(uiShader);
 
-	shadowShader = new ShadowShader(this->pGameEngine->GetRenderer());
-	ShaderSetArray.push_back(shadowShader);
-
 	terrainShader = new TerrainShader(this->pGameEngine->GetRenderer());
 	ShaderSetArray.push_back(terrainShader);
 
+	skinMeshPhongShader = new SkinMeshPhongShader(this->pGameEngine->GetRenderer());
+	ShaderSetArray.push_back(skinMeshPhongShader);
+	
+	//shadow
+	shadowShader = new ShadowShader(this->pGameEngine->GetRenderer());
+	ShaderSetArray.push_back(shadowShader);
+
+	skinMeshShadowShader = new SkinMeshShadowShader(this->pGameEngine->GetRenderer());
+	ShaderSetArray.push_back(skinMeshShadowShader);
 
 	//posteffect
 	gausianBlur = new GausianBlurShader(this->pGameEngine->GetRenderer());
@@ -348,7 +261,11 @@ void AssetsManager::CreateAllShader(void)
 	notEffectShader = new NotEffectShader(this->pGameEngine->GetRenderer());
 	PostEffectShaderArray.push_back(notEffectShader);
 
+	//cs
+	skinMeshCompute = new SkinMeshComputeShader(this->pGameEngine->GetRenderer());
+	ComputeShaderArray.push_back(skinMeshCompute);
 
+	
 }
 
 void AssetsManager::CreateDefaultMaterial(void)
@@ -379,9 +296,19 @@ ShadowShader* AssetsManager::GetShadowShader(void)
 	return this->shadowShader;
 }
 
+SkinMeshShadowShader* AssetsManager::GetSkinMeshShadowShader(void)
+{
+	return this->skinMeshShadowShader;
+}
+
 TerrainShader* AssetsManager::GetTerrainShader(void)
 {
 	return this->terrainShader;
+}
+
+SkinMeshPhongShader* AssetsManager::GetSkinMeshShader(void)
+{
+	return this->skinMeshPhongShader;
 }
 
 GausianBlurShader* AssetsManager::GetGausianBlurShader(void)
@@ -418,12 +345,29 @@ void AssetsManager::SetShader(ShaderSet::ShaderIndex index)
 
 		this->uiShader->SetShaderRenderer();
 		break;
-	case ShaderSet::Shadow:
-
-		this->shadowShader->SetShaderRenderer();
-		break;
 	case ShaderSet::Terrain:
 		this->terrainShader->SetShaderRenderer();
+		break;
+	case ShaderSet::SkinMeshPhong:
+		this->skinMeshPhongShader->SetShaderRenderer();
+		break;
+	}
+}
+
+void AssetsManager::SetShadowShader(ShaderSet::ShadowShaderIndex index)
+{
+	switch (index)
+	{
+	case ShaderSet::ShadowShaderIndex::StandardShadow:
+		this->shadowShader->SetShaderRenderer();
+		break;
+
+	case ShaderSet::ShadowShaderIndex::SkinMeshShadow:
+		this->skinMeshShadowShader->SetShaderRenderer();
+		break;
+
+	default:
+		break;
 	}
 }
 
@@ -468,6 +412,11 @@ void AssetsManager::DeleteRenderTexture(int index)
 {
 	if(this->RenderTextureArray[index]) delete this->RenderTextureArray[index];
 	this->RenderTextureArray[index] = nullptr;
+}
+
+SkinMeshComputeShader* AssetsManager::GetSkinMeshComputeShader(void)
+{
+	return skinMeshCompute;
 }
 
 Material* AssetsManager::LoadMaterial(Material* material)

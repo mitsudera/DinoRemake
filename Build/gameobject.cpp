@@ -9,6 +9,10 @@
 #include "MeshData.h"
 #include "MeshComponent.h"
 #include "Material.h"
+#include "SkinMeshComponent.h"
+#include "SkinMeshLinkerComponent.h"
+#include "BoneComponent.h"
+#include "SkinMeshTreeData.h"
 
 GameObject::GameObject()
 {
@@ -50,7 +54,7 @@ GameObject::GameObject(GameObject* parent)
 
 GameObject::~GameObject()
 {
-	Uninit();
+	Destroy();
 }
 
 void GameObject::Awake(void)
@@ -61,22 +65,8 @@ void GameObject::Awake(void)
 
 }
 
-void GameObject::Init(void)
-{
-	this->transformComponent->Init();
 
-	for (Component* com : componentList)
-	{
-		com->Init();
-	}
-	for (GameObject* obj : childList)
-	{
-		obj->Init();
-	}
-
-}
-
-void GameObject::Uninit(void)
+void GameObject::Destroy(void)
 {
 	for (int i = 0; i < this->componentList.size(); i++)
 	{
@@ -87,108 +77,13 @@ void GameObject::Uninit(void)
 
 	for (int i = 0; i < childList.size(); i++)
 	{
-		childList[i]->Uninit();
+		childList[i]->Destroy();
 		delete childList[i];
 
 	}
 	this->childList.clear();
 }
 
-void GameObject::Update(void)
-{
-	if (!isActive)
-		return;
-
-	for (Component* com:componentList)
-	{
-		if (!com->GetActive())
-			continue;
-
-		com->Update();
-	}
-	for (GameObject* gameObject:childList)
-	{
-		if (!gameObject->GetActive())
-			continue;
-
-		gameObject->Update();
-	}
-
-}
-
-void GameObject::UpdateMatrix(void)
-{
-	if (!isActive)
-		return;
-
-
-	this->transformComponent->UpdateMatrix();
-
-	for (GameObject* gameObject : childList)
-	{
-		if (!gameObject->GetActive())
-			continue;
-
-		gameObject->UpdateMatrix();
-	}
-
-}
-
-void GameObject::Draw(ShaderSet::ShaderIndex index)
-{
-	if (!isActive)
-		return;
-
-	for (Component* component : GetComponentList())
-	{
-		if (component->GetAttribute() != Component::Attribute::Primitive)
-			continue;
-
-		PrimitiveComponent* primitiveComponent = static_cast<PrimitiveComponent*>(component);
-
-		//現在セットしてるシェーダーを使っている場合描画
-		if (primitiveComponent->GetMaterial()->GetShaderSet()->GetShaderIndex() != index)
-			continue;
-
-		primitiveComponent->Draw();
-
-	}
-	for (GameObject* child:childList)
-	{
-		if (!child->GetActive())
-			continue;
-		child->Draw(index);
-	}
-
-}
-
-void GameObject::ShadowMapping(void)
-{
-	if (!isActive)
-		return;
-
-	for (Component* component : GetComponentList())
-	{
-		if (component->GetAttribute() != Component::Attribute::Primitive)
-			continue;
-
-		PrimitiveComponent* primitiveComponent = static_cast<PrimitiveComponent*>(component);
-
-		if (!primitiveComponent->GetHasShadow()||!primitiveComponent->GetActive())
-			continue;
-
-		primitiveComponent->ShadowMapping();
-
-	}
-	for (GameObject* child : childList)
-	{
-		if (!child->GetActive())
-			continue;
-		child->ShadowMapping();
-	}
-
-
-}
 
 Scene* GameObject::GetScene(void)
 {
@@ -271,6 +166,25 @@ GameObject* GameObject::GetChild(string name)
 vector<GameObject*>& GameObject::GetChild()
 {
 	return this->childList;
+}
+
+GameObject* GameObject::SerchAllChild(string name)
+{
+	GameObject* ans = nullptr;
+
+	if (this->name == name)
+	{
+		return this;
+	}
+	
+	for (GameObject* obj : this->childList)
+	{
+		ans = obj->SerchAllChild(name);
+		if (ans != nullptr)
+			return ans;
+	}
+
+	return ans;
 }
 
 vector<Component*>& GameObject::GetComponentList(void)
@@ -361,5 +275,48 @@ void GameObject::LoadMeshNode(MeshData* node)
 		AddChild(childData->GetName())->LoadMeshNode(childData);
 	}
 
+
+}
+
+void GameObject::LoadFbxFileSkinMesh(string fName)
+{
+	SkinMeshTreeData* root = pGameEngine->GetAssetsManager()->LoadSkinMeshFileFbx(fName);
+	SkinMeshLinkerComponent* linker = AddComponent<SkinMeshLinkerComponent>();
+	linker->SetBoneCount(root->GetBoneNum());
+
+	for (SkinMeshData* childData : root->GetRootMeshArray())
+	{
+		AddChild(childData->GetName())->LoadSkinMeshNode(childData, linker);
+	}
+
+	BoneData* rootBone = root->GetRootBone();
+	AddChild(rootBone->GetName())->LoadBoneNode(rootBone,linker);
+
+}
+
+void GameObject::LoadSkinMeshNode(SkinMeshData* node,SkinMeshLinkerComponent* linker)
+{
+
+	SkinMeshComponent* skinmesh = AddComponent<SkinMeshComponent>();
+	skinmesh->SetSkinMeshData(node, linker);
+
+
+	for (SkinMeshData* childData : node->GetChildArray())
+	{
+		AddChild(childData->GetName())->LoadSkinMeshNode(childData,linker);
+	}
+
+
+}
+
+void GameObject::LoadBoneNode(BoneData* node, SkinMeshLinkerComponent* linker)
+{
+	BoneComponent* bone = AddComponent<BoneComponent>();
+	bone->SetBone(node, linker);
+
+	for (BoneData* childData : node->GetChildArray())
+	{
+		AddChild(childData->GetName())->LoadBoneNode(childData, linker);
+	}
 
 }

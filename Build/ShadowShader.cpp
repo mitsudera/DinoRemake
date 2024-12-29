@@ -8,7 +8,7 @@ ShadowShader::ShadowShader(Renderer* renderer)
     CreateVS("shaders/ShadowShader.hlsl", "VS_SM");
     CreatePS("shaders/ShadowShader.hlsl", "PS_SM");
 
-    shaderIndex = ShaderIndex::Shadow;
+    shadowShaderIndex = ShadowShaderIndex::StandardShadow;
 
 
     D3D11_BUFFER_DESC bufferDesc;

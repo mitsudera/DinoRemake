@@ -13,6 +13,9 @@
 #include "ShadowShader.h"
 #include "transformcomponent.h"
 #include "GausianBlurShader.h"
+#include "SkinMeshShadowShader.h"
+#include "ShadowShader.h"
+#include "Material.h"
 
 ShadowMap::ShadowMap(GameEngine* gameEngine)
 {
@@ -32,12 +35,12 @@ ShadowMap::ShadowMap(GameEngine* gameEngine)
 	pRenderer->GetDevice()->CreateBuffer(&hBufferDesc, nullptr, &this->shadowBuffer);
 	pCBufferManager->SetShadowBuffer(this->shadowBuffer);
 	quality = ShadowQuality::High;
-	vhwn = 256.0f;
+	vhwn = 128.0f;
 	vhwf = 1024.0f;
 	variance = TRUE;
 
 	vNear = 0.0f;
-	vFar = 50.0f;
+	vFar = 128.0f;
 
 }
 
@@ -97,7 +100,7 @@ void ShadowMap::ShadowMapping(void)
 
 
 	this->shadowBufferStruct.mode = variance;
-	this->shadowBufferStruct.facter = (vFar - vNear) * 0.0005;
+	this->shadowBufferStruct.facter = (3.0f/vFar);
 
 	XMMATRIX view;
 	XMMATRIX proj;
@@ -119,12 +122,12 @@ void ShadowMap::ShadowMapping(void)
 
 	lDir = XMVector3Normalize(lDir);
 
-	mapPos = camPos- (lDir * vFar * 0.5f);
+	mapPos = camPos- (lDir * vFar * 0.1f);
 
 
 
 
-	view = XMMatrixLookToLH(mapPos, lDir, zonevec());
+	view = XMMatrixLookToLH(mapPos, lDir, pGameEngine->GetLightmanager()->GetMainLight()->GetTransFormComponent()->GetAxisY());
 
 	proj = XMMatrixOrthographicLH(vhwn, vhwn, vNear, vFar);
 	//proj = XMMatrixPerspectiveFovLH(90.0f, 1.0f, vNear, vFar);
@@ -148,14 +151,34 @@ void ShadowMap::ShadowMapping(void)
 	this->shadowBufferStruct.wvp = XMMatrixTranspose(XMMatrixIdentity() * view * proj);
 	pAssetsManager->GetShadowShader()->SetShaderRenderer();
 
-
-	for (GameObject* gameObj : pGameEngine->GetActiveScene()->GetGameObject())
+	//シェーダー毎に描画
+	for (int i = 0; i < ShaderSet::ShadowShaderIndex::MAXShadowShader; i++)
 	{
+		pGameEngine->GetAssetsManager()->SetShadowShader((ShaderSet::ShadowShaderIndex)i);
 
-		gameObj->ShadowMapping();
 
+		for (PrimitiveComponent* com : pGameEngine->GetActiveScene()->GetAllPrimitiveComponent())
+		{
+			if (!com->GetActive())
+				continue;
+
+
+			Material* matShadow = com->GetShadowMaterial();
+
+			if (matShadow == nullptr)
+			{
+				com->ShadowMapping();
+				continue;
+			}
+
+			if (matShadow->GetShaderSet()->GetShaderIndex() != i)
+				continue;
+
+
+			com->ShadowMapping();
+
+		}
 	}
-	
 	pRenderer->GetDeviceContext()->OMSetRenderTargets(0, nullptr, nullptr);
 
 

@@ -40,23 +40,27 @@ void MtxNode::LoadAnimation(FbxNode* node, MtxNode* parent, AnimationData* animd
 
 		for (int i = 0; i < pAnimData->GetFrameNum(); i++)
 		{
-			//FbxMatrix framemtx = node->EvaluateGlobalTransform(pAnimData->GetStartTime() + pAnimData->GetOneFrameValue() * i);
 			FbxMatrix framemtx = node->EvaluateLocalTransform(pAnimData->GetStartTime() + pAnimData->GetOneFrameValue() * i);
+			FbxVector4 framepos = node->EvaluateLocalTranslation(pAnimData->GetStartTime() + pAnimData->GetOneFrameValue() * i);
+			FbxVector4 framerot = node->EvaluateLocalRotation(pAnimData->GetStartTime() + pAnimData->GetOneFrameValue() * i);
+			FbxVector4 framescl = node->EvaluateLocalScaling(pAnimData->GetStartTime() + pAnimData->GetOneFrameValue() * i);
+
+			XMMATRIX mtx = XMMatrixIdentity();
+			XMMATRIX scl = XMMatrixTranslation(framescl[0], framescl[1], framescl[2]);
+			XMMATRIX rz = XMMatrixRotationZ((framerot[2] / 180.0) * XM_PI);
+			XMMATRIX ry = XMMatrixRotationY((framerot[1] / 180.0) * XM_PI);
+			XMMATRIX rx = XMMatrixRotationX((framerot[0] / 180.0) * XM_PI);
+			XMMATRIX pos = XMMatrixTranslation(framepos[0], framepos[1], framepos[2]);
+
+			mtx = XMMatrixMultiply(mtx, scl);
+			mtx = XMMatrixMultiply(mtx, rz);
+			mtx = XMMatrixMultiply(mtx, ry);
+			mtx = XMMatrixMultiply(mtx, rx);
+			mtx = XMMatrixMultiply(mtx, pos);
+
+			
+
 			XMMATRIX frameMtx = FbxMatrixConvertToXMMATRIX(framemtx);
-
-
-			//FbxVector4 pos = node->EvaluateLocalTranslation(pAnimData->GetStartTime() + pAnimData->GetOneFrameValue() * i);
-			//FbxVector4 scl = node->EvaluateLocalScaling(pAnimData->GetStartTime() + pAnimData->GetOneFrameValue() * i);
-			//FbxVector4 rot = node->EvaluateLocalRotation(pAnimData->GetStartTime() + pAnimData->GetOneFrameValue() * i);
-
-			//XMMATRIX posMtx = XMMatrixTranslation(pos[0], pos[1], pos[2]);
-			//XMMATRIX sclMtx = XMMatrixTranslation(scl[0], scl[1], scl[2]);
-			//XMMATRIX rotMtx = XMMatrixTranslation(rot[0], rot[1], rot[2]);
-
-			//XMMATRIX localFrameMtx = XMMatrixIdentity();
-			//localFrameMtx = XMMatrixMultiply(localFrameMtx, sclMtx);
-			//localFrameMtx = XMMatrixMultiply(localFrameMtx, rotMtx);
-			//localFrameMtx = XMMatrixMultiply(localFrameMtx, posMtx);
 
 			this->frameMtxArray[i] = frameMtx;
 		}

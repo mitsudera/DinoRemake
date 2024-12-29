@@ -20,6 +20,7 @@ public:
 	void Init(void);
 
 	void Update();
+	void LateUpdate();
 	void Draw();
 	void Uninit();
 

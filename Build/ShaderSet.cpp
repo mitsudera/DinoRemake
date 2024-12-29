@@ -103,6 +103,37 @@ void ShaderSet::CreateVS(string filePath, string shaderName)
 	(pVSBlob)->Release();
 
 }
+void ShaderSet::CreateCustomVS(string filePath, string shaderName, D3D11_INPUT_ELEMENT_DESC* layout, UINT numElements)
+{
+	// 頂点シェーダコンパイル・生成
+	ID3DBlob* pErrorBlob = NULL;
+	ID3DBlob* pVSBlob = NULL;
+	DWORD shFlag = D3DCOMPILE_ENABLE_STRICTNESS;
+
+#if defined(_DEBUG) && defined(DEBUG_SHADER)
+	shFlag = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
+#endif
+
+	HRESULT hr = D3DX11CompileFromFile(filePath.c_str(), NULL, NULL, shaderName.c_str(), "vs_5_0", shFlag, 0, NULL, &pVSBlob, &pErrorBlob, NULL);
+	if (FAILED(hr))
+	{
+		MessageBox(NULL, (char*)pErrorBlob->GetBufferPointer(), "VS", MB_OK | MB_ICONERROR);
+	}
+
+	pRenderer->GetDevice()->CreateVertexShader(pVSBlob->GetBufferPointer(), pVSBlob->GetBufferSize(), NULL, &this->VS);
+
+
+
+	pRenderer->GetDevice()->CreateInputLayout(
+		layout,
+		numElements,
+		(pVSBlob)->GetBufferPointer(),
+		(pVSBlob)->GetBufferSize(),
+		&VertexLayout);
+
+	(pVSBlob)->Release();
+
+}
 
 void ShaderSet::CreateHS(string filePath, string shaderName)
 {
@@ -180,5 +211,10 @@ void ShaderSet::CreatePS(string filePath, string shaderName)
 ShaderSet::ShaderIndex ShaderSet::GetShaderIndex(void)
 {
 	return this->shaderIndex;
+}
+
+ShaderSet::ShadowShaderIndex ShaderSet::GetShadowShaderIndex(void)
+{
+	return this->shadowShaderIndex;
 }
 

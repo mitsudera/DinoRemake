@@ -29,9 +29,10 @@ void Scene::Awake()
 
 void Scene::Init(void)
 {
-	for (GameObject* gameObject : GetGameObject())
+	for (Component* com : allComponent)
 	{
-		gameObject->Init();
+
+		com->Init();
 
 	}
 
@@ -81,6 +82,28 @@ void Scene::Update()
 	sceneTime += pGameEngine->GetDeltaTime();
 }
 
+void Scene::LateUpdate()
+{
+	for (Component* com : allComponent)
+	{
+		if (!com->GetActive())
+			continue;
+
+		com->LateUpdate();
+
+	}
+
+	for (TransformComponent* com : allTransformComponent)
+	{
+		if (!com->GetActive())
+			continue;
+
+		com->UpdateMatrix();
+
+	}
+
+}
+
 void Scene::Draw()
 {
 
@@ -97,7 +120,7 @@ void Scene::Uninit()
 {
 	for (GameObject* gameObject : GetGameObject())
 	{
-		gameObject->Uninit();
+		gameObject->Destroy();
 		delete gameObject;
 	}
 	gameObjectArray.clear();

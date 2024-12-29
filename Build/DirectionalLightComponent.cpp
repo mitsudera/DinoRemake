@@ -28,8 +28,10 @@ void DirectionalLightComponent::Update(void)
 {
 	Component::Update();
 
+	XMFLOAT3 dirc;
+	XMStoreFloat3(&dirc, this->GetTransFormComponent()->GetAxisZ());
 
-	this->param.m_Direction = XMFLOAT4(this->GetTransFormComponent()->GetForward().x,this->GetTransFormComponent()->GetForward().y,this->GetTransFormComponent()->GetForward().z, 1.0f);
+	this->param.m_Direction = XMFLOAT4(dirc.x, dirc.y, dirc.z, 1.0f);
 
 	pGameEngine->GetLightmanager()->SetDirecLight(this, index);
 

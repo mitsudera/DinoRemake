@@ -15,6 +15,8 @@ class MeshComponent;
 class PostEffectShader;
 
 class RenderTexture;
+
+class PrimitiveComponent;
 //*****************************************************************************
 // É}ÉNÉçíËã`
 //*****************************************************************************
@@ -89,6 +91,8 @@ public:
 	void SetClearMode(ClearMode mode);
 	void SetClearColor(XMFLOAT4 color);
 
+	void SetSkyCom(GameObject* sky);
+
 	void SetSky(GameObject* sky);
 
 	void SetMainCamera(void);
@@ -137,6 +141,7 @@ private:
 	ClearMode clearMode;
 
 	GameObject* sky;
+	vector<PrimitiveComponent*> skyComArray;
 
 	vector<PostEffectShader*> shaderArray;
 	int postEffectIndex;

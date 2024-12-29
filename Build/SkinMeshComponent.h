@@ -1,17 +1,17 @@
 #pragma once
-#include "MeshComponent.h"
-#include "Renderer.h"
-#define BONE_MAX (100)
+#include "primitivecomponent.h"
+#include "SkinMeshPhongShader.h"
+#include "SkinMeshComputeShader.h"
+class SkinMeshData;
+class SkinMeshLinkerComponent;
 
 struct CP
 {
 	XMFLOAT3 pos;
-	float dummy;
+	int refBoneNum;
 	float weight[BONE_MAX];
-	int showBoneNum;
-	float dummy2[2];
-	int showBoneIndex[BONE_MAX];
-	
+	int refBoneIndex[BONE_MAX];
+
 };
 
 
@@ -22,72 +22,50 @@ struct SkinMeshMath
 
 };
 
-class MeshVertex
+struct MeshVertex
 {
 public:
-
-	MeshVertex();
-	~MeshVertex();
-
-	ID3D11Buffer* m_vertexBuffer;
-	VERTEX_3D* vertexArray;
-	int vertNum;
-
-	ID3D11Buffer* controlPointBuffer;
-	ID3D11Buffer* outputBuffer;
-	ID3D11UnorderedAccessView* outputUAV;
-	ID3D11ShaderResourceView* controlPointSRV;
 
 };
 
-class SkinMeshComponent :public MeshComponent
-{
 
+class SkinMeshComponent : public PrimitiveComponent
+{
 public:
-	SkinMeshComponent();
+	SkinMeshComponent(GameObject* pGameObject);
 	~SkinMeshComponent();
 
-
-	virtual void Init(void) override;
+	virtual void Awake(void) override;
 	virtual void Update(void) override;
+	virtual void LateUpdate(void) override;
 	virtual void Uninit(void) override;
-	virtual void BeginPlay(void) override;
-	virtual void UpdatePlay(void) override;
-	virtual void EndPlay(void) override;
-	
+
 	virtual void Draw(void) override;
-	virtual void DrawSkinMesh(int n) ;
 
-	void SetSkinMeshStatus(
-		string meshfilepath,
-		vector<string> animfilepatharray,
-		BOOL blend,
-		int blendframe);
-
-	void SetSkinMeshStatus(string meshfilepath);
+	virtual void ShadowMapping(void) override;
 
 
-	virtual void SetSkinMesh(void);
+	void SetSkinMeshData(SkinMeshData* data,SkinMeshLinkerComponent* linker);
 
-	void SetBlendBone(void);
-
-	virtual void SwichAnimIndex(int n) override;
-	virtual void StartOneTimeAnimIndex(int n) override;//çƒê∂èIóπå„ÇÕÇOî‘Ç…à⁄çs
-
-	void UpdateSkinMeshForCS(void);
-	int GetAnimIndex(void);
+	void CreateVertexArray(int n, SkinMeshVertex* vertexArray);
 
 
-protected:
+	
+
+private:
+
+
+	SkinMeshData* skinMeshData;
+	SkinMeshLinkerComponent* linker;
+	
+	
+	ID3D11Buffer* vertexBuffer;
+	SkinMeshVertex* vertexArray;
+	int vertNum;
 
 
 
-	XMMATRIX* boneMtx;
 	int boneCnt;
-	XMMATRIX* blendBoneMtx;
-	MeshVertex* meshVertex;
-	ID3D11Buffer* boneBuffer;
-	ID3D11Buffer* skinMeshMathBuffer;
 
 };
 

@@ -13,7 +13,9 @@ class Component;
 class MeshData;
 class GameEngine;
 class ColliderComponent;
-
+class SkinMeshData;
+class BoneData;
+class SkinMeshLinkerComponent;
 
 class GameObject
 {
@@ -48,12 +50,7 @@ public:
 	~GameObject();
 
 	virtual void Awake(void);
-	void Init(void);
-	void Uninit(void);
-	void Update(void);
-	void UpdateMatrix(void);
-	void Draw(ShaderSet::ShaderIndex index);
-	void ShadowMapping(void);
+	void Destroy(void);
 	
 
 	Scene* GetScene(void);
@@ -71,6 +68,7 @@ public:
 	GameObject* GetChild(int index);
 	GameObject* GetChild(string name);
 	vector<GameObject*>& GetChild();
+	GameObject* SerchAllChild(string name);
 
 	vector<Component*>& GetComponentList(void);
 
@@ -96,6 +94,13 @@ public:
 	void LoadFbxFileMesh(string fName);
 
 	void LoadMeshNode(MeshData* node);
+
+	void LoadFbxFileSkinMesh(string fName);
+
+	void LoadSkinMeshNode(SkinMeshData* node,SkinMeshLinkerComponent* linker);
+
+	void LoadBoneNode(BoneData* node, SkinMeshLinkerComponent* linker);
+
 
 protected:
 	Scene* pScene;

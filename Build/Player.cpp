@@ -51,7 +51,6 @@ void Player::Awake(void)
 	{
 		//ゲームオブジェクト生成
 		GameObject* child = AddChild("Camera");
-		child->Init();
 		child->GetTransFormComponent()->SetPosition(XMFLOAT3(0.0f, 10.0f, -15.0f));
 
 		//カメラコンポーネントの生成

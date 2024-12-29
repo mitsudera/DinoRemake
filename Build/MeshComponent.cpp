@@ -17,15 +17,11 @@
 #define TEXTURE_PATH	"data/TEXTURE/"
 
 
-MeshComponent::MeshComponent()
+MeshComponent::MeshComponent(GameObject* gameObject)
 {
 	cullMode = CULL_MODE::CULL_MODE_FRONT;
 	this->alphaTest = FALSE;
 
-}
-
-MeshComponent::MeshComponent(GameObject* gameObject)
-{
 	pGameObject = gameObject;
 
 
@@ -133,26 +129,6 @@ void MeshComponent::ShadowMapping(void)
 
 }
 
-
-void MeshComponent::SetCullingMode(int cullMode)
-{
-	this->cullMode = cullMode;
-}
-
-int MeshComponent::GetCullingMode(void)
-{
-	return this->cullMode;
-}
-
-void MeshComponent::SetAlphaTest(BOOL enable)
-{
-	this->alphaTest = enable;
-}
-
-BOOL MeshComponent::GetAlphaTest(void)
-{
-	return this->alphaTest;
-}
 
 
 void MeshComponent::SetMeshData(MeshData* data)

@@ -14,6 +14,7 @@ class CollisionManager;
 class ShadowMap;
 class SoundEngine;
 class WicFactory;
+class DebugUtility;
 
 class GameEngine
 {
@@ -43,6 +44,7 @@ public:
 	ShadowMap* GetShadowMap(void);
 	SoundEngine* GetSoundEngine(void);
 	WicFactory* GetWicFactory(void);
+	DebugUtility* GetDebugUtility(void);
 
 	Scene* GetActiveScene(void);
 	void SetActiveScene(Scene* scene);
@@ -78,6 +80,7 @@ private:
 	ShadowMap* shadowMap;
 	SoundEngine* soundEngine;
 	WicFactory* wicFactory;
+	DebugUtility* debugUtility;
 
 	SceneManager* sceneManager;
 	Scene* activeScene;

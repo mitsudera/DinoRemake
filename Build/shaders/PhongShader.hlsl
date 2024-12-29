@@ -119,7 +119,7 @@ void VSmain(in float4 inPosition : POSITION0,
 {
     matrix wvp;
     wvp = mul(World, View);
-    wvp = mul(wvp, Projection);
+    wvp = mul(View, Projection);
     outPosition = mul(inPosition, wvp);
 
     outNormal = normalize(mul(float4(inNormal.xyz, 0.0f), World));

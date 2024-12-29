@@ -85,7 +85,6 @@ void PlayerComponent::Update(void)
 
 	float height = PlayerOffset + pGameObject->GetScene()->GetGameObjectName("Field")->GetComponent<TerrainComponent>()->GetHeight(GetTransFormComponent()->GetWorldPos());
 
-	GetTransFormComponent()->SetPosY(height);
 
 	ColliderComponent* collider = GetComponent<ColliderComponent>();
 

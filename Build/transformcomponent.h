@@ -32,7 +32,7 @@ public:
 	XMFLOAT3 GetRotation(void);
 	XMFLOAT3 GetOldRotation(void);
 	XMFLOAT3 GetScale(void);
-	XMFLOAT3 GetForward(void);
+	//XMFLOAT3 GetForward(void);
 	XMVECTOR GetAxisX(void);
 	XMVECTOR GetAxisY(void);
 	XMVECTOR GetAxisZ(void);
@@ -45,10 +45,13 @@ public:
 	XMMATRIX GetLocalMtx(void);
 
 	void SetPosition(XMFLOAT3 pos);
+	void SetRotation(XMVECTOR qton);
 	void SetRotation(XMFLOAT3 rot);
 	void SetScale(XMFLOAT3 scl);
-	void RotForward(XMFLOAT3 forward);
-	void SetMtxRot(XMMATRIX mtx);
+	void SetPositionMtx(XMMATRIX pos);
+	void SetRotationMtx(XMMATRIX rot);
+	void SetScaleMtx(XMMATRIX scl);
+	//void RotForward(XMFLOAT3 forward);
 	void SetLocalMtx(XMMATRIX mtx);
 	void SetTransForm(XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 scl);
 
@@ -69,12 +72,12 @@ public:
 	//このトランスフォームのZ軸方向に動かす
 	void MoveZAxis(float f);
 
-	void MoveForward(float f);
+	//void MoveForward(float f);
 
 
 	void PosUpdate(void);
 
-	void SetForwardDiection(XMFLOAT3 dir);
+	//void SetForwardDiection(XMFLOAT3 dir);
 
 	void RotRoll(float f);
 	void RotPitch(float f);
@@ -96,6 +99,7 @@ public:
 
 	void SetMtxUpdate(BOOL flag);
 
+	void RotQuaternion(XMVECTOR qton);
 
 protected:
 
@@ -106,8 +110,8 @@ protected:
 	XMFLOAT3		rot;		// ポリゴンの向き
 	XMFLOAT3		oldRot;
 	XMFLOAT3		scl;		// ポリゴンの大きさ(スケール)
-	XMFLOAT3		forward;
-	XMFLOAT3		fDirection;
+	//XMFLOAT3		forward;
+	//XMFLOAT3		fDirection;
 
 	XMVECTOR		axisX;
 	XMVECTOR		axisY;
@@ -118,7 +122,7 @@ protected:
 	XMMATRIX		mtxscl;
 
 	XMMATRIX		mtxrot;			//回転行列
-
+	XMVECTOR		quaternion;		//クオータニオン
 
 	XMMATRIX		lMtx;
 

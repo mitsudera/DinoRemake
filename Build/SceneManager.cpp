@@ -8,11 +8,15 @@
 #include "SoundEngine.h"
 #include "Stage1Scene.h"
 #include "Stage2Scene.h"
+#include "TestScene.h"
 SceneManager::SceneManager(GameEngine* pGameEngine)
 {
 	this->pGameEngine = pGameEngine;
 
-	this->defaultScene = SCENE::STAGE1;
+	this->defaultScene = SCENE::TEST;
+
+	TestScene* testScene = new TestScene(pGameEngine);
+	this->SceneList.push_back(testScene);
 
 	TitleScene* titleScene = new TitleScene(pGameEngine);
 	this->SceneList.push_back(titleScene);
@@ -28,6 +32,7 @@ SceneManager::SceneManager(GameEngine* pGameEngine)
 
 	Stage2Scene* stage2 = new Stage2Scene(pGameEngine);
 	this->SceneList.push_back(stage2);
+
 
 }
 

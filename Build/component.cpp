@@ -44,7 +44,19 @@ void Component::Update(void)
 	if (!isActive) return;
 }
 
+void Component::LateUpdate(void)
+{
+	if (!isActive) return;
+
+}
+
 void Component::Draw(void)
+{
+	if (!isActive) return;
+
+}
+
+void Component::DebugDraw(void)
 {
 	if (!isActive) return;
 

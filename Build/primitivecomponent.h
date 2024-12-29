@@ -34,7 +34,13 @@ public:
 	void SetMaterial(Material* material);
 	Material* LoadMaterial(Material* material);
 
+	Material* GetShadowMaterial(void);
+
+	void SetCullingMode(int cullMode);
+	int GetCullingMode(void);
+
 	void SetAlphaTest(BOOL enable);
+	BOOL GetAlphaTest(void);
 
 protected:
 	Renderer* pRenderer;
@@ -45,5 +51,7 @@ protected:
 	BOOL alphaTest;
 	CBufferManager* pCBufferManager;
 	AssetsManager* pAssetsManager;
+	int cullMode;
+
 };
 

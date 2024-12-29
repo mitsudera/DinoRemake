@@ -15,6 +15,7 @@ public:
 
 	enum class SCENE :int
 	{
+		TEST,
 		TITLE,
 		TUORIAL,
 		STAGE_SELECT,

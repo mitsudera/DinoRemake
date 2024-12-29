@@ -91,9 +91,29 @@ Material* PrimitiveComponent::LoadMaterial(Material* material)
 	return this->material;
 }
 
+Material* PrimitiveComponent::GetShadowMaterial(void)
+{
+	return this->shadowMaterial;
+}
+
+void PrimitiveComponent::SetCullingMode(int cullMode)
+{
+	this->cullMode = cullMode;
+}
+
+int PrimitiveComponent::GetCullingMode(void)
+{
+	return this->cullMode;
+}
+
 void PrimitiveComponent::SetAlphaTest(BOOL enable)
 {
 	this->alphaTest = enable;
+}
+
+BOOL PrimitiveComponent::GetAlphaTest(void)
+{
+	return this->alphaTest;
 }
 
 

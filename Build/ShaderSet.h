@@ -25,10 +25,20 @@ public:
 		Phong,
 		UI,
 		Terrain,
-		Shadow,
-		MAX,
+		SkinMeshPhong,
+		MAXShader,
 
 	}ShaderIndex;
+
+	typedef enum 
+	{
+		StandardShadow,
+		SkinMeshShadow,
+		MAXShadowShader,
+
+	}ShadowShaderIndex;
+
+
 
 
 	struct MaterialCBuffer 
@@ -54,6 +64,7 @@ public:
 	virtual void Uninit(void);
 
 	void CreateVS(string filePath,string shaderName);
+	void CreateCustomVS(string filePath, string shaderName, D3D11_INPUT_ELEMENT_DESC* layout, UINT numElements);
 	void CreateHS(string filePath,string shaderName);
 	void CreateDS(string filePath,string shaderName);
 	void CreateGS(string filePath,string shaderName);
@@ -61,7 +72,7 @@ public:
 
 	ShaderIndex GetShaderIndex(void);
 
-
+	ShadowShaderIndex GetShadowShaderIndex(void);
 
 private:
 
@@ -82,5 +93,6 @@ protected:
 	ID3D11Buffer* materialBuffer;
 
 	ShaderIndex shaderIndex;
+	ShadowShaderIndex shadowShaderIndex;
 };
 

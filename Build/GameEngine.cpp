@@ -12,6 +12,7 @@
 #include "ShadowMap.h"
 #include "SoundEngine.h"
 #include "WicFactory.h"
+#include "DebugUtility.h"
 
 GameEngine::GameEngine(Main* main)
 {
@@ -40,7 +41,7 @@ void GameEngine::Awake()
 
 	this->collisionManager = new CollisionManager(this);
 
-
+	this->debugUtility = new DebugUtility(this);
 
 	this->lightManager = new LightManager(this);
 	lightManager->Awake();
@@ -83,17 +84,23 @@ void GameEngine::Update()
 
 	this->input->Update();
  	this->activeScene->Update();
+
+	this->activeScene->LateUpdate();
+
 	collisionManager->Update();
 	lightManager->Update();
+
+
+
 }
 
 void GameEngine::Draw()
 {
+	this->shadowMap->ShadowMapping();
 
 
 
 	renderer->Clear();
-	this->shadowMap->ShadowMapping();
 
 	this->activeScene->Draw();
 
@@ -116,6 +123,7 @@ void GameEngine::Uninit()
 
 	delete lightManager;
 
+	delete debugUtility;
 
 	delete cBufferManager;
 
@@ -195,6 +203,11 @@ SoundEngine* GameEngine::GetSoundEngine(void)
 WicFactory* GameEngine::GetWicFactory(void)
 {
 	return this->wicFactory;
+}
+
+DebugUtility* GameEngine::GetDebugUtility(void)
+{
+	return this->debugUtility;
 }
 
 

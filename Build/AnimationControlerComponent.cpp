@@ -340,7 +340,6 @@ void AnimationControlerComponent::UpdateAnimation(MtxNode* node, GameObject* gam
 
 	XMMATRIX frameMtx = node->GetFrameMtx(timeCnt);
 
-	gameObject->GetTransFormComponent()->SetMtxUpdate(FALSE);
 	gameObject->GetTransFormComponent()->SetLocalMtx(frameMtx);
 
 	for (int i = 0; i < node->GetChildCnt(); i++)
@@ -497,7 +496,6 @@ void AnimationTransition::UpdateMtx(MtxNode* node1, MtxNode* node2 , GameObject*
 	XMMATRIX blendMtx = (frameMtx1 * weight1) + (frameMtx2 * weight2);
 	
 
-	gameObject->GetTransFormComponent()->SetMtxUpdate(FALSE);
 	gameObject->GetTransFormComponent()->SetLocalMtx(blendMtx);
 
 	for (int i = 0; i < node1->GetChildCnt(); i++)
@@ -617,7 +615,6 @@ void AnimationNode::UpdateMtx(MtxNode* node, GameObject* gameObject)
 {
 	XMMATRIX frameMtx = node->GetFrameMtx(timeCnt);
 
-	gameObject->GetTransFormComponent()->SetMtxUpdate(FALSE);
 	gameObject->GetTransFormComponent()->SetLocalMtx(frameMtx);
 
 	for (int i = 0; i < node->GetChildCnt(); i++)

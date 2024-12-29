@@ -4,7 +4,7 @@ struct Fade
 
 };
 
-cbuffer GaussianBuffer : register(b8)
+cbuffer FadeBuffer : register(b9)
 {
     Fade fade;
 
