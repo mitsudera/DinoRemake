@@ -76,8 +76,7 @@ void VS_SM(
         
         out float4 outPosition : SV_POSITION,
 		out float2 outTexCoord : TEXCOORD0,
-		out float4 outDiffuse : COLOR0,
-		out float4 outWorldPos : POSITION0
+		out float4 outDiffuse : COLOR0
 )
 {
     matrix wvp;
@@ -88,7 +87,6 @@ void VS_SM(
 
     outTexCoord = inTexCoord;
 
-    outWorldPos = mul(inPosition, World);
 
     outDiffuse = inDiffuse;
 }
@@ -99,7 +97,6 @@ void PS_SM(
 		in float4 inPosition : SV_POSITION,
 		in float2 inTexCoord : TEXCOORD0,
 		in float4 inDiffuse : COLOR0,
-		in float4 inWorldPos : POSITION0,
 
 
 		out float4 outDiffuse : SV_Target
@@ -120,6 +117,7 @@ void PS_SM(
     
     color = color * Material.Diffuse;
 
+    //color.r = 0.0f;
     color.r = inPosition.z;
     color.g = color.r * color.r;
     
@@ -128,29 +126,7 @@ void PS_SM(
 
 
 
-//ÉuÉâÅ[óp
-void VS_2D(
-		in float4 inPosition : POSITION0,
-		in float4 inNormal : NORMAL0,
-		in float4 inDiffuse : COLOR0,
-		in float2 inTexCoord : TEXCOORD0,
 
-		out float4 outPosition : SV_POSITION,
-		out float2 outTexCoord : TEXCOORD0,
-		out float4 outDiffuse : COLOR0
-)
-{
-    matrix wvp;
-    wvp = mul(World, View);
-    wvp = mul(wvp, Projection);
-    outPosition = mul(inPosition, wvp);
-
-
-    outTexCoord = inTexCoord;
-
-
-    outDiffuse = inDiffuse;
-}
 
 //const float sValue = 0.8f;
 

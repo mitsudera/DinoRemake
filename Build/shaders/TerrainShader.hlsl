@@ -91,7 +91,7 @@ cbuffer ShadowBuffer : register(b7)
 {
     SHADOW Shadow;
 }
-cbuffer TessellationBuffer : register(b8)
+cbuffer TessellationBuffer : register(b9)
 {
     float cbEdgeFactor; //4ŠpŒ`‚Ì•Ó‚Ì•ªŠ„—Ê‚ÌŽw’è
     float cbInsideFactor; //4ŠpŒ`‚Ì“à•”‚Ì•ªŠ„—Ê‚ÌŽw’è
@@ -216,7 +216,6 @@ struct DS_OUTPUT
     float2 TexCoord : TEXCOORD0;
     float4 Diffuse : COLOR0;
     float4 WorldPos : POSITION0;
-    float4 PosSM : POSITION1;
 };
 
 [domain("quad")]
@@ -258,15 +257,6 @@ DS_OUTPUT DSmain(
     
     output.WorldPos = mul(pos, World);
 
-    matrix SMWorldViewProj = mul(World, Shadow.wvp);
-
-    output.PosSM = float4(0.0f, 0.0f, 0.0f, 1.0f);
-    
-    float4 pos4 = mul(pos, SMWorldViewProj);
-    pos4.xyz = pos4.xyz / pos4.w;
-    output.PosSM.x = (pos4.x + 1.0) / 2.0;
-    output.PosSM.y = (-pos4.y + 1.0) / 2.0;
-    output.PosSM.z = pos4.z;
     return output;
 }
 
@@ -278,7 +268,6 @@ struct GS_OUTPUT
     float2 TexCoord : TEXCOORD0;
     float4 Diffuse : COLOR0;
     float4 WorldPos : POSITION0;
-    float4 PosSM : POSITION1;
     float4 Normal : NORMAL0;
     float4 Tangent : TANGENT0;
     float4 BiNormal : BINORMAL0;
@@ -320,7 +309,6 @@ void GSmain(triangle DS_OUTPUT input[3], inout TriangleStream<GS_OUTPUT> TriStre
         output.BiNormal = float4(binormal, 1.0f);
         output.TexCoord = input[i].TexCoord;
         output.WorldPos = input[i].WorldPos;
-        output.PosSM = input[i].PosSM;
         TriStream.Append(output);
     }
 }
@@ -363,6 +351,15 @@ PSout PSmain(GS_OUTPUT input)
     
     float4 normal = input.Normal;
     
+
+    
+    float4 pos4 = mul(input.WorldPos, Shadow.wvp);
+    float4 PosSM;
+    PosSM.x = (pos4.x + 1.0) / 2.0;
+    PosSM.y = (-pos4.y + 1.0) / 2.0;
+    PosSM.z = pos4.z;
+    PosSM.w = 1.0f;
+    
     if (Material.noNormalTex == 0)
     {
         // Sample the normal map
@@ -385,16 +382,16 @@ PSout PSmain(GS_OUTPUT input)
     					//‰e
     if (Shadow.enable == 1)
     {
-        if (input.PosSM.z > 1.0)
+        if (PosSM.z > 1.0)
         {
             sma = 1.0;
         }
         else if (Shadow.mode == 0)
         {
-            float sm0 = ShadowMapNear.Sample(BorderSampler, input.PosSM.xy);
+            float sm0 = ShadowMapNear.Sample(BorderSampler, PosSM.xy);
 
             
-            if (input.PosSM.z - 0.0002 > sm0)
+            if (PosSM.z - 0.0002 > sm0)
             {
                 sma = 0.5;
 
@@ -403,8 +400,8 @@ PSout PSmain(GS_OUTPUT input)
         }
         else if (Shadow.mode == 1)
         {
-            sma = GetVarianceDirectionalShadowFactor(input.PosSM);
-            if (sma < 0.99f)
+            sma = GetVarianceDirectionalShadowFactor(PosSM);
+            if (sma != 1.0f)
             {
                 sma = sma * sma;
 
