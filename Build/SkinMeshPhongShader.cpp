@@ -59,6 +59,12 @@ SkinMeshPhongShader::~SkinMeshPhongShader()
     if (materialBuffer) materialBuffer->Release();
 }
 
+void SkinMeshPhongShader::Uninit(void)
+{
+    ShaderSet::Uninit();
+    if (boneBuffer) boneBuffer->Release();
+}
+
 void SkinMeshPhongShader::SetMaterialCbuffer(MaterialCBuffer data)
 {
     pRenderer->GetDeviceContext()->UpdateSubresource(this->materialBuffer, 0, nullptr, &data, 0, 0);

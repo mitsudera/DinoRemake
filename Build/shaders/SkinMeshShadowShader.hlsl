@@ -155,8 +155,7 @@ void PS_SM(
 		in float4 inDiffuse : COLOR0,
 
 
-		out float4 outDiffuse : SV_Target
-		)
+		out float4 outDiffuse : SV_Target)
 {
     float4 color;
     if (Material.noDiffuseTex == 0)

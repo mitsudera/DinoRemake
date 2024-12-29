@@ -32,7 +32,10 @@ void MtxNode::LoadAnimation(FbxNode* node, MtxNode* parent, AnimationData* animd
 		{
 			this->attribute = Attribute::Bone;
 		}
-
+		else
+		{
+			this->attribute = Attribute::Null;
+		}
 		this->isRoot = FALSE;
 
 
@@ -41,24 +44,6 @@ void MtxNode::LoadAnimation(FbxNode* node, MtxNode* parent, AnimationData* animd
 		for (int i = 0; i < pAnimData->GetFrameNum(); i++)
 		{
 			FbxMatrix framemtx = node->EvaluateLocalTransform(pAnimData->GetStartTime() + pAnimData->GetOneFrameValue() * i);
-			FbxVector4 framepos = node->EvaluateLocalTranslation(pAnimData->GetStartTime() + pAnimData->GetOneFrameValue() * i);
-			FbxVector4 framerot = node->EvaluateLocalRotation(pAnimData->GetStartTime() + pAnimData->GetOneFrameValue() * i);
-			FbxVector4 framescl = node->EvaluateLocalScaling(pAnimData->GetStartTime() + pAnimData->GetOneFrameValue() * i);
-
-			XMMATRIX mtx = XMMatrixIdentity();
-			XMMATRIX scl = XMMatrixTranslation(framescl[0], framescl[1], framescl[2]);
-			XMMATRIX rz = XMMatrixRotationZ((framerot[2] / 180.0) * XM_PI);
-			XMMATRIX ry = XMMatrixRotationY((framerot[1] / 180.0) * XM_PI);
-			XMMATRIX rx = XMMatrixRotationX((framerot[0] / 180.0) * XM_PI);
-			XMMATRIX pos = XMMatrixTranslation(framepos[0], framepos[1], framepos[2]);
-
-			mtx = XMMatrixMultiply(mtx, scl);
-			mtx = XMMatrixMultiply(mtx, rz);
-			mtx = XMMatrixMultiply(mtx, ry);
-			mtx = XMMatrixMultiply(mtx, rx);
-			mtx = XMMatrixMultiply(mtx, pos);
-
-			
 
 			XMMATRIX frameMtx = FbxMatrixConvertToXMMATRIX(framemtx);
 
@@ -82,6 +67,13 @@ void MtxNode::LoadAnimation(FbxNode* node, MtxNode* parent, AnimationData* animd
 			MtxNode* childNode = new MtxNode();
 			childNode->LoadAnimation(child, this, pAnimData);
 			childArray.push_back(childNode);
+		}
+		else
+		{
+			MtxNode* childNode = new MtxNode();
+			childNode->LoadAnimation(child, this, pAnimData);
+			childArray.push_back(childNode);
+
 		}
 	}
 

@@ -28,6 +28,9 @@ public:
 	SkinMeshPhongShader(Renderer* renderer);
 	~SkinMeshPhongShader();
 
+
+	virtual void Uninit(void)override;
+
 	void SetMaterialCbuffer(MaterialCBuffer data);
 
 	void SetBoneBuffer(XMMATRIX* bone);

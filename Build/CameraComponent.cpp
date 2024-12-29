@@ -310,12 +310,17 @@ void CameraComponent::Render(void)
 
 	pGameEngine->GetDebugUtility()->SetDebugLineShader();
 	
+
+#ifdef DEBUG
 	for (Component* com : pGameObject->GetScene()->GetAllComponent())
 	{
 		if (!com->GetActive())
 			continue;
 		com->DebugDraw();
 	}
+
+#endif
+
 
 
 

@@ -14,18 +14,58 @@ struct CONTROLPOINT
 
 };
 
+class SkinMeshTreeNode
+{
+public:
+	enum class Attribute :int
+	{
+		Root,
+		Null,
+		Mesh,
+		Bone,
+	};
 
+	SkinMeshTreeNode();
+	~SkinMeshTreeNode();
 
-class SkinMeshData
+	virtual void LoadNode(FbxNode* node, SkinMeshTreeNode* parent, SkinMeshTreeData* skinMeshTree);
+	void LoadChild(FbxNode* node);
+
+	string GetName(void);
+	vector<SkinMeshTreeNode*>& GetChildArray(void);
+
+	Attribute GetAttribute(void);
+
+	virtual void Destroy(void);
+
+protected:
+	AssetsManager* pAssetsManager;
+	Renderer* pRenderer;
+
+	SkinMeshTreeData* skinMeshTree;
+
+	vector <SkinMeshTreeNode*> childArray;
+	string name;
+	SkinMeshTreeNode* parent;
+	string fileName;
+	XMMATRIX	worldOffset;
+	XMMATRIX	localOffset;
+	XMFLOAT3	posOffset;
+	XMFLOAT3	sclOffset;
+	XMFLOAT3	rotOffset;
+	Attribute nodeAttribute;
+};
+
+class SkinMeshData:public SkinMeshTreeNode
 {
 public:
 	SkinMeshData(AssetsManager* p);
 	~SkinMeshData();
-	void LoadSkinMesh(FbxMesh* mesh, SkinMeshData* parent,SkinMeshTreeData* skinMeshTree);
+	//void LoadSkinMesh(FbxMesh* mesh, SkinMeshData* parent,SkinMeshTreeData* skinMeshTree);
+	virtual void LoadNode(FbxNode* node, SkinMeshTreeNode* parent, SkinMeshTreeData* skinMeshTree) override;
 
-	vector <SkinMeshData*>& GetChildArray(void);
 
-	string GetName(void);
+	virtual void Destroy(void)override;
 
 
 	ID3D11Buffer* GetIndexBuffer(void);
@@ -51,11 +91,7 @@ public:
 
 
 private:
-	AssetsManager* pAssetsManager;
-	Renderer* pRenderer;
-	SkinMeshTreeData* skinMeshTree;
 
-	string name;
 
 
 	SkinMeshVertex* vertexArray;
@@ -72,34 +108,24 @@ private:
 	void CreateIndexBuffer(int n);
 
 
-	SkinMeshData* parent;
-	vector <SkinMeshData*> childArray;
-	string fileName;
 	Material* material;
 	Material* shadowMaterial;
 
 	int boneNum;
 
-	XMMATRIX	worldOffset;
-	XMMATRIX	localOffset;
-	XMFLOAT3	posOffset;
-	XMFLOAT3	sclOffset;
-	XMFLOAT3	rotOffset;
 
-	vector<string> boneName;
 };
 
 
-class BoneData
+class BoneData :public SkinMeshTreeNode
 {
 public:
 	BoneData(AssetsManager* p);
 	~BoneData();
-	void LoadBone(FbxSkeleton* bone, BoneData* parent, SkinMeshTreeData* skinMeshTree);
-	vector <BoneData*>& GetChildArray(void);
-	string GetName(void);
+	//void LoadBone(FbxSkeleton* bone, BoneData* parent, SkinMeshTreeData* skinMeshTree);
+	virtual void LoadNode(FbxNode* node, SkinMeshTreeNode* parent, SkinMeshTreeData* skinMeshTree) override;
+
 	
-	XMMATRIX GetInitMtxInverse(void);
 
 	XMMATRIX GetWorldOffset(void);
 	XMMATRIX GetLocalOffset(void);
@@ -109,21 +135,6 @@ public:
 	XMFLOAT3 GetRotOffset(void);
 
 private:
-	AssetsManager* pAssetsManager;
-	SkinMeshTreeData* skinMeshTree;
-
-	BoneData* parent;
-	vector <BoneData*> childArray;
-	string name;
-
-	XMMATRIX initMatrixInverse;
-
-	XMMATRIX	worldOffset;
-	XMMATRIX	localOffset;
-	XMFLOAT3	posOffset;
-	XMFLOAT3	sclOffset;
-	XMFLOAT3	rotOffset;
-
 
 };
 
@@ -139,18 +150,13 @@ public:
 
 	int GetBoneNum(void);
 
-	vector<SkinMeshData*>& GetRootMeshArray(void);
-	BoneData* GetRootBone(void);
-
-	void AddBone(BoneData* bone);
+	vector<SkinMeshTreeNode*>& GetNodeArray(void);
 
 	XMMATRIX GetInitMtx(string name);
 
 private:
 	AssetsManager* pAssetsManager;
-	vector<BoneData*> boneArray;
-	vector<SkinMeshData*>rootMeshArray;
-	BoneData* rootBone;
+	vector<SkinMeshTreeNode*> nodeArray;
 	string fileName;
 	string name;
 	int boneNum;

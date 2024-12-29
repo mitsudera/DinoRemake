@@ -17,13 +17,13 @@ void SkinMeshTest::Awake(void)
 	GameObject::Awake();
 	this->name = "SkinMesh";
 	this->transformComponent->SetPosition(XMFLOAT3(0.0f, 0.0f, 0.0f));
-	//this->transformComponent->SetScale(XMFLOAT3(0.1f, 0.1f, 0.1f));
+	this->transformComponent->SetScale(XMFLOAT3(0.1f, 0.1f, 0.1f));
 	//this->transformComponent->RotWorldYaw(XM_PIDIV2);
 
-	this->LoadFbxFileSkinMesh("womananim.fbx");
+	this->LoadFbxFileSkinMesh("aqchan.fbx");
 
 	AnimationControlerComponent* animControler = this->AddComponent<AnimationControlerComponent>();
-	animControler->LoadDefaulAnimation("WomanRun.fbx", "Idol");
+	animControler->LoadDefaulAnimation("aqchansneakRun.fbx", "Idol");
 	//animControler->LoadAnimation("Lex_Bite.fbx", "Atack", FALSE);
 	//AnimParameter para;
 	//para.value = FALSE;

@@ -38,6 +38,7 @@ void DX11Texture::CreateSRV(char* path)
 }
 void DX11Texture::CreateSRV(string path)
 {
+	wstring wstr(path.begin(), path.end());
 
 	D3DX11CreateShaderResourceViewFromFile(
 		this->pManager->GetGameEngine()->GetRenderer()->GetDevice(),

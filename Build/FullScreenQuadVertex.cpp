@@ -6,17 +6,27 @@ FullScreenQuadVertex::FullScreenQuadVertex(Renderer* renderer)
 	pRenderer = renderer;
 
 
+	struct vert
+	{
+		XMFLOAT3	Position;
+		XMFLOAT4	Diffuse;
+		XMFLOAT2	TexCoord;
+
+	};
+
 	// 頂点バッファ生成
 	D3D11_BUFFER_DESC bd;
 	ZeroMemory(&bd, sizeof(bd));
 	bd.Usage = D3D11_USAGE_DYNAMIC;
-	bd.ByteWidth = sizeof(VERTEX_3D) * 4;
+	bd.ByteWidth = sizeof(vert) * 4;
 	bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
 	this->pRenderer->GetDevice()->CreateBuffer(&bd, NULL, &this->vertexBuffer);
 
-	VERTEX_3D vertexArray[4];
+
+
+	vert vertexArray[4];
 
 
 	vertexArray[0].Position = { -1.0f,1.0f,0.0f };
@@ -41,9 +51,9 @@ FullScreenQuadVertex::FullScreenQuadVertex(Renderer* renderer)
 	D3D11_MAPPED_SUBRESOURCE msr;
 	this->pRenderer->GetDeviceContext()->Map(this->vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
 
-	VERTEX_3D* pVtx = (VERTEX_3D*)msr.pData;
+	vert* pVtx = (vert*)msr.pData;
 
-	memcpy(pVtx, vertexArray, sizeof(VERTEX_3D) * 4);
+	memcpy(pVtx, vertexArray, sizeof(vert) * 4);
 
 	this->pRenderer->GetDeviceContext()->Unmap(this->vertexBuffer, 0);
 
@@ -57,7 +67,7 @@ FullScreenQuadVertex::FullScreenQuadVertex(Renderer* renderer)
 	shFlag = D3DCOMPILE_DEBUG | D3DCOMPILE_SKIP_OPTIMIZATION;
 #endif
 
-	HRESULT hr = D3DX11CompileFromFile("shaders/FullScreenVertexShader.hlsl", NULL, NULL, "VS_Main", "vs_4_0", shFlag, 0, NULL, &pVSBlob, &pErrorBlob, NULL);
+	HRESULT hr = D3DX11CompileFromFile("shaders/FullScreenVertexShader.hlsl", NULL, NULL, "VS_Main", "vs_5_0", shFlag, 0, NULL, &pVSBlob, &pErrorBlob, NULL);
 	if (FAILED(hr))
 	{
 		MessageBox(NULL, (char*)pErrorBlob->GetBufferPointer(), "VS", MB_OK | MB_ICONERROR);
@@ -70,11 +80,8 @@ FullScreenQuadVertex::FullScreenQuadVertex(Renderer* renderer)
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT,		0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT,		0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "COLOR",    0, DXGI_FORMAT_R32G32B32A32_FLOAT,	0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,			0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "TANGENT",    0, DXGI_FORMAT_R32G32B32_FLOAT,		0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "BINORMAL",    0, DXGI_FORMAT_R32G32B32_FLOAT,	0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 	UINT numElements = ARRAYSIZE(layout);
 
@@ -100,9 +107,18 @@ FullScreenQuadVertex::~FullScreenQuadVertex()
 void FullScreenQuadVertex::Draw(void)
 {
 	pRenderer->SetCullingMode(CULL_MODE::CULL_MODE_BACK);
+	struct vert
+	{
+		XMFLOAT3	Position;
+		XMFLOAT4	Diffuse;
+		XMFLOAT2	TexCoord;
+
+	};
+	//頂点入力レイアウトをセット
+	if (this->VertexLayout) pRenderer->GetDeviceContext()->IASetInputLayout(this->VertexLayout);
 
 	// 頂点バッファ設定
-	UINT stride = sizeof(VERTEX_3D);
+	UINT stride = sizeof(vert);
 	UINT offset = 0;
 	pRenderer->GetDeviceContext()->VSSetShader(vs, NULL, 0);
 	pRenderer->GetDeviceContext()->IASetVertexBuffers(0, 1, &this->vertexBuffer, &stride, &offset);

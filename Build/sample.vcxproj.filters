@@ -883,5 +883,8 @@
     <FxCompile Include="shaders\DebugLineShader.hlsl">
       <Filter>Shader\DebugLineShader</Filter>
     </FxCompile>
+    <FxCompile Include="shaders\FullScreenVertexShader.hlsl">
+      <Filter>GameEngine\Renderer\Utility</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

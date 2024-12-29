@@ -16,6 +16,7 @@ class ColliderComponent;
 class SkinMeshData;
 class BoneData;
 class SkinMeshLinkerComponent;
+class SkinMeshTreeNode;
 
 class GameObject
 {
@@ -97,7 +98,7 @@ public:
 
 	void LoadFbxFileSkinMesh(string fName);
 
-	void LoadSkinMeshNode(SkinMeshData* node,SkinMeshLinkerComponent* linker);
+	void LoadSkinMeshNode(SkinMeshTreeNode* node,SkinMeshLinkerComponent* linker);
 
 	void LoadBoneNode(BoneData* node, SkinMeshLinkerComponent* linker);
 

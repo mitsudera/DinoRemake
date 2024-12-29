@@ -284,39 +284,46 @@ void GameObject::LoadFbxFileSkinMesh(string fName)
 	SkinMeshLinkerComponent* linker = AddComponent<SkinMeshLinkerComponent>();
 	linker->SetBoneCount(root->GetBoneNum());
 
-	for (SkinMeshData* childData : root->GetRootMeshArray())
+
+	for (SkinMeshTreeNode* childData:root->GetNodeArray())
+	{
+		AddChild(childData->GetName())->LoadSkinMeshNode(childData, linker);
+
+	}
+
+
+}
+
+void GameObject::LoadSkinMeshNode(SkinMeshTreeNode* node, SkinMeshLinkerComponent* linker)
+{
+	if (node->GetAttribute() == SkinMeshTreeNode::Attribute::Mesh)
+	{
+
+		SkinMeshData* data = dynamic_cast<SkinMeshData*>(node);
+		SkinMeshComponent* skinmesh = AddComponent<SkinMeshComponent>();
+		skinmesh->SetSkinMeshData(data, linker);
+
+	}
+	if (node->GetAttribute() == SkinMeshTreeNode::Attribute::Bone)
+	{
+		BoneData* data = dynamic_cast<BoneData*>(node);
+		BoneComponent* bone = AddComponent<BoneComponent>();
+		bone->SetBone(data, linker);
+
+
+	}
+	if (node->GetAttribute() == SkinMeshTreeNode::Attribute::Null)
+	{
+
+	}
+
+
+
+	for (SkinMeshTreeNode* childData : node->GetChildArray())
 	{
 		AddChild(childData->GetName())->LoadSkinMeshNode(childData, linker);
 	}
 
-	BoneData* rootBone = root->GetRootBone();
-	AddChild(rootBone->GetName())->LoadBoneNode(rootBone,linker);
-
 }
 
-void GameObject::LoadSkinMeshNode(SkinMeshData* node,SkinMeshLinkerComponent* linker)
-{
 
-	SkinMeshComponent* skinmesh = AddComponent<SkinMeshComponent>();
-	skinmesh->SetSkinMeshData(node, linker);
-
-
-	for (SkinMeshData* childData : node->GetChildArray())
-	{
-		AddChild(childData->GetName())->LoadSkinMeshNode(childData,linker);
-	}
-
-
-}
-
-void GameObject::LoadBoneNode(BoneData* node, SkinMeshLinkerComponent* linker)
-{
-	BoneComponent* bone = AddComponent<BoneComponent>();
-	bone->SetBone(node, linker);
-
-	for (BoneData* childData : node->GetChildArray())
-	{
-		AddChild(childData->GetName())->LoadBoneNode(childData, linker);
-	}
-
-}

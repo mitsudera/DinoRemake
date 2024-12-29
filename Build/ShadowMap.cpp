@@ -159,7 +159,7 @@ void ShadowMap::ShadowMapping(void)
 
 		for (PrimitiveComponent* com : pGameEngine->GetActiveScene()->GetAllPrimitiveComponent())
 		{
-			if (!com->GetActive())
+			if (!com->GetActive()||!com->GetHasShadow())
 				continue;
 
 
@@ -171,7 +171,7 @@ void ShadowMap::ShadowMapping(void)
 				continue;
 			}
 
-			if (matShadow->GetShaderSet()->GetShaderIndex() != i)
+			if (matShadow->GetShaderSet()->GetShadowShaderIndex() != i)
 				continue;
 
 

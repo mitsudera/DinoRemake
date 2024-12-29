@@ -13,7 +13,7 @@ SceneManager::SceneManager(GameEngine* pGameEngine)
 {
 	this->pGameEngine = pGameEngine;
 
-	this->defaultScene = SCENE::TEST;
+	this->defaultScene = SCENE::TITLE;
 
 	TestScene* testScene = new TestScene(pGameEngine);
 	this->SceneList.push_back(testScene);

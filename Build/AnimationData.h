@@ -7,10 +7,10 @@ class AnimationData;
 class MtxNode
 {
 public:
-
 	enum class Attribute :int
 	{
 		Root,
+		Null,
 		Mesh,
 		Bone,
 	};

@@ -87,7 +87,7 @@ void PostEffectShader::AddShader(string filePath, string shaderName)
 	DWORD shFlag = D3DCOMPILE_ENABLE_STRICTNESS;
 	ID3D11PixelShader* ps;
 
-	HRESULT hr = D3DX11CompileFromFile(filePath.c_str(), NULL, NULL, shaderName.c_str(), "ps_4_0", shFlag, 0, NULL, &pPSBlob, &pErrorBlob, NULL);
+	HRESULT hr = D3DX11CompileFromFile(filePath.c_str(), NULL, NULL, shaderName.c_str(), "ps_5_0", shFlag, 0, NULL, &pPSBlob, &pErrorBlob, NULL);
 	if (FAILED(hr))
 	{
 		MessageBox(NULL, (char*)pErrorBlob->GetBufferPointer(), "PS", MB_OK | MB_ICONERROR);

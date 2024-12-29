@@ -57,7 +57,6 @@ void SkinMeshComponent::Uninit(void)
 
 
 	if (vertexBuffer) vertexBuffer->Release();
-
 }
 
 void SkinMeshComponent::Draw(void)
