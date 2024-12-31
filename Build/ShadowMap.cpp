@@ -107,7 +107,6 @@ void ShadowMap::ShadowMapping(void)
 
 	XMVECTOR mapPos;
 	XMVECTOR camPos;
-	XMVECTOR camAt;
 	XMVECTOR lDir;
 
 

@@ -23,7 +23,7 @@ DebugUtility::DebugUtility(GameEngine* gameEngine)
 
 
     int vcnt = 0;
-    for (int i = 0; i < latitudeBands+1; i++)
+    for (unsigned int i = 0; i < latitudeBands+1; i++)
     {
         float y = radius-((radius * 2.0f) / latitudeBands) * (float)i;
         float theta = (float)i * (XM_PI / latitudeBands);
@@ -44,7 +44,7 @@ DebugUtility::DebugUtility(GameEngine* gameEngine)
         }
         else
         {
-            for (int j = 0; j < longitudeBands; j++) {
+            for (unsigned int j = 0; j < longitudeBands; j++) {
                 float phi = (float)j * (2.0f * XM_PI / longitudeBands); // Longitude angle 
                 float x = radius * sinf(theta) * cosf(phi);
                 float z = radius * sinf(theta) * sinf(phi);
@@ -87,9 +87,9 @@ DebugUtility::DebugUtility(GameEngine* gameEngine)
     //    }
     //}
     //‰¡‚Ìü
-    for (int i = 0; i < latitudeBands-1; i++)
+    for (unsigned int i = 0; i < latitudeBands-1; i++)
     {
-        for (int j = 0; j < longitudeBands; j++)
+        for (unsigned int j = 0; j < longitudeBands; j++)
         {
             if (j == longitudeBands - 1)
             {

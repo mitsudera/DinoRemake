@@ -2,6 +2,7 @@
 #include "component.h"
 
 class ColliderComponent;
+class PhysixEngine;
 
 class RigidBodyComponent :public Component
 {
@@ -14,6 +15,8 @@ public:
 	virtual void Update(void) override;
 	virtual void LateUpdate(void) override;
 	virtual void Uninit(void) override;
+	virtual void OnEnable(void)override;
+	virtual void OnDisable(void)override;
 
 
 	void SetMass(float f);
@@ -24,8 +27,8 @@ public:
 	void AddForce(XMVECTOR force);
 private:
 
+	PhysixEngine* pPhysxEngine;
 	TransformComponent* transform;
-	ColliderComponent* collider;
 	XMVECTOR velocity;
 	float mass;
 	float drag;

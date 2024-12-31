@@ -13,12 +13,13 @@
 #include "SoundEngine.h"
 #include "WicFactory.h"
 #include "DebugUtility.h"
+#include "PhysixEngine.h"
 
 GameEngine::GameEngine(Main* main)
 {
 	this->main = main;
-
-
+	accumulatedTime = 0.0f;
+	fixedDeltaTime = 1.0f / 60.0f;
 }
 
 GameEngine::~GameEngine()
@@ -34,6 +35,8 @@ void GameEngine::Awake()
 
 	this->renderer = new Renderer(this);
 	this->renderer->InitRenderer(*main->GetInstanceHandle(), main->GetWindowHangle(), true);
+
+	this->physixEngine = new PhysixEngine(this);
 
 	this->soundEngine = new SoundEngine(this);
 
@@ -75,6 +78,14 @@ void GameEngine::Update()
 		SwichScene();
 	}
 
+	accumulatedTime += GetDeltaTime();
+	while (accumulatedTime >= fixedDeltaTime)
+	{
+		this->FixedUpdate();
+		accumulatedTime -= fixedDeltaTime;
+	}
+
+
 	this->mouseDeltaX = input->GetMouseX() - oldMousePosX;
 	this->mouseDeltaY = input->GetMouseY() - oldMousePosY;
 
@@ -85,11 +96,23 @@ void GameEngine::Update()
 	this->input->Update();
  	this->activeScene->Update();
 
-	this->activeScene->LateUpdate();
 
+
+	this->LateUpdate();
+
+}
+
+void GameEngine::FixedUpdate()
+{
+	this->physixEngine->Update();
+
+}
+
+void GameEngine::LateUpdate()
+{
+	this->activeScene->LateUpdate();
 	collisionManager->Update();
 	lightManager->Update();
-
 
 
 }
@@ -120,6 +143,7 @@ void GameEngine::Uninit()
 	this->assetsManager->Uninit();
 	delete assetsManager;
 
+	delete physixEngine;
 
 	delete lightManager;
 
@@ -210,6 +234,11 @@ DebugUtility* GameEngine::GetDebugUtility(void)
 	return this->debugUtility;
 }
 
+PhysixEngine* GameEngine::GetPhysixEngine(void)
+{
+	return this->physixEngine;
+}
+
 
 Scene* GameEngine::GetActiveScene(void)
 {
@@ -239,8 +268,8 @@ void GameEngine::SetFullScreen(BOOL flag)
 
 void GameEngine::ChengeWindowSize(int width, int height)
 {
-	this->windowSize.x = width;
-	this->windowSize.y = height;
+	this->windowSize.x = (float)width;
+	this->windowSize.y = (float)height;
 	if (fullscreen)
 		return;
 
@@ -278,6 +307,11 @@ void GameEngine::SwichScene(void)
 	this->activeScene = nextScene;
 	activeScene->Awake();
 	activeScene->Init();
+}
+
+float GameEngine::GetFixedDeltaTime(void)
+{
+	return fixedDeltaTime;
 }
 
 

@@ -115,7 +115,6 @@ void TerrainComponent::CreateVetexBuffer(XMINT2 resolution, XMFLOAT2 size)
 
 	int vCnt = 0;
 	
-	int ycnt;
 	
 
 	for (int y = 0; y < resolution.y; y++)

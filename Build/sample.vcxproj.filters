@@ -187,8 +187,11 @@
     <Filter Include="GameEngine\Debug">
       <UniqueIdentifier>{da822710-f0b9-4959-91df-2f3c1a02264c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="component\Physic">
+    <Filter Include="component\RigidBody">
       <UniqueIdentifier>{3049d48b-5a26-4146-9883-13fc8ecc5f8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Physx">
+      <UniqueIdentifier>{62a2d8ae-c1ee-42ba-b916-ca88edcfe8b6}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -526,7 +529,10 @@
       <Filter>lib</Filter>
     </ClInclude>
     <ClInclude Include="RigidBodyComponent.h">
-      <Filter>component\Physic</Filter>
+      <Filter>component\RigidBody</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysixEngine.h">
+      <Filter>GameEngine\Physx</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -861,7 +867,10 @@
       <Filter>lib</Filter>
     </ClCompile>
     <ClCompile Include="RigidBodyComponent.cpp">
-      <Filter>component\Physic</Filter>
+      <Filter>component\RigidBody</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysixEngine.cpp">
+      <Filter>GameEngine\Physx</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

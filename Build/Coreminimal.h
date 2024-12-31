@@ -43,6 +43,9 @@
 #include "DDSTextureLoader11.h"
 #include "WICTextureLoader11.h"
 
+//physix
+#include "PxPhysicsAPI.h"
+
 #pragma warning(pop)
 //*****************************************************************************
 // ライブラリのリンク
@@ -62,10 +65,22 @@
 
 #pragma comment (lib,"DirectXTex.lib")
 
+#pragma comment(lib, "PhysX_64.lib")
+#pragma comment(lib, "PhysXCommon_64.lib")
+#pragma comment(lib, "PhysXCooking_64.lib")
+#pragma comment(lib, "PhysXExtensions_static_64.lib")
+#pragma comment(lib, "PhysXFoundation_64.lib")
+#pragma comment(lib, "PhysXPvdSDK_static_64.lib")
+#pragma comment(lib, "PhysXTask_static_64.lib")
+#pragma comment(lib, "SceneQuery_static_64.lib")
+#pragma comment(lib, "SimulationController_static_64.lib")
+
+
 
 // 本来はヘッダに書かない方が良い
 using namespace DirectX;
 using namespace std;
+using namespace physx;
 
 // プロジェクト独自
 #include "Math.h"

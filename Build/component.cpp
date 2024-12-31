@@ -26,12 +26,13 @@ void Component::Awake(void)
 	this->pGameObject->GetScene()->AddSceneComponent(this);
 	this->attribute = Attribute::Component;
 	this->input = pGameEngine->GetInput();
-	this->SetActive(TRUE);
 	
 }
 
 void Component::Init(void)
 {
+	this->SetActive(TRUE);
+
 }
 
 void Component::Uninit(void)

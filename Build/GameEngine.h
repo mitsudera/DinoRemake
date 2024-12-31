@@ -15,6 +15,7 @@ class ShadowMap;
 class SoundEngine;
 class WicFactory;
 class DebugUtility;
+class PhysixEngine;
 
 class GameEngine
 {
@@ -24,6 +25,8 @@ public:
 
 	void Awake();
 	void Update();
+	void FixedUpdate();
+	void LateUpdate();
 	void Draw();
 	void Uninit();
 
@@ -45,6 +48,7 @@ public:
 	SoundEngine* GetSoundEngine(void);
 	WicFactory* GetWicFactory(void);
 	DebugUtility* GetDebugUtility(void);
+	PhysixEngine* GetPhysixEngine(void);
 
 	Scene* GetActiveScene(void);
 	void SetActiveScene(Scene* scene);
@@ -66,6 +70,7 @@ public:
 
 	void SwichScene(void);
 
+	float GetFixedDeltaTime(void);
 
 private:
 
@@ -81,6 +86,7 @@ private:
 	SoundEngine* soundEngine;
 	WicFactory* wicFactory;
 	DebugUtility* debugUtility;
+	PhysixEngine* physixEngine;
 
 	SceneManager* sceneManager;
 	Scene* activeScene;
@@ -96,5 +102,8 @@ private:
 	Scene* nextScene;
 
 	XMFLOAT2 windowSize;
+
+	float fixedDeltaTime;
+	float accumulatedTime;
 };
 
