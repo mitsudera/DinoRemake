@@ -48,6 +48,9 @@ public:
 
 	virtual void Update(void) override;
 
+	virtual void OnEnable(void)override;
+	virtual void OnDisable(void)override;
+
 	BOOL GetHitTag(GameObject::ObjectTag tag);
 
 	void SetHitTag(GameObject::ObjectTag tag, BOOL isHit);
@@ -61,7 +64,7 @@ public:
 	void SetHitObject(GameObject* gameObject);
 	BOOL GetHitObject(GameObject* gameObject);
 
-
+	GameObject* GetHitTagObject(GameObject::ObjectTag tag);
 
 	void OnCollider(void);
 	void OffCollider(void);
@@ -75,6 +78,7 @@ public:
 protected:
 	HitResult result;
 	Shape shape;
+	BOOL enable;
 
 	XMFLOAT3 center;//’†S
 	float checkRadius;//‘å‚Ü‚©‚È“–‚½‚è”»’è‚ğs‚¤‚½‚ß‚Ì”¼Œa

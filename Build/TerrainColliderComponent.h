@@ -1,5 +1,9 @@
 #pragma once
 #include "ColliderComponent.h"
+
+class TerrainComponent;
+
+
 class TerrainColliderComponent : public ColliderComponent
 {
 public:
@@ -10,12 +14,16 @@ public:
 	virtual void Uninit(void) override;
 	virtual void Update(void) override;
 
-	ID3D11Texture2D* GetHeightMap(void);
-	void SetHeightMap(ID3D11Texture2D* map);
+	void SetTerrainComponent(TerrainComponent* com);
+
+	float GetHeight(XMFLOAT3 pos);
+	
+	XMFLOAT2  GetSize(void);
 
 protected:
 
-	ID3D11Texture2D* pHeightMap;
+	TerrainComponent* terrain;
+	XMFLOAT2 size;
 
 };
 

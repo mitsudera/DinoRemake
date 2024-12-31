@@ -13,7 +13,6 @@ void TerrainColliderComponent::Awake(void)
 {
 	ColliderComponent::Awake();
 	this->shape = Shape::Terrain;
-	this->pHeightMap = nullptr;
 
 }
 
@@ -28,12 +27,23 @@ void TerrainColliderComponent::Update(void)
 	ColliderComponent::Update();
 }
 
-ID3D11Texture2D* TerrainColliderComponent::GetHeightMap(void)
+void TerrainColliderComponent::SetTerrainComponent(TerrainComponent* com)
 {
-	return this->pHeightMap;
+	this->terrain = com;
+	this->center = GetWorldPos();
+	this->size = com->GetHW();
+	this->checkRadius = -1.0f;
+
+
 }
 
-void TerrainColliderComponent::SetHeightMap(ID3D11Texture2D* map)
+float TerrainColliderComponent::GetHeight(XMFLOAT3 pos)
 {
-	this->pHeightMap = map;
+	return terrain->GetHeight(pos);
 }
+
+XMFLOAT2 TerrainColliderComponent::GetSize(void)
+{
+	return size;
+}
+

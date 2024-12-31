@@ -7,7 +7,7 @@
 #include "LineColliderComponent.h"
 #include "CapsuleColliderComponent.h"
 #include "BoxColliderComponent.h"
-
+#include "TerrainColliderComponent.h"
 CollisionManager::CollisionManager(GameEngine* gameEngine)
 {
 	this->pGameEngine = gameEngine;
@@ -100,15 +100,18 @@ BOOL CollisionManager::CheckCillision(ColliderPair pair)
 	float check1 = pair.collider1->GetCheckRadius();
 	float check2 = pair.collider2->GetCheckRadius();
 
+	if (check1 < 0.0f || check2 < 0.0f)
+	{
+
+	}
 	//ここで大まかに当たっているか判定
-	if (CollisionSphereSphere(pos1, check1, pos2, check2) == FALSE)
+	else if (CollisionSphereSphere(pos1, check1, pos2, check2) == FALSE)
 	{
 		return FALSE;
 	}
 
 
-
-
+	//一旦terrainはシェイプに関わらずポイントだけで
 
 
 	if (pair.collider1->GetShape() == ColliderComponent::ColliderComponent::ColliderComponent::Shape::Point)
@@ -138,6 +141,12 @@ BOOL CollisionManager::CheckCillision(ColliderPair pair)
 		{
 			BoxColliderComponent* box = static_cast<BoxColliderComponent*>(pair.collider2);
 			return CollisionPointBox(pos1, box->GetCenter(),box->GetSize());
+
+		}
+		else if (pair.collider2->GetShape() == ColliderComponent::Shape::Terrain)
+		{
+			TerrainColliderComponent* terrain = static_cast<TerrainColliderComponent*>(pair.collider2);
+			return CollisionPointTerrain(pos1, terrain);
 
 		}
 
@@ -173,6 +182,13 @@ BOOL CollisionManager::CheckCillision(ColliderPair pair)
 			return CollisionLineBox(line->GetStart(), line->GetEnd(), box->GetCenter(), box->GetSize());
 
 		}
+		else if (pair.collider2->GetShape() == ColliderComponent::Shape::Terrain)
+		{
+			TerrainColliderComponent* terrain = static_cast<TerrainColliderComponent*>(pair.collider2);
+			return CollisionPointTerrain(pos1, terrain);
+
+		}
+
 
 	}
 	else if (pair.collider1->GetShape() == ColliderComponent::Shape::Sphere)
@@ -208,6 +224,12 @@ BOOL CollisionManager::CheckCillision(ColliderPair pair)
 		{
 			BoxColliderComponent* box = static_cast<BoxColliderComponent*>(pair.collider2);
 			return CollisionSphereBox(pos1, sphere1->GetCheckRadius(), box->GetCenter(), box->GetSize());
+
+		}
+		else if (pair.collider2->GetShape() == ColliderComponent::Shape::Terrain)
+		{
+			TerrainColliderComponent* terrain = static_cast<TerrainColliderComponent*>(pair.collider2);
+			return CollisionPointTerrain(pos1, terrain);
 
 		}
 
@@ -247,6 +269,13 @@ BOOL CollisionManager::CheckCillision(ColliderPair pair)
 			return CollisionCapsuleBox(capsule1->GetStart(), capsule1->GetEnd(), capsule1->GetRadius(), box->GetCenter(), box->GetSize());
 
 		}
+		else if (pair.collider2->GetShape() == ColliderComponent::Shape::Terrain)
+		{
+			TerrainColliderComponent* terrain = static_cast<TerrainColliderComponent*>(pair.collider2);
+			return CollisionPointTerrain(pos1, terrain);
+
+		}
+
 
 	}
 	else if (pair.collider1->GetShape() == ColliderComponent::Shape::Box)
@@ -282,6 +311,44 @@ BOOL CollisionManager::CheckCillision(ColliderPair pair)
 			return CollisionBoxBox(box1->GetCenter(), box1->GetSize(), box2->GetCenter(), box2->GetSize());
 
 		}
+		else if (pair.collider2->GetShape() == ColliderComponent::Shape::Terrain)
+		{
+			TerrainColliderComponent* terrain = static_cast<TerrainColliderComponent*>(pair.collider2);
+			return CollisionPointTerrain(pos1, terrain);
+
+		}
+
+
+	}
+	else if (pair.collider1->GetShape() == ColliderComponent::Shape::Terrain)
+	{
+	TerrainColliderComponent* terrain = static_cast<TerrainColliderComponent*>(pair.collider1);
+
+		if (pair.collider2->GetShape() == ColliderComponent::Shape::Point)
+		{
+			return CollisionPointTerrain(pos2, terrain);
+		}
+		else if (pair.collider2->GetShape() == ColliderComponent::Shape::Line)
+		{
+			return CollisionPointTerrain(pos2, terrain);
+		}
+		else if (pair.collider2->GetShape() == ColliderComponent::Shape::Sphere)
+		{
+			return CollisionPointTerrain(pos2, terrain);
+		}
+		else if (pair.collider2->GetShape() == ColliderComponent::Shape::Capsule)
+		{
+			return CollisionPointTerrain(pos2, terrain);
+		}
+		else if (pair.collider2->GetShape() == ColliderComponent::Shape::Box)
+		{
+			return CollisionPointTerrain(pos2, terrain);
+		}
+		else if (pair.collider2->GetShape() == ColliderComponent::Shape::Terrain)
+		{
+			return FALSE;
+		}
+
 
 	}
 

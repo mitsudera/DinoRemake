@@ -31,6 +31,9 @@ public:
 	virtual void LateUpdate(void);
 	virtual void Draw(void);
 	virtual void DebugDraw(void);
+	virtual void OnEnable(void);
+	virtual void OnDisable(void);
+
 
 	GameObject* GetGameObject(void);
 
@@ -52,9 +55,11 @@ public:
 protected:
 	GameObject* pGameObject;
 	Attribute attribute;
-	BOOL	isActive;
 	GameEngine* pGameEngine;
 	Input* input;
+
+private:
+	BOOL	isActive;
 
 };
 

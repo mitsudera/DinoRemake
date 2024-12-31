@@ -406,6 +406,15 @@ void TransformComponent::MoveZAxis(float f)
 
 }
 
+void TransformComponent::MoveVelocity(XMVECTOR velo)
+{
+	XMFLOAT3 v;
+	XMStoreFloat3(&v, velo);
+	MoveX(v.x);
+	MoveY(v.y);
+	MoveZ(v.z);
+}
+
 
 //void TransformComponent::MoveForward(float f)
 //{

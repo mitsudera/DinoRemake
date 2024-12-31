@@ -26,7 +26,7 @@ void Component::Awake(void)
 	this->pGameObject->GetScene()->AddSceneComponent(this);
 	this->attribute = Attribute::Component;
 	this->input = pGameEngine->GetInput();
-	this->isActive = TRUE;
+	this->SetActive(TRUE);
 	
 }
 
@@ -36,6 +36,7 @@ void Component::Init(void)
 
 void Component::Uninit(void)
 {
+	this->SetActive(FALSE);
 	this->pGameObject->GetScene()->RemoveSceneComponent(this);
 }
 
@@ -62,6 +63,14 @@ void Component::DebugDraw(void)
 
 }
 
+void Component::OnEnable(void)
+{
+}
+
+void Component::OnDisable(void)
+{
+}
+
 GameObject* Component::GetGameObject(void)
 {
 	return this->pGameObject;
@@ -74,7 +83,21 @@ Component::Attribute Component::GetAttribute(void)
 
 void Component::SetActive(BOOL b)
 {
-	isActive = b;
+	if (isActive==b)
+	{
+		return;
+	}
+	else if (isActive == FALSE)
+	{
+		isActive = TRUE;
+		this->OnEnable();
+	}
+	else if (isActive == TRUE)
+	{
+		isActive = FALSE;
+		this->OnDisable();
+	}
+
 }
 
 BOOL Component::GetActive(void)

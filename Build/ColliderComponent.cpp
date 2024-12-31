@@ -26,7 +26,7 @@ void ColliderComponent::Awake(void)
 	
 	this->attribute = Attribute::Collider;
 	result.hitObject.clear();
-	
+	enable = FALSE;
 	this->checkRadius = 1.0f;
 
 	for (int i = 0; i < (int)GameObject::ObjectTag::ObjectTagMax; i++)
@@ -40,15 +40,11 @@ void ColliderComponent::Awake(void)
 void ColliderComponent::Init(void)
 {
 	Component::Init();
-	OnCollider();
-
 }
 
 void ColliderComponent::Uninit(void)
 {
 	Component::Uninit();
-	this->GetGameObject()->GetScene()->GetGameEngine()->GetCollisionManager()->DeleteCllider(this);
-
 }
 
 void ColliderComponent::Update(void)
@@ -58,6 +54,18 @@ void ColliderComponent::Update(void)
 	this->center = GetWorldPos();
 
 
+}
+
+void ColliderComponent::OnEnable(void)
+{
+	Component::OnEnable();
+	OnCollider();
+}
+
+void ColliderComponent::OnDisable(void)
+{
+	Component::OnDisable();
+	OffCollider();
 }
 
 BOOL ColliderComponent::GetHitTag(GameObject::ObjectTag tag)
@@ -114,6 +122,20 @@ BOOL ColliderComponent::GetHitObject(GameObject* gameObject)
 	return ans;
 }
 
+GameObject* ColliderComponent::GetHitTagObject(GameObject::ObjectTag tag)
+{
+
+	for (GameObject* obj: result.hitObject)
+	{
+		if (obj->GetTag() == tag)
+		{
+			return obj;
+		}
+	}
+
+	return nullptr;
+}
+
 void ColliderComponent::Clear(void)
 {
 	this->result.hitObject.clear();
@@ -146,13 +168,20 @@ void ColliderComponent::SetCheckRadius(float r)
 
 void ColliderComponent::OnCollider(void)
 {
-	this->GetGameObject()->GetScene()->GetGameEngine()->GetCollisionManager()->AddCollider(this);
+	if (enable==FALSE)
+	{
+		enable = TRUE;
+		this->GetGameObject()->GetScene()->GetGameEngine()->GetCollisionManager()->AddCollider(this);
+
+	}
 }
 
 void ColliderComponent::OffCollider(void)
 {
-
-	this->GetGameObject()->GetScene()->GetGameEngine()->GetCollisionManager()->DeleteCllider(this);
-
+	if (enable == TRUE)
+	{
+		enable = FALSE;
+		this->GetGameObject()->GetScene()->GetGameEngine()->GetCollisionManager()->DeleteCllider(this);
+	}
 }
 

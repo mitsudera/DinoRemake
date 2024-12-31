@@ -22,6 +22,8 @@ public:
 
 	float GetHeight(XMFLOAT3 pos);
 
+	XMFLOAT2 GetHW(void);
+
 private:
 	
 	XMINT2 terrainResolution;

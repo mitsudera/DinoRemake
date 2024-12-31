@@ -38,7 +38,10 @@
 //FBXSDKライブラリ
 #include <fbxsdk.h>
 
-
+//directxtex
+#include "DirectXTex.h"
+#include "DDSTextureLoader11.h"
+#include "WICTextureLoader11.h"
 
 #pragma warning(pop)
 //*****************************************************************************
@@ -56,6 +59,8 @@
 #pragma comment (lib,"libfbxsdk-mt.lib")
 #pragma comment (lib,"libxml2-mt.lib")
 #pragma comment (lib,"zlib-mt.lib")
+
+#pragma comment (lib,"DirectXTex.lib")
 
 
 // 本来はヘッダに書かない方が良い

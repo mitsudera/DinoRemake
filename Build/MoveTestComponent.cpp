@@ -2,6 +2,7 @@
 #include "transformcomponent.h"
 #include "input.h"
 #include "gameobject.h"
+#include "RigidBodyComponent.h"
 MoveTestComponent::MoveTestComponent(GameObject* gameObject)
 {
 	pGameObject = gameObject;
@@ -14,11 +15,14 @@ MoveTestComponent::~MoveTestComponent()
 void MoveTestComponent::Awake(void)
 {
 	Component::Awake();
+
 }
 
 void MoveTestComponent::Init(void)
 {
 	Component::Init();
+	this->rb = GetComponent<RigidBodyComponent>();
+	transform = GetTransFormComponent();
 }
 
 void MoveTestComponent::Uninit(void)
@@ -31,20 +35,20 @@ void MoveTestComponent::Update(void)
 	Component::Update();
 	if (input->GetKeyboardPress(DIK_UP))
 	{
-		GetTransFormComponent()->MoveZAxis(1.0f);
+		rb->AddForce(transform->GetAxisZ() * 1.0f);
 	}
 	if (input->GetKeyboardPress(DIK_DOWN))
 	{
-		GetTransFormComponent()->MoveZAxis(-1.0f);
+		rb->AddForce(transform->GetAxisZ() * -1.0f);
 
 	}
 	if (input->GetKeyboardPress(DIK_LEFT))
 	{
-		GetTransFormComponent()->MoveXAxis(-1.0f);
+		rb->AddForce(transform->GetAxisX() * -1.0f);
 	}
 	if (input->GetKeyboardPress(DIK_RIGHT))
 	{
-		GetTransFormComponent()->MoveXAxis(1.0f);
+		rb->AddForce(transform->GetAxisX() * 1.0f);
 	}
 
 	if (input->GetKeyboardPress(DIK_Z))
@@ -58,15 +62,5 @@ void MoveTestComponent::Update(void)
 
 	}
 
-	GameObject* bone= pGameObject->SerchAllChild("C_Hip");
-
-	//bone->GetTransFormComponent()->RotPitch(0.1f);
-
-	//bone= pGameObject->SerchAllChild("C_Spine5");
-
-	//bone->GetTransFormComponent()->RotPitch(-0.1f);
-	//bone= pGameObject->SerchAllChild("C_Tail2");
-
-	//bone->GetTransFormComponent()->RotYaw(0.1f);
 
 }

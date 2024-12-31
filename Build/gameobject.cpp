@@ -62,6 +62,9 @@ void GameObject::Awake(void)
 	this->pGameEngine = pScene->GetGameEngine();
 	this->isActive = TRUE;
 	this->transformComponent->Awake();
+	tag = ObjectTag::Default;
+
+	this->layer = Layer::Default;
 
 }
 

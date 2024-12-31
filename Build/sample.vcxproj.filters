@@ -181,6 +181,15 @@
     <Filter Include="Shader\DebugLineShader">
       <UniqueIdentifier>{b68691fe-34ea-476c-99c3-9f773b15aa62}</UniqueIdentifier>
     </Filter>
+    <Filter Include="lib">
+      <UniqueIdentifier>{98821a5d-89c2-4e06-862f-54b7e8469b80}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameEngine\Debug">
+      <UniqueIdentifier>{da822710-f0b9-4959-91df-2f3c1a02264c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="component\Physic">
+      <UniqueIdentifier>{3049d48b-5a26-4146-9883-13fc8ecc5f8d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Coreminimal.h">
@@ -507,8 +516,17 @@
     <ClInclude Include="DebugLineShader.h">
       <Filter>Shader\DebugLineShader</Filter>
     </ClInclude>
+    <ClInclude Include="lib\WICTextureLoader\WICTextureLoader11.h">
+      <Filter>lib</Filter>
+    </ClInclude>
     <ClInclude Include="DebugUtility.h">
-      <Filter>ヘッダー ファイル</Filter>
+      <Filter>GameEngine\Debug</Filter>
+    </ClInclude>
+    <ClInclude Include="lib\DDSTextureLoader\DDSTextureLoader11.h">
+      <Filter>lib</Filter>
+    </ClInclude>
+    <ClInclude Include="RigidBodyComponent.h">
+      <Filter>component\Physic</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -833,8 +851,17 @@
     <ClCompile Include="DebugLineShader.cpp">
       <Filter>Shader\DebugLineShader</Filter>
     </ClCompile>
+    <ClCompile Include="lib\WICTextureLoader\WICTextureLoader11.cpp">
+      <Filter>lib</Filter>
+    </ClCompile>
     <ClCompile Include="DebugUtility.cpp">
-      <Filter>ソース ファイル</Filter>
+      <Filter>GameEngine\Debug</Filter>
+    </ClCompile>
+    <ClCompile Include="lib\DDSTextureLoader\DDSTextureLoader11.cpp">
+      <Filter>lib</Filter>
+    </ClCompile>
+    <ClCompile Include="RigidBodyComponent.cpp">
+      <Filter>component\Physic</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

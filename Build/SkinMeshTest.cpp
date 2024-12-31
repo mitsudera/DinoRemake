@@ -2,7 +2,8 @@
 #include "transformcomponent.h"
 #include "AnimationControlerComponent.h"
 #include "MoveTestComponent.h"
-
+#include "CapsuleColliderComponent.h"
+#include "RigidBodyComponent.h"
 SkinMeshTest::SkinMeshTest(Scene* scene)
 {
 	pScene = scene;
@@ -32,7 +33,9 @@ void SkinMeshTest::Awake(void)
 	//animControler->CreateTransition("Idol", "Atack", "AtackTrigger", TRUE);
 	//animControler->CreateNotLoopAnimExitTransition("Atack", "Idol");
 
+	AddComponent<CapsuleColliderComponent>();
 
+	AddComponent<RigidBodyComponent>();
 
 	AddComponent<MoveTestComponent>();
 }

@@ -72,6 +72,8 @@ public:
 	//このトランスフォームのZ軸方向に動かす
 	void MoveZAxis(float f);
 
+	void MoveVelocity(XMVECTOR velo);
+
 	//void MoveForward(float f);
 
 

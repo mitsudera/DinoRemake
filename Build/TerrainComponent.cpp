@@ -244,3 +244,8 @@ float TerrainComponent::GetHeight(XMFLOAT3 pos)
 
 	return GetTransFormComponent()->GetWorldPos().y + height;
 }
+
+XMFLOAT2 TerrainComponent::GetHW(void)
+{
+	return this->terrainSize;
+}

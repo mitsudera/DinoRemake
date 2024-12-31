@@ -3,8 +3,6 @@
 #include "AssetsManager.h"
 #include "renderer.h"
 #include "GameEngine.h"
-
-
 DX11Texture::DX11Texture(AssetsManager* Manager)
 {
 	pManager = Manager;
@@ -25,7 +23,6 @@ ID3D11ShaderResourceView* DX11Texture::GetTexture(void)
 }
 void DX11Texture::CreateSRV(char* path)
 {
-
 	D3DX11CreateShaderResourceViewFromFile(
 		this->pManager->GetGameEngine()->GetRenderer()->GetDevice(),
 		path,
@@ -40,13 +37,20 @@ void DX11Texture::CreateSRV(string path)
 {
 	wstring wstr(path.begin(), path.end());
 
-	D3DX11CreateShaderResourceViewFromFile(
+	CreateWICTextureFromFile(
 		this->pManager->GetGameEngine()->GetRenderer()->GetDevice(),
-		path.c_str(),
-		NULL,
-		NULL,
-		&SRV,
-		NULL);
+		wstr.c_str(),
+		nullptr,
+		&SRV);
+
+
+	//D3DX11CreateShaderResourceViewFromFile(
+	//	this->pManager->GetGameEngine()->GetRenderer()->GetDevice(),
+	//	path.c_str(),
+	//	NULL,
+	//	NULL,
+	//	&SRV,
+	//	NULL);
 	this->filepath = path;
 
 }

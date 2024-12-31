@@ -5,7 +5,7 @@
 //
 //=============================================================================
 #include "collision.h"
-
+#include "TerrainColliderComponent.h"
 //=============================================================================
 // 内積(dot)
 //=============================================================================
@@ -195,6 +195,37 @@ BOOL CollisionPointBox(XMFLOAT3 point, XMFLOAT3 center, XMFLOAT3 size)
 	return FALSE; // 点がボックス内にない場合
 }
 
+BOOL CollisionPointTerrain(XMFLOAT3 point,TerrainColliderComponent* terrain )
+{
+
+	XMFLOAT2 length;
+	length.x = point.x - terrain->GetCenter().x;
+	length.y = point.z - terrain->GetCenter().z;
+
+	XMFLOAT2 terrainSize = terrain->GetSize();
+
+	//範囲内にいるか？
+	if (length.x > (terrainSize.x * 0.5) ||
+		length.x < -(terrainSize.x * 0.5) ||
+		length.y >(terrainSize.y * 0.5) ||
+		length.y < -(terrainSize.y * 0.5))
+	{
+
+		return FALSE;
+
+	}
+
+	float height = terrain->GetHeight(point);
+
+	if (height > point.y)
+	{
+		return TRUE;
+	}
+
+	return FALSE;
+
+}
+
 
 
 
@@ -261,7 +292,49 @@ BOOL CollisionLineCapsule(XMFLOAT3 lp1, XMFLOAT3 lp2, XMFLOAT3 cp1, XMFLOAT3 cp2
 
 BOOL CollisionLineBox(XMFLOAT3 lp1, XMFLOAT3 lp2, XMFLOAT3 center, XMFLOAT3 size)
 {
-	return 0;
+	XMFLOAT3 boxMin(center.x - size.x / 2, center.y - size.y / 2, center.z - size.z / 2);
+	XMFLOAT3 boxMax(center.x + size.x / 2, center.y + size.y / 2, center.z + size.z / 2);
+
+	XMFLOAT3 direction(lp2.x - lp1.x, lp2.y - lp1.y, lp2.z - lp1.z);
+	XMFLOAT3 invDirection(1.0f / direction.x, 1.0f / direction.y, 1.0f / direction.z);
+
+	float t1 = (boxMin.x - lp1.x) * invDirection.x;
+	float t2 = (boxMax.x - lp1.x) * invDirection.x;
+	float t3 = (boxMin.y - lp1.y) * invDirection.y;
+	float t4 = (boxMax.y - lp1.y) * invDirection.y;
+	float t5 = (boxMin.z - lp1.z) * invDirection.z;
+	float t6 = (boxMax.z - lp1.z) * invDirection.z;
+
+	float tmin = max(max(min(t1, t2), min(t3, t4)), min(t5, t6));
+	float tmax = min(min(max(t1, t2), max(t3, t4)), max(t5, t6));
+
+	if (tmax < 0 || tmin > tmax)
+		return FALSE;
+
+	return TRUE;
+}
+
+BOOL CollisionLineTerrain(XMFLOAT3 lp1, XMFLOAT3 lp2, XMFLOAT3 center, XMFLOAT2 hw)
+{
+	// 地形の範囲を定義
+	XMFLOAT3 minPoint(center.x - hw.x / 2, center.y, center.z - hw.y / 2);
+	XMFLOAT3 maxPoint(center.x + hw.x / 2, center.y, center.z + hw.y / 2);
+
+	// 線分の各点が範囲内かチェック
+	auto isPointInRange = [&](const XMFLOAT3& p)
+	{
+		return (p.x >= minPoint.x && p.x <= maxPoint.x &&
+			p.y >= minPoint.y && p.y <= maxPoint.y &&
+			p.z >= minPoint.z && p.z <= maxPoint.z);
+	};
+
+	// 両方の点が範囲内にあるかを確認
+	if (isPointInRange(lp1) || isPointInRange(lp2))
+	{
+		return TRUE;
+	}
+
+	return FALSE;
 }
 
 
@@ -323,7 +396,44 @@ BOOL CollisionSphereCapsule(XMFLOAT3 center1, float r1, XMFLOAT3 cp1, XMFLOAT3 c
 
 BOOL CollisionSphereBox(XMFLOAT3 center1, float r1, XMFLOAT3 center, XMFLOAT3 size)
 {
-	return 0;
+	// ボックスの範囲を定義
+	XMFLOAT3 boxMin(center.x - size.x / 2, center.y - size.y / 2, center.z - size.z / 2);
+	XMFLOAT3 boxMax(center.x + size.x / 2, center.y + size.y / 2, center.z + size.z / 2);
+
+	// ボックス内で球の中心に最も近い点を見つける
+	XMFLOAT3 closestPoint(
+		max(boxMin.x, min(center1.x, boxMax.x)),
+		max(boxMin.y, min(center1.y, boxMax.y)),
+		max(boxMin.z, min(center1.z, boxMax.z))
+	);
+
+	// 球の中心とボックス内で最も近い点の距離を計算
+	XMFLOAT3 direction(center1.x - closestPoint.x, center1.y - closestPoint.y, center1.z - closestPoint.z);
+	float distanceSq = direction.x * direction.x + direction.y * direction.y + direction.z * direction.z;
+
+	// 距離が球の半径以下であれば、衝突している
+	return distanceSq <= r1 * r1 ? TRUE : FALSE;
+}
+
+BOOL CollisionSphereTerrain(XMFLOAT3 center1, float r1, XMFLOAT3 center, XMFLOAT2 hw)
+{
+	// 地形の範囲を定義
+	XMFLOAT3 minPoint(center.x - hw.x / 2, center.y, center.z - hw.y / 2);
+	XMFLOAT3 maxPoint(center.x + hw.x / 2, center.y, center.z + hw.y / 2);
+
+	// 地形の各面について球の中心に最も近い点を見つける
+	XMFLOAT3 closestPoint(
+		max(minPoint.x, min(center1.x, maxPoint.x)),
+		center.y, // 高さは変わらないのでcenter.yを使用
+		max(minPoint.z, min(center1.z, maxPoint.z))
+	);
+
+	// 球の中心と地形内で最も近い点の距離を計算
+	XMFLOAT3 direction(center1.x - closestPoint.x, center1.y - closestPoint.y, center1.z - closestPoint.z);
+	float distanceSq = direction.x * direction.x + direction.y * direction.y + direction.z * direction.z;
+
+	// 距離が球の半径以下であれば、範囲内にある
+	return distanceSq <= r1 * r1 ? TRUE : FALSE;
 }
 
 BOOL CollisionCapsuleCapsule(XMFLOAT3 cp1_1, XMFLOAT3 cp1_2, float r1, XMFLOAT3 cp2_1, XMFLOAT3 cp2_2, float r2)
@@ -352,9 +462,93 @@ BOOL CollisionCapsuleCapsule(XMFLOAT3 cp1_1, XMFLOAT3 cp1_2, float r1, XMFLOAT3 
 
 BOOL CollisionCapsuleBox(XMFLOAT3 cp1_1, XMFLOAT3 cp1_2, float r1, XMFLOAT3 center, XMFLOAT3 size)
 {
-	return 0;
+	XMFLOAT3 boxMin(center.x - size.x / 2, center.y - size.y / 2, center.z - size.z / 2);
+	XMFLOAT3 boxMax(center.x + size.x / 2, center.y + size.y / 2, center.z + size.z / 2);
+
+	auto squaredDistancePointAABB = [](const XMFLOAT3& p, const XMFLOAT3& bMin, const XMFLOAT3& bMax)
+	{
+		float sqDist = 0.0f;
+		if (p.x < bMin.x) sqDist += (bMin.x - p.x) * (bMin.x - p.x);
+		if (p.x > bMax.x) sqDist += (p.x - bMax.x) * (p.x - bMax.x);
+		if (p.y < bMin.y) sqDist += (bMin.y - p.y) * (bMin.y - p.y);
+		if (p.y > bMax.y) sqDist += (p.y - bMax.y) * (p.y - bMax.y);
+		if (p.z < bMin.z) sqDist += (bMin.z - p.z) * (bMin.z - p.z);
+		if (p.z > bMax.z) sqDist += (p.z - bMax.z) * (p.z - bMax.z);
+		return sqDist;
+	};
+
+	if (squaredDistancePointAABB(cp1_1, boxMin, boxMax) <= r1 * r1 ||
+		squaredDistancePointAABB(cp1_2, boxMin, boxMax) <= r1 * r1)
+		return TRUE;
+
+	XMFLOAT3 d(cp1_2.x - cp1_1.x, cp1_2.y - cp1_1.y, cp1_2.z - cp1_1.z);
+	float lengthSq = d.x * d.x + d.y * d.y + d.z * d.z;
+	XMFLOAT3 closestPt = cp1_1;
+
+	auto segmentClosestPtToPoint = [&](const XMFLOAT3& p, XMFLOAT3& closest)
+	{
+		XMFLOAT3 pToCp1(p.x - cp1_1.x, p.y - cp1_1.y, p.z - cp1_1.z);
+		float t = (pToCp1.x * d.x + pToCp1.y * d.y + pToCp1.z * d.z) / lengthSq;
+		t = max(0.0f, min(1.0f, t));
+		closest.x = cp1_1.x + t * d.x;
+		closest.y = cp1_1.y + t * d.y;
+		closest.z = cp1_1.z + t * d.z;
+	};
+
+	segmentClosestPtToPoint(center, closestPt);
+
+	if (squaredDistancePointAABB(closestPt, boxMin, boxMax) <= r1 * r1)
+		return TRUE;
+
+	return FALSE;
 }
 
+BOOL CollisionCapsuleTerrain(XMFLOAT3 cp1_1, XMFLOAT3 cp1_2, float r1, XMFLOAT3 center, XMFLOAT2 hw)
+{
+	// 地形の範囲を定義 (xz平面のみ)
+	XMFLOAT2 minPoint(center.x - hw.x / 2, center.z - hw.y / 2);
+	XMFLOAT2 maxPoint(center.x + hw.x / 2, center.z + hw.y / 2);
+
+	auto squaredDistancePointAABB2D = [](const XMFLOAT2& p, const XMFLOAT2& bMin, const XMFLOAT2& bMax)
+	{
+		float sqDist = 0.0f;
+		if (p.x < bMin.x) sqDist += (bMin.x - p.x) * (bMin.x - p.x);
+		if (p.x > bMax.x) sqDist += (p.x - bMax.x) * (p.x - bMax.x);
+		if (p.y < bMin.y) sqDist += (bMin.y - p.y) * (bMin.y - p.y);
+		if (p.y > bMax.y) sqDist += (p.y - bMax.y) * (p.y - bMax.y);
+		return sqDist;
+	};
+
+	// カプセルの両端が地形の範囲内かチェック
+	XMFLOAT2 cp1_1_2D(cp1_1.x, cp1_1.z);
+	XMFLOAT2 cp1_2_2D(cp1_2.x, cp1_2.z);
+	if (squaredDistancePointAABB2D(cp1_1_2D, minPoint, maxPoint) <= r1 * r1 ||
+		squaredDistancePointAABB2D(cp1_2_2D, minPoint, maxPoint) <= r1 * r1)
+	{
+		return TRUE;
+	}
+
+	// カプセルの線分の各点が地形の範囲内かチェック
+	XMFLOAT2 d(cp1_2_2D.x - cp1_1_2D.x, cp1_2_2D.y - cp1_1_2D.y);
+	float lengthSq = d.x * d.x + d.y * d.y;
+	XMFLOAT2 closestPt = cp1_1_2D;
+
+	auto segmentClosestPtToPoint2D = [&](const XMFLOAT2& p, XMFLOAT2& closest)
+	{
+		XMFLOAT2 pToCp1(p.x - cp1_1_2D.x, p.y - cp1_1_2D.y);
+		float t = (pToCp1.x * d.x + pToCp1.y * d.y) / lengthSq;
+		t = max(0.0f, min(1.0f, t));
+		closest.x = cp1_1_2D.x + t * d.x;
+		closest.y = cp1_1_2D.y + t * d.y;
+	};
+
+	segmentClosestPtToPoint2D(XMFLOAT2(center.x, center.z), closestPt);
+
+	if (squaredDistancePointAABB2D(closestPt, minPoint, maxPoint) <= r1 * r1)
+		return TRUE;
+
+	return FALSE;
+}
 
 BOOL CollisionBoxBox(XMFLOAT3 center1, XMFLOAT3 size1, XMFLOAT3 center2, XMFLOAT3 size2)
 {
@@ -372,6 +566,27 @@ BOOL CollisionBoxBox(XMFLOAT3 center1, XMFLOAT3 size1, XMFLOAT3 center2, XMFLOAT
 	if (min1.z > max2.z || max1.z < min2.z) return FALSE;
 
 	return TRUE; // ボックスが重なっている場合
+}
+
+
+BOOL CollisionBoxTerrain(XMFLOAT3 center1, XMFLOAT3 size1, XMFLOAT3 center, XMFLOAT2 hw)
+{
+	// 地形の範囲を定義 (xz平面のみ)
+	XMFLOAT2 minPoint(center.x - hw.x / 2, center.z - hw.y / 2);
+	XMFLOAT2 maxPoint(center.x + hw.x / 2, center.z + hw.y / 2);
+
+	// ボックスの範囲を定義 (xz平面のみ)
+	XMFLOAT2 boxMin(center1.x - size1.x / 2, center1.z - size1.z / 2);
+	XMFLOAT2 boxMax(center1.x + size1.x / 2, center1.z + size1.z / 2);
+
+	// ボックスと地形の範囲が交差するかをチェック
+	if (boxMin.x <= maxPoint.x && boxMax.x >= minPoint.x &&
+		boxMin.y <= maxPoint.y && boxMax.y >= minPoint.y)
+	{
+		return TRUE;
+	}
+
+	return FALSE;
 }
 
 void ClosestPtSegmentSegment(XMVECTOR p1, XMVECTOR d1, XMVECTOR p2, XMVECTOR d2, float& t1, float& t2, XMVECTOR& c1, XMVECTOR& c2)

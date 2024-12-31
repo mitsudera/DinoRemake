@@ -1,5 +1,8 @@
 #pragma once
 #include "component.h"
+
+class RigidBodyComponent;
+
 class MoveTestComponent : public Component
 {
 public:
@@ -14,5 +17,7 @@ public:
 
 private:
 
+	RigidBodyComponent* rb;
+	TransformComponent* transform;
 };
 

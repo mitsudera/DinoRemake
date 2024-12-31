@@ -106,11 +106,12 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>false</ConformanceMode>
       <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\include;C:\github\dino\Build\lib\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\include;C:\github\dino\Build\lib\include;C:\github\dino\Build\lib\DDSTextureLoader;C:\github\dino\Build\lib\WICTextureLoader</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\lib\x64\debug;C:\github\dino\Build\lib\x64\Debug</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\lib\x64\debug;C:\github\dino\Build\lib\Debug</AdditionalLibraryDirectories>
+      <AdditionalDependencies>kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -139,7 +140,7 @@
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>false</ConformanceMode>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
-      <AdditionalIncludeDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\include;C:\github\dino\Build\lib\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files\Autodesk\FBX\FBX SDK\2020.3.7\include;C:\github\dino\Build\lib\include;C:\github\dino\Build\lib\DDSTextureLoader;C:\github\dino\Build\lib\WICTextureLoader</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp17</LanguageStandard>
     </ClCompile>
     <Link>
@@ -174,6 +175,8 @@
     <ClInclude Include="DX11Texture.h" />
     <ClInclude Include="FadeShader.h" />
     <ClInclude Include="FbxConvertDX11.h" />
+    <ClInclude Include="lib\DDSTextureLoader\DDSTextureLoader11.h" />
+    <ClInclude Include="lib\WICTextureLoader\WICTextureLoader11.h" />
     <ClInclude Include="MeshField.h" />
     <ClInclude Include="FullScreenQuadVertex.h" />
     <ClInclude Include="GameEngine.h" />
@@ -196,6 +199,7 @@
     <ClInclude Include="MoveTestComponent.h" />
     <ClInclude Include="NotEffectShader.h" />
     <ClInclude Include="RedEnemy.h" />
+    <ClInclude Include="RigidBodyComponent.h" />
     <ClInclude Include="SkinMeshComponent.h" />
     <ClInclude Include="SkinMeshComputeShader.h" />
     <ClInclude Include="SkinMeshLinkerComponent.h" />
@@ -287,6 +291,8 @@
     <ClCompile Include="DX11Texture.cpp" />
     <ClCompile Include="FadeShader.cpp" />
     <ClCompile Include="FbxConvertDX11.cpp" />
+    <ClCompile Include="lib\DDSTextureLoader\DDSTextureLoader11.cpp" />
+    <ClCompile Include="lib\WICTextureLoader\WICTextureLoader11.cpp" />
     <ClCompile Include="MeshField.cpp" />
     <ClCompile Include="FullScreenQuadVertex.cpp" />
     <ClCompile Include="GameEngine.cpp" />
@@ -309,6 +315,7 @@
     <ClCompile Include="MoveTestComponent.cpp" />
     <ClCompile Include="NotEffectShader.cpp" />
     <ClCompile Include="RedEnemy.cpp" />
+    <ClCompile Include="RigidBodyComponent.cpp" />
     <ClCompile Include="SkinMeshComponent.cpp" />
     <ClCompile Include="SkinMeshComputeShader.cpp" />
     <ClCompile Include="SkinMeshLinkerComponent.cpp" />
