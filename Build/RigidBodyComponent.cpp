@@ -33,6 +33,12 @@ void RigidBodyComponent::Update(void)
 {
     Component::Update();
 
+
+}
+
+void RigidBodyComponent::LateUpdate(void)
+{
+    Component::LateUpdate();
     // èdóÕÇÃìKóp
     if (useGravity)
     {
