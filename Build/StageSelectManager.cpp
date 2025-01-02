@@ -12,6 +12,6 @@ StageSelectManager::~StageSelectManager()
 void StageSelectManager::Awake(void)
 {
 	GameObject::Awake();
-	this->name = "StageSelectManager";
+	SetName("StageSelectManager");
 	AddComponent<StageSelectManagerComponent>();
 }

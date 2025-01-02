@@ -178,3 +178,73 @@ float XMFLOAT3Length(XMFLOAT3 p1, XMFLOAT3 p2)
 }
 
 
+// PhysX‚ÌPxVec3‚ğDirectXMath‚ÌXMVECTOR‚É•ÏŠ·
+XMVECTOR PxVec3ToXMVECTOR(const PxVec3& vec) {
+	return XMVectorSet(vec.x, vec.y, vec.z, 0.0f);
+}
+
+// PhysX‚ÌPxQuat‚ğDirectXMath‚ÌXMVECTOR‚É•ÏŠ·
+XMVECTOR PxQuatToXMVECTOR(const PxQuat& quat) {
+	return XMVectorSet(quat.x, quat.y, quat.z, quat.w);
+}
+
+// PhysX‚ÌPxMat44‚ğDirectXMath‚ÌXMMATRIX‚É•ÏŠ·
+XMMATRIX PxMat44ToXMMATRIX(const PxMat44& mat) {
+	return XMMATRIX(
+		mat.column0.x, mat.column0.y, mat.column0.z, mat.column0.w,
+		mat.column1.x, mat.column1.y, mat.column1.z, mat.column1.w,
+		mat.column2.x, mat.column2.y, mat.column2.z, mat.column2.w,
+		mat.column3.x, mat.column3.y, mat.column3.z, mat.column3.w
+	);
+}
+
+// DirectXMath‚ÌXMVECTOR‚ğPhysX‚ÌPxVec3‚É•ÏŠ·
+PxVec3 XMVECTORToPxVec3(const XMVECTOR& vec) {
+	XMFLOAT3 temp;
+	XMStoreFloat3(&temp, vec);
+	return PxVec3(temp.x, temp.y, temp.z);
+}
+
+// DirectXMath‚ÌXMVECTOR‚ğPhysX‚ÌPxQuat‚É•ÏŠ·
+PxQuat XMVECTORToPxQuat(const XMVECTOR& vec) {
+	XMFLOAT4 temp;
+	XMStoreFloat4(&temp, vec);
+	return PxQuat(temp.x, temp.y, temp.z, temp.w);
+}
+
+// DirectXMath‚ÌXMMATRIX‚ğPhysX‚ÌPxMat44‚É•ÏŠ·
+PxMat44 XMMATRIXToPxMat44(const XMMATRIX& mat) {
+	PxMat44 result;
+	XMStoreFloat4x4(reinterpret_cast<XMFLOAT4X4*>(&result), mat);
+	return result;
+}
+
+// XMFLOAT3‚©‚çPxVec3‚Ö‚Ì•ÏŠ·
+PxVec3 XMFLOAT3ToPxVec3(const XMFLOAT3& vec) {
+	return PxVec3(vec.x, vec.y, vec.z);
+}
+
+// PxVec3‚©‚çXMFLOAT3‚Ö‚Ì•ÏŠ·
+XMFLOAT3 PxVec3ToXMFLOAT3(const PxVec3& vec) {
+	return XMFLOAT3(vec.x, vec.y, vec.z);
+}
+
+// XMFLOAT4‚©‚çPxVec3‚Ö‚Ì•ÏŠ· (X, Y, Z¬•ª‚Ì‚İg—p)
+PxVec3 XMFLOAT4ToPxVec3(const XMFLOAT4& vec) {
+	return PxVec3(vec.x, vec.y, vec.z);
+}
+
+// PxVec3‚©‚çXMFLOAT4‚Ö‚Ì•ÏŠ· (W¬•ª‚ğ0‚Éİ’è)
+XMFLOAT4 PxVec3ToXMFLOAT4(const PxVec3& vec) {
+	return XMFLOAT4(vec.x, vec.y, vec.z, 0.0f);
+}
+
+// XMFLOAT4‚©‚çPxQuat‚Ö‚Ì•ÏŠ·
+PxQuat XMFLOAT4ToPxQuat(const XMFLOAT4& vec) {
+	return PxQuat(vec.x, vec.y, vec.z, vec.w);
+}
+
+// PxQuat‚©‚çXMFLOAT4‚Ö‚Ì•ÏŠ·
+XMFLOAT4 PxQuatToXMFLOAT4(const PxQuat& quat) {
+	return XMFLOAT4(quat.x, quat.y, quat.z, quat.w);
+}

@@ -15,7 +15,7 @@ void TitleBG::Awake(void)
 	GameObject::Awake();
 	this->layer = Layer::UI;
 
-	this->name = "TitleBG";
+	SetName("TitleBG");
 	SpriteComponent* bg = AddComponent<SpriteComponent>();
 	bg->SetSpriteLeftDown("data/texture/title/title.png", XMFLOAT3(0.0f, 0.0f, 0.0f),pGameEngine->GetWindowSize().x , pGameEngine->GetWindowSize().y);
 

@@ -653,13 +653,13 @@ BoneData::~BoneData()
 //	this->skinMeshTree = skinMeshTree;
 //	FbxNode* node = bone->GetNode();
 //
-//	this->name = node->GetName();
+//	 = node->GetName();
 //
 //	//FbxMatrix worldOffset = node->EvaluateGlobalTransform(FBXSDK_TIME_INFINITE);//オフセット行列の取得
 //	//this->worldOffset = FbxMatrixConvertToXMMATRIX(worldOffset);
 //
 //
-//	this->worldOffset = skinMeshTree->GetInitMtx(this->name);
+//	this->worldOffset = skinMeshTree->GetInitMtx();
 //
 //	FbxMatrix localOffset = node->EvaluateLocalTransform(FBXSDK_TIME_INFINITE);
 //	this->localOffset = FbxMatrixConvertToXMMATRIX(localOffset);

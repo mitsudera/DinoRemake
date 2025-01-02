@@ -14,7 +14,7 @@ GameManager::~GameManager()
 void GameManager::Awake(void)
 {
 	GameObject::Awake();
-	this->name = "GameManager";
+	SetName("GameManager");
 	GameManagerComponent* gameManagerComponent = AddComponent<GameManagerComponent>();
 
 

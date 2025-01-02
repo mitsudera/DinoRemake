@@ -51,7 +51,6 @@ void RigidBodyComponent::OnEnable(void)
 {
 	Component::OnEnable();
 
-	pPhysxEngine->AddRigidBodyStatic(this);
 }
 
 void RigidBodyComponent::OnDisable(void)

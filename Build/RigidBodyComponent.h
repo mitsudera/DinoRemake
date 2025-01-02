@@ -2,7 +2,7 @@
 #include "component.h"
 
 class ColliderComponent;
-class PhysixEngine;
+class PhysxEngine;
 
 class RigidBodyComponent :public Component
 {
@@ -27,7 +27,7 @@ public:
 	void AddForce(XMVECTOR force);
 private:
 
-	PhysixEngine* pPhysxEngine;
+	PhysxEngine* pPhysxEngine;
 	TransformComponent* transform;
 	XMVECTOR velocity;
 	float mass;

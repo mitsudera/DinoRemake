@@ -47,7 +47,8 @@ void TestScene::Awake()
 
 	pGameEngine->SetMainCamera(dcamera->GetComponent<CameraComponent>());
 
-	CreateGameObject<MeshField>();
+	//CreateGameObject<MeshField>();
 
 	CreateGameObject<SkinMeshTest>();
+	CreateGameObject<RedEnemy>();
 }

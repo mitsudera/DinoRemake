@@ -13,7 +13,7 @@ TitleManager::~TitleManager()
 void TitleManager::Awake(void)
 {
 	GameObject::Awake();
-	this->name = "TitleManager";
+	SetName("TitleManager");
 	TitleManagerComponent* titleManager = AddComponent<TitleManagerComponent>();
 
 

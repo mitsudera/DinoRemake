@@ -15,7 +15,7 @@ void TitleLogo::Awake(void)
 	GameObject::Awake();
 	this->layer = Layer::UI;
 
-	this->name = "TitleLogo";
+	SetName("TitleLogo");
 	SpriteComponent* logo = AddComponent<SpriteComponent>();
 	logo->SetAlphaTest(TRUE);
 

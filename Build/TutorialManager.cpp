@@ -13,7 +13,7 @@ TutorialManager::~TutorialManager()
 void TutorialManager::Awake(void)
 {
 	GameObject::Awake();
-	this->name = "TutorialManager";
+	SetName("TutorialManager");
 	AddComponent<TutorialManagerComponent>();
 
 }

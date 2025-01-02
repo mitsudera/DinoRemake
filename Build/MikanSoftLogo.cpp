@@ -16,8 +16,8 @@ void MikanSoftLogo::Awake(void)
 {
 	GameObject::Awake();
 	this->layer = Layer::UI;
-
-	this->name = "MikanLogo";
+	
+	SetName("MikanLogo");
 	SpriteComponent* logo = AddComponent<SpriteComponent>();
 	logo->SetSpriteLeftDown("data/texture/title/logo.png", XMFLOAT3(0.0f, 0.0f, 0.0f), pGameEngine->GetWindowSize().x, pGameEngine->GetWindowSize().y);
 

@@ -24,4 +24,5 @@ void DirectionalLight::Awake(void)
 	this->transformComponent->RotWorldPitch(XM_PIDIV2);
 	this->transformComponent->RotWorldRoll(XM_PIDIV4);
 
+	SetName("DirecLight");
 }

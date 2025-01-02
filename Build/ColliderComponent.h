@@ -13,7 +13,8 @@ struct HitResult
 };
 
 
-
+class RigidBodyComponent;
+class PhysxEngine;
 
 class ColliderComponent :public Component
 {
@@ -29,9 +30,6 @@ public:
 		Box,
 		Terrain,
 
-		//–¢À‘•
-		AABB,
-		CBB,
 
 	};
 
@@ -73,15 +71,21 @@ public:
 	XMFLOAT3 GetCenter(void);
 	float GetCheckRadius(void);
 	void SetCheckRadius(float r);
+	BOOL GetIsStatic(void);
+
+	//void SetRigidBody(RigidBodyComponent* rb);
+
 
 
 protected:
+	PhysxEngine* pPhysxEngine;
 	HitResult result;
 	Shape shape;
 	BOOL enable;
-
+	BOOL isStatic;
 	XMFLOAT3 center;//’†S
 	float checkRadius;//‘å‚Ü‚©‚È“–‚½‚è”»’è‚ğs‚¤‚½‚ß‚Ì”¼Œa
+
 
 };
 

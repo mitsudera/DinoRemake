@@ -27,7 +27,6 @@ public:
 
 
 
-
 	GameEngine* GetGameEngine(void);
 
 	vector <GameObject*>& GetGameObject(void);
@@ -74,6 +73,7 @@ protected:
 	list<TransformComponent*> allTransformComponent;
 	list<PrimitiveComponent*> allPrimitiveComponent;
 
+	list<pair<string, GameObject*>> gameObjectNameList;
 };
 
 

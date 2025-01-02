@@ -31,9 +31,6 @@ public:
 
 
 
-	long GetMousePosX(void);
-	long GetMousePosY(void);
-
 	// 前フレームからの経過ミリ秒を取得する
 	float GetDeltaTime(void);
 

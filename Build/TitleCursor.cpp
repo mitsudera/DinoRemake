@@ -16,7 +16,7 @@ void TitleCursor::Awake(void)
 	GameObject::Awake();
 	this->layer = Layer::UI;
 
-	this->name = "cursor";
+	SetName("cursor");
 	SpriteComponent* sprite = AddComponent<SpriteComponent>();
 
 	sprite->SetTexSlice(XMINT2(7, 1));

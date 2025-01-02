@@ -1,8 +1,8 @@
 #include "ColliderComponent.h"
 #include "gameobject.h"
-#include "CollisionManager.h"
 #include "Scene.h"
 #include "GameEngine.h"
+#include "PhysixEngine.h"
 ColliderComponent::ColliderComponent()
 {
 	this->attribute = Component::Attribute::Collider;
@@ -27,7 +27,9 @@ void ColliderComponent::Awake(void)
 	this->attribute = Attribute::Collider;
 	result.hitObject.clear();
 	enable = FALSE;
+	isStatic = FALSE;
 	this->checkRadius = 1.0f;
+	this->pPhysxEngine = pGameEngine->GetPhysixEngine();
 
 	for (int i = 0; i < (int)GameObject::ObjectTag::ObjectTagMax; i++)
 	{
@@ -40,6 +42,7 @@ void ColliderComponent::Awake(void)
 void ColliderComponent::Init(void)
 {
 	Component::Init();
+
 }
 
 void ColliderComponent::Uninit(void)
@@ -163,6 +166,11 @@ void ColliderComponent::SetCheckRadius(float r)
 	checkRadius = r;
 }
 
+BOOL ColliderComponent::GetIsStatic(void)
+{
+	return isStatic;
+}
+
 
 
 
@@ -171,7 +179,7 @@ void ColliderComponent::OnCollider(void)
 	if (enable==FALSE)
 	{
 		enable = TRUE;
-		this->GetGameObject()->GetScene()->GetGameEngine()->GetCollisionManager()->AddCollider(this);
+		pPhysxEngine->AddCollider(this);
 
 	}
 }
@@ -181,7 +189,7 @@ void ColliderComponent::OffCollider(void)
 	if (enable == TRUE)
 	{
 		enable = FALSE;
-		this->GetGameObject()->GetScene()->GetGameEngine()->GetCollisionManager()->DeleteCllider(this);
+		//this->GetGameObject()->GetScene()->GetGameEngine()->GetCollisionManager()->DeleteCllider(this);
 	}
 }
 

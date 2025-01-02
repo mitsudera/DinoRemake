@@ -335,6 +335,7 @@ void TransformComponent::SetPosZ(float f)
 
 XMFLOAT3 TransformComponent::GetWorldPos(void)
 {
+	UpdateMatrix();
 	XMFLOAT3 lPos = XMFLOAT3(0.0f, 0.0f, 0.0f);
 
 	XMVECTOR wPos = XMLoadFloat3(&lPos);

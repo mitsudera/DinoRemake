@@ -100,7 +100,6 @@ public:
 
 	void LoadSkinMeshNode(SkinMeshTreeNode* node,SkinMeshLinkerComponent* linker);
 
-	void LoadBoneNode(BoneData* node, SkinMeshLinkerComponent* linker);
 
 
 protected:
@@ -110,7 +109,6 @@ protected:
 
 	vector<Component*> componentList;
 
-	string name;
 	ObjectTag tag;
 	Layer layer;
 
@@ -120,6 +118,9 @@ protected:
 
 	GameObject* parent;
 	vector <GameObject*> childList;
+private:
+	string name;
+
 
 };
 

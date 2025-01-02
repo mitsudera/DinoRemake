@@ -20,7 +20,7 @@ MeshField::~MeshField()
 void MeshField::Awake(void)
 {
 	GameObject::Awake();
-	this->name = "Field";
+	SetName("Field");
 	this->tag = GameObject::ObjectTag::Field;
 	this->layer = Layer::Field;
 	TerrainComponent* meshField = AddComponent<TerrainComponent>();

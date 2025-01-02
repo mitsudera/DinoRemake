@@ -162,8 +162,6 @@
     <ClInclude Include="CapsuleColliderComponent.h" />
     <ClInclude Include="CBufferManager.h" />
     <ClInclude Include="ColliderComponent.h" />
-    <ClInclude Include="collision.h" />
-    <ClInclude Include="CollisionManager.h" />
     <ClInclude Include="component.h" />
     <ClInclude Include="ComputeShader.h" />
     <ClInclude Include="Coreminimal.h" />
@@ -280,8 +278,6 @@
     <ClCompile Include="CapsuleColliderComponent.cpp" />
     <ClCompile Include="CBufferManager.cpp" />
     <ClCompile Include="ColliderComponent.cpp" />
-    <ClCompile Include="collision.cpp" />
-    <ClCompile Include="CollisionManager.cpp" />
     <ClCompile Include="component.cpp" />
     <ClCompile Include="ComputeShader.cpp" />
     <ClCompile Include="DebugCamera.cpp" />

@@ -25,7 +25,7 @@ Camera::~Camera()
 void Camera::Awake(void)
 {
 	GameObject::Awake();
-	this->name = "Camera";
+	SetName("Camera");
 	CameraComponent* cameraComponent = AddComponent<CameraComponent>();
 
 	cameraComponent->SetRenderTarget(pScene->GetGameEngine()->GetRenderer()->GetBackBuffer());

@@ -10,12 +10,11 @@ class SceneManager;
 class Scene;
 class CBufferManager;
 class LightManager;
-class CollisionManager;
 class ShadowMap;
 class SoundEngine;
 class WicFactory;
 class DebugUtility;
-class PhysixEngine;
+class PhysxEngine;
 
 class GameEngine
 {
@@ -42,13 +41,12 @@ public:
 	Renderer* GetRenderer(void);
 	CBufferManager* GetCBufferManager(void);
 	Input* GetInput(void);
-	CollisionManager* GetCollisionManager(void);
 	LightManager* GetLightmanager(void);
 	ShadowMap* GetShadowMap(void);
 	SoundEngine* GetSoundEngine(void);
 	WicFactory* GetWicFactory(void);
 	DebugUtility* GetDebugUtility(void);
-	PhysixEngine* GetPhysixEngine(void);
+	PhysxEngine* GetPhysixEngine(void);
 
 	Scene* GetActiveScene(void);
 	void SetActiveScene(Scene* scene);
@@ -80,13 +78,12 @@ private:
 	CBufferManager* cBufferManager;
 	Input* input;
 	LightManager* lightManager;
-	CollisionManager* collisionManager;
 	CameraComponent* mainCamera;//バックバッファへの描画を行うカメラ
 	ShadowMap* shadowMap;
 	SoundEngine* soundEngine;
 	WicFactory* wicFactory;
 	DebugUtility* debugUtility;
-	PhysixEngine* physixEngine;
+	PhysxEngine* physixEngine;
 
 	SceneManager* sceneManager;
 	Scene* activeScene;

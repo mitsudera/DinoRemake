@@ -234,12 +234,6 @@
     <ClInclude Include="FbxConvertDX11.h">
       <Filter>GameEngine\math</Filter>
     </ClInclude>
-    <ClInclude Include="collision.h">
-      <Filter>GameEngine\math</Filter>
-    </ClInclude>
-    <ClInclude Include="CollisionManager.h">
-      <Filter>GameEngine\Manager</Filter>
-    </ClInclude>
     <ClInclude Include="TitleScene.h">
       <Filter>Scene</Filter>
     </ClInclude>
@@ -571,12 +565,6 @@
     </ClCompile>
     <ClCompile Include="FbxConvertDX11.cpp">
       <Filter>GameEngine\math</Filter>
-    </ClCompile>
-    <ClCompile Include="collision.cpp">
-      <Filter>GameEngine\math</Filter>
-    </ClCompile>
-    <ClCompile Include="CollisionManager.cpp">
-      <Filter>GameEngine\Manager</Filter>
     </ClCompile>
     <ClCompile Include="TitleScene.cpp">
       <Filter>Scene</Filter>

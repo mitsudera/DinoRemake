@@ -35,10 +35,13 @@ void MoveTestComponent::Update(void)
 	Component::Update();
 	if (input->GetKeyboardPress(DIK_UP))
 	{
-		rb->AddForce(transform->GetAxisZ() * 1.0f);
+		transform->MoveZ(1.0f);
+		//rb->AddForce(transform->GetAxisZ() * 1.0f);
 	}
 	if (input->GetKeyboardPress(DIK_DOWN))
 	{
+		transform->MoveZ(-1.0f);
+
 		rb->AddForce(transform->GetAxisZ() * -1.0f);
 
 	}

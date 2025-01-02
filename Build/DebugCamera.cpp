@@ -27,7 +27,7 @@ DebugCamera::~DebugCamera()
 void DebugCamera::Awake(void)
 {
 	GameObject::Awake();
-	this->name = "DebugCamera";
+	SetName("DebugCamera");
 	CameraComponent* cameraComponent= AddComponent<CameraComponent>();
 	cameraComponent->SetRenderTarget(pGameEngine->GetRenderer()->GetBackBuffer());
 	cameraComponent->SetDepthStencilView(pGameEngine->GetRenderer()->GetBackBufferDSV());

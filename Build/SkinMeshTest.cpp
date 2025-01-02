@@ -2,7 +2,7 @@
 #include "transformcomponent.h"
 #include "AnimationControlerComponent.h"
 #include "MoveTestComponent.h"
-#include "CapsuleColliderComponent.h"
+#include "BoxColliderComponent.h"
 #include "RigidBodyComponent.h"
 SkinMeshTest::SkinMeshTest(Scene* scene)
 {
@@ -16,7 +16,7 @@ SkinMeshTest::~SkinMeshTest()
 void SkinMeshTest::Awake(void)
 {
 	GameObject::Awake();
-	this->name = "SkinMesh";
+	SetName("SkinMesh");
 	this->transformComponent->SetPosition(XMFLOAT3(0.0f, 0.0f, 0.0f));
 	this->transformComponent->SetScale(XMFLOAT3(0.1f, 0.1f, 0.1f));
 	//this->transformComponent->RotWorldYaw(XM_PIDIV2);
@@ -33,7 +33,7 @@ void SkinMeshTest::Awake(void)
 	//animControler->CreateTransition("Idol", "Atack", "AtackTrigger", TRUE);
 	//animControler->CreateNotLoopAnimExitTransition("Atack", "Idol");
 
-	AddComponent<CapsuleColliderComponent>();
+	AddComponent<BoxColliderComponent>()->SetBox(XMFLOAT3(10.0f, 10.0f, 10.0f));
 
 	AddComponent<RigidBodyComponent>();
 

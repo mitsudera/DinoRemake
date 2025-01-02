@@ -15,7 +15,7 @@ void Text::Awake(void)
 	GameObject::Awake();
 	this->layer = Layer::Text;
 
-	this->name = "Text";
+	SetName("Text");
 	TextWriteComponent* text = AddComponent<TextWriteComponent>();
 
 }

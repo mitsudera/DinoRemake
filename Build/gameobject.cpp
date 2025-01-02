@@ -13,6 +13,7 @@
 #include "SkinMeshLinkerComponent.h"
 #include "BoneComponent.h"
 #include "SkinMeshTreeData.h"
+#include "PhysixEngine.h"
 
 GameObject::GameObject()
 {
@@ -66,6 +67,7 @@ void GameObject::Awake(void)
 
 	this->layer = Layer::Default;
 
+	SetName("GameObject");
 }
 
 
@@ -254,7 +256,40 @@ string GameObject::GetName(void)
 
 void GameObject::SetName(string name)
 {
+	int count = 1;
+	string originalName = name;
+
+	if (parent == nullptr)
+	{
+		for (GameObject* obj : pScene->GetGameObject())
+		{
+			while (obj->GetName() == name)
+			{
+				name = originalName + std::to_string(count++);
+			}
+		}
+	}
+	else
+	{
+		for (GameObject* child : parent->GetChild())
+		{
+			while (child->GetName() == name)
+			{
+				name = originalName + std::to_string(count++);
+			}
+		}
+	}
+
 	this->name = name;
+	ColliderComponent* collider = GetComponent<ColliderComponent>();
+
+	if (collider)
+	{
+		pGameEngine->GetPhysixEngine()->ChangeName(collider, this->name);
+
+	}
+
+
 }
 
 void GameObject::LoadFbxFileMesh(string fName)

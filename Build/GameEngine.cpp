@@ -7,7 +7,6 @@
 #include "Scene.h"
 #include "CBufferManager.h"
 #include "LightManager.h"
-#include "CollisionManager.h"
 #include "CameraComponent.h"
 #include "ShadowMap.h"
 #include "SoundEngine.h"
@@ -36,13 +35,12 @@ void GameEngine::Awake()
 	this->renderer = new Renderer(this);
 	this->renderer->InitRenderer(*main->GetInstanceHandle(), main->GetWindowHangle(), true);
 
-	this->physixEngine = new PhysixEngine(this);
+	this->physixEngine = new PhysxEngine(this);
 
 	this->soundEngine = new SoundEngine(this);
 
 	this->cBufferManager = new CBufferManager(this);
 
-	this->collisionManager = new CollisionManager(this);
 
 	this->debugUtility = new DebugUtility(this);
 
@@ -111,7 +109,6 @@ void GameEngine::FixedUpdate()
 void GameEngine::LateUpdate()
 {
 	this->activeScene->LateUpdate();
-	collisionManager->Update();
 	lightManager->Update();
 
 
@@ -157,7 +154,6 @@ void GameEngine::Uninit()
 
 	delete sceneManager;
 	delete soundEngine;
-	delete collisionManager;
 
 	this->renderer->UninitRenderer();
 	delete renderer;
@@ -204,10 +200,6 @@ Input* GameEngine::GetInput(void)
 	return this->input;
 }
 
-CollisionManager* GameEngine::GetCollisionManager(void)
-{
-	return this->collisionManager;
-}
 
 LightManager* GameEngine::GetLightmanager(void)
 {
@@ -234,7 +226,7 @@ DebugUtility* GameEngine::GetDebugUtility(void)
 	return this->debugUtility;
 }
 
-PhysixEngine* GameEngine::GetPhysixEngine(void)
+PhysxEngine* GameEngine::GetPhysixEngine(void)
 {
 	return this->physixEngine;
 }

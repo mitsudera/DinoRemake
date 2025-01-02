@@ -14,7 +14,7 @@ void TextMesh::Awake(void)
 	GameObject::Awake();
 	this->layer = Layer::UI;
 
-	this->name = "TextMesh";
+	SetName("TextMesh");
 	TextMeshComponent* text = AddComponent<TextMeshComponent>();
 
 }
