@@ -50,4 +50,7 @@ void TestScene::Awake()
 	CreateGameObject<MeshField>();
 
 	CreateGameObject<SkinMeshTest>();
+
+	CreateGameObject<GameManager>();
+	
 }

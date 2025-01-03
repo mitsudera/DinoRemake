@@ -190,9 +190,6 @@
     <Filter Include="component\RigidBody">
       <UniqueIdentifier>{3049d48b-5a26-4146-9883-13fc8ecc5f8d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="GameEngine\Physx">
-      <UniqueIdentifier>{62a2d8ae-c1ee-42ba-b916-ca88edcfe8b6}</UniqueIdentifier>
-    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Coreminimal.h">
@@ -531,9 +528,6 @@
     <ClInclude Include="RigidBodyComponent.h">
       <Filter>component\RigidBody</Filter>
     </ClInclude>
-    <ClInclude Include="PhysixEngine.h">
-      <Filter>GameEngine\Physx</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -868,9 +862,6 @@
     </ClCompile>
     <ClCompile Include="RigidBodyComponent.cpp">
       <Filter>component\RigidBody</Filter>
-    </ClCompile>
-    <ClCompile Include="PhysixEngine.cpp">
-      <Filter>GameEngine\Physx</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

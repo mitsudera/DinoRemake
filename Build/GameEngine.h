@@ -15,7 +15,6 @@ class ShadowMap;
 class SoundEngine;
 class WicFactory;
 class DebugUtility;
-class PhysixEngine;
 
 class GameEngine
 {
@@ -48,7 +47,6 @@ public:
 	SoundEngine* GetSoundEngine(void);
 	WicFactory* GetWicFactory(void);
 	DebugUtility* GetDebugUtility(void);
-	PhysixEngine* GetPhysixEngine(void);
 
 	Scene* GetActiveScene(void);
 	void SetActiveScene(Scene* scene);
@@ -86,7 +84,6 @@ private:
 	SoundEngine* soundEngine;
 	WicFactory* wicFactory;
 	DebugUtility* debugUtility;
-	PhysixEngine* physixEngine;
 
 	SceneManager* sceneManager;
 	Scene* activeScene;

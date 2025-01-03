@@ -58,6 +58,6 @@ XMMATRIX& BoneComponent::GetBoneMtx(void)
 	XMMATRIX mtx = GetWorldMtx();
 	XMFLOAT3 p = GetWorldPos();
 	boneMtx = XMMatrixTranspose(XMMatrixMultiply(initMtxInv, GetWorldMtx()));
-
+	this;
 	return boneMtx;
 }

@@ -60,24 +60,6 @@ void Scene::Update()
 
 	}
 
-	//for (GameObject* gameObject : GetGameObject())
-	//{
-	//	if (!gameObject->GetActive())
-	//		continue;
-	//	gameObject->Update();
-
-	//}
-
-
-	//for (GameObject* gameObject : GetGameObject())
-	//{
-	//	if (!gameObject->GetActive())
-	//		continue;
-
-	//	gameObject->UpdateMatrix();
-
-	//}
-
 
 	sceneTime += pGameEngine->GetDeltaTime();
 }

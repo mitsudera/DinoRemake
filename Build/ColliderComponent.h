@@ -74,6 +74,7 @@ public:
 	float GetCheckRadius(void);
 	void SetCheckRadius(float r);
 
+	void UpdateCenter(void);
 
 protected:
 	HitResult result;

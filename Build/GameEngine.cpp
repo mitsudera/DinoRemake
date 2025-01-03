@@ -13,7 +13,6 @@
 #include "SoundEngine.h"
 #include "WicFactory.h"
 #include "DebugUtility.h"
-#include "PhysixEngine.h"
 
 GameEngine::GameEngine(Main* main)
 {
@@ -36,7 +35,6 @@ void GameEngine::Awake()
 	this->renderer = new Renderer(this);
 	this->renderer->InitRenderer(*main->GetInstanceHandle(), main->GetWindowHangle(), true);
 
-	this->physixEngine = new PhysixEngine(this);
 
 	this->soundEngine = new SoundEngine(this);
 
@@ -96,7 +94,7 @@ void GameEngine::Update()
 	this->input->Update();
  	this->activeScene->Update();
 
-
+	this->collisionManager->Update();
 
 	this->LateUpdate();
 
@@ -104,7 +102,6 @@ void GameEngine::Update()
 
 void GameEngine::FixedUpdate()
 {
-	this->physixEngine->Update();
 
 }
 
@@ -143,7 +140,6 @@ void GameEngine::Uninit()
 	this->assetsManager->Uninit();
 	delete assetsManager;
 
-	delete physixEngine;
 
 	delete lightManager;
 
@@ -176,7 +172,8 @@ long GameEngine::GetMouseMoveY(void)
 
 float GameEngine::GetDeltaTime(void)
 {
-	return main->GetDeltaTime();
+	//return main->GetDeltaTime();
+	return 1.0f/60.0f;
 }
 
 XMFLOAT2 GameEngine::GetWindowSize(void)
@@ -234,10 +231,6 @@ DebugUtility* GameEngine::GetDebugUtility(void)
 	return this->debugUtility;
 }
 
-PhysixEngine* GameEngine::GetPhysixEngine(void)
-{
-	return this->physixEngine;
-}
 
 
 Scene* GameEngine::GetActiveScene(void)

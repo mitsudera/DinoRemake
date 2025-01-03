@@ -214,13 +214,17 @@ BOOL CollisionPointTerrain(XMFLOAT3 point,TerrainColliderComponent* terrain )
 		return FALSE;
 
 	}
-
-	float height = terrain->GetHeight(point);
-
-	if (height > point.y)
+	else
 	{
 		return TRUE;
 	}
+		
+	//float height = terrain->GetHeight(point);
+
+	//if (height > point.y)
+	//{
+	//	return TRUE;
+	//}
 
 	return FALSE;
 

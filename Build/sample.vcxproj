@@ -198,7 +198,6 @@
     <ClInclude Include="MeshData.h" />
     <ClInclude Include="MoveTestComponent.h" />
     <ClInclude Include="NotEffectShader.h" />
-    <ClInclude Include="PhysixEngine.h" />
     <ClInclude Include="RedEnemy.h" />
     <ClInclude Include="RigidBodyComponent.h" />
     <ClInclude Include="SkinMeshComponent.h" />
@@ -315,7 +314,6 @@
     <ClCompile Include="MeshData.cpp" />
     <ClCompile Include="MoveTestComponent.cpp" />
     <ClCompile Include="NotEffectShader.cpp" />
-    <ClCompile Include="PhysixEngine.cpp" />
     <ClCompile Include="RedEnemy.cpp" />
     <ClCompile Include="RigidBodyComponent.cpp" />
     <ClCompile Include="SkinMeshComponent.cpp" />

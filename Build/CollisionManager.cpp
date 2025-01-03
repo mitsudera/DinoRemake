@@ -25,6 +25,7 @@ void CollisionManager::Update(void)
 	for (int i = 0; i < colliderList.size(); i++)
 	{
 		colliderList[i]->Clear();
+		colliderList[i]->UpdateCenter();
 	}
 
 

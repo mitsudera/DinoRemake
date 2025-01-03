@@ -2,7 +2,6 @@
 #include "component.h"
 
 class ColliderComponent;
-class PhysixEngine;
 
 class RigidBodyComponent :public Component
 {
@@ -25,9 +24,11 @@ public:
 	void SetUseGarvity(BOOL b);
 	void SetIsKinematic(BOOL b);
 	void AddForce(XMVECTOR force);
-private:
 
-	PhysixEngine* pPhysxEngine;
+	BOOL GetOnGround(void);
+
+private:
+	ColliderComponent* collider;
 	TransformComponent* transform;
 	XMVECTOR velocity;
 	float mass;
@@ -35,5 +36,6 @@ private:
 	float angularDrag;
 	BOOL useGravity;
 	BOOL isKinematic;
+	BOOL onGround;
 };
 

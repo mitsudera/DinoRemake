@@ -51,7 +51,6 @@ void ColliderComponent::Update(void)
 {
 	Component::Update();
 
-	this->center = GetWorldPos();
 
 
 }
@@ -161,6 +160,12 @@ float ColliderComponent::GetCheckRadius(void)
 void ColliderComponent::SetCheckRadius(float r)
 {
 	checkRadius = r;
+}
+
+void ColliderComponent::UpdateCenter(void)
+{
+	this->center = GetWorldPos();
+
 }
 
 

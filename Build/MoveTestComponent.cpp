@@ -3,6 +3,7 @@
 #include "input.h"
 #include "gameobject.h"
 #include "RigidBodyComponent.h"
+#include "AnimationControlerComponent.h"
 MoveTestComponent::MoveTestComponent(GameObject* gameObject)
 {
 	pGameObject = gameObject;
@@ -23,6 +24,8 @@ void MoveTestComponent::Init(void)
 	Component::Init();
 	this->rb = GetComponent<RigidBodyComponent>();
 	transform = GetTransFormComponent();
+	animControl = GetComponent<AnimationControlerComponent>();
+	
 }
 
 void MoveTestComponent::Uninit(void)
@@ -61,6 +64,21 @@ void MoveTestComponent::Update(void)
 		GetTransFormComponent()->RotYaw((XM_PI / 180));
 
 	}
+	if (input->GetKeyboardTrigger(DIK_SPACE))
+	{
+		rb->AddForce(transform->GetAxisY() * 30.0f);
+		animControl->SetCondition("JumpTrigger", TRUE);
 
+	}
 
+	if (rb->GetOnGround() == TRUE)
+	{
+		animControl->SetCondition("OnGround", TRUE);
+
+	}
+	else
+	{
+		animControl->SetCondition("OnGround", FALSE);
+
+	}
 }

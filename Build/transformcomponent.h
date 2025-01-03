@@ -53,6 +53,7 @@ public:
 	void SetScaleMtx(XMMATRIX scl);
 	//void RotForward(XMFLOAT3 forward);
 	void SetLocalMtx(XMMATRIX mtx);
+	void SetLocalMtx(XMMATRIX mtx1, float weight1, XMMATRIX mtx2, float weight2);
 	void SetTransForm(XMFLOAT3 pos, XMFLOAT3 rot, XMFLOAT3 scl);
 
 	void SetPosX(float f);
