@@ -76,6 +76,7 @@ public:
 	//void SetRigidBody(RigidBodyComponent* rb);
 
 
+	void UpdateCenter(void);
 
 protected:
 	PhysxEngine* pPhysxEngine;

@@ -2,6 +2,7 @@
 #include "component.h"
 
 class RigidBodyComponent;
+class AnimationControlerComponent;
 
 class MoveTestComponent : public Component
 {
@@ -19,5 +20,6 @@ private:
 
 	RigidBodyComponent* rb;
 	TransformComponent* transform;
+	AnimationControlerComponent* animControl;
 };
 

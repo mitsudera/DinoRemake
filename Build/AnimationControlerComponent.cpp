@@ -210,7 +210,7 @@ void AnimationControlerComponent::CreateTransition(string beforeAnimName, string
 
 
 	AnimationTransition* transition = new AnimationTransition(this);
-	transition->CreateTransition(beforeNode, afterNode, 0.25f, conditionIndex, needCondition);
+	transition->CreateTransition(beforeNode, afterNode, 0.1f, conditionIndex, needCondition);
 	beforeNode->AddTransition(transition);
 
 }
@@ -496,7 +496,8 @@ void AnimationTransition::UpdateMtx(MtxNode* node1, MtxNode* node2 , GameObject*
 	XMMATRIX blendMtx = (frameMtx1 * weight1) + (frameMtx2 * weight2);
 	
 
-	gameObject->GetTransFormComponent()->SetLocalMtx(blendMtx);
+	//gameObject->GetTransFormComponent()->SetLocalMtx(blendMtx);
+	gameObject->GetTransFormComponent()->SetLocalMtx(frameMtx1, weight1, frameMtx2, weight2);
 
 	for (int i = 0; i < node1->GetChildCnt(); i++)
 	{

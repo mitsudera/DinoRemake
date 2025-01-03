@@ -100,14 +100,14 @@ XMMATRIX MtxNode::GetFrameMtx(float time)
 
 	int frame1 = int(frame);
 	
-	if (frame1 > (float)pAnimData->GetFrameNum())
+	if (frame1 >= (float)pAnimData->GetFrameNum()-1)
 	{
 		frame1 %= pAnimData->GetFrameNum();
 	}
-	int frame2 = frame1+1;
+	int frame2 = frame1 + 1;
 
 
-	if (frame2 >= pAnimData->GetFrameNum())
+	if (frame2 >= pAnimData->GetFrameNum()-1)
 	{
 		frame2 = 0;
 	}
