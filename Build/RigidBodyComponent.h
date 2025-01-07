@@ -11,6 +11,7 @@ public:
 
 	virtual void Awake(void) override;
 	virtual void Init(void) override;
+	virtual void FixedUpdate(void) override;
 	virtual void Update(void) override;
 	virtual void LateUpdate(void) override;
 	virtual void Uninit(void) override;
@@ -24,6 +25,7 @@ public:
 	void SetUseGarvity(BOOL b);
 	void SetIsKinematic(BOOL b);
 	void AddForce(XMVECTOR force);
+	void RotVelocityY(float f);
 
 	BOOL GetOnGround(void);
 

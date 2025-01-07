@@ -240,5 +240,8 @@ void AnimationData::LoadAnimation(string fileName, AssetsManager* assetsManager)
 
 	this->mtxTreeRoot->LoadAnimation(scene->GetRootNode(), nullptr, this);
 
-
+	scene->Destroy();
+	importer->Destroy();
+	ioSettings->Destroy();
+	manager->Destroy();
 }

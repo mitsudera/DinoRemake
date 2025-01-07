@@ -18,6 +18,7 @@
 #include "CameraComponent.h"
 #include "TextMesh.h"
 #include "TextMeshComponent.h"
+#include "ShadowMap.h"
 
 Stage1Scene::Stage1Scene(GameEngine* pGameEngine)
 {
@@ -32,24 +33,21 @@ void Stage1Scene::Awake()
 {
 	Scene::Awake();
 
+	pGameEngine->GetShadowMap()->SetEnable(TRUE);
 
 	CreateGameObject<DirectionalLight>();
 
-	SkySphere* sky=CreateGameObject<SkySphere>();
+	SkySphere* sky = CreateGameObject<SkySphere>();
 	sky->SetHasShadowAll(FALSE);
 
-	GameObject* dcamera= CreateGameObject<DebugCamera>();
+	GameObject* dcamera = CreateGameObject<DebugCamera>();
 	dcamera->GetComponent<CameraComponent>()->SetSky(GetGameObject<SkySphere>());
 
-	CreateGameObject<Player>();
-
-	CreateGameObject<RedEnemy>();
+	pGameEngine->SetMainCamera(dcamera->GetComponent<CameraComponent>());
 
 	CreateGameObject<MeshField>();
 
-	CreateGameObject<BGMPlayer>();
-
-	CreateGameObject<Stage1Manager>();
+	CreateGameObject<Player>();
 
 	CreateGameObject<GameManager>();
 

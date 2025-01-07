@@ -216,12 +216,6 @@
     <ClInclude Include="CameraComponent.h">
       <Filter>component\Camera</Filter>
     </ClInclude>
-    <ClInclude Include="MeshAnimData.h">
-      <Filter>Assets</Filter>
-    </ClInclude>
-    <ClInclude Include="MeshData.h">
-      <Filter>Assets</Filter>
-    </ClInclude>
     <ClInclude Include="DX11Texture.h">
       <Filter>Assets</Filter>
     </ClInclude>
@@ -528,6 +522,12 @@
     <ClInclude Include="RigidBodyComponent.h">
       <Filter>component\RigidBody</Filter>
     </ClInclude>
+    <ClInclude Include="MeshData.h">
+      <Filter>Assets</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerAnimationControlComponent.h">
+      <Filter>component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -550,12 +550,6 @@
     </ClCompile>
     <ClCompile Include="CameraComponent.cpp">
       <Filter>component\Camera</Filter>
-    </ClCompile>
-    <ClCompile Include="MeshAnimData.cpp">
-      <Filter>Assets</Filter>
-    </ClCompile>
-    <ClCompile Include="MeshData.cpp">
-      <Filter>Assets</Filter>
     </ClCompile>
     <ClCompile Include="DX11Texture.cpp">
       <Filter>Assets</Filter>
@@ -862,6 +856,12 @@
     </ClCompile>
     <ClCompile Include="RigidBodyComponent.cpp">
       <Filter>component\RigidBody</Filter>
+    </ClCompile>
+    <ClCompile Include="MeshData.cpp">
+      <Filter>Assets</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerAnimationControlComponent.cpp">
+      <Filter>component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

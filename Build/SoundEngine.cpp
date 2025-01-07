@@ -303,7 +303,7 @@ void SoundEngine::LoadSoundData(AudioData* pData, string filePath, SoundType typ
 	// オーディオバッファの登録
 	pData->sorceVoice->SubmitSourceBuffer(&buffer);
 
-
+	
 	// ファイルを閉じる
 	CloseHandle(hFile);
 

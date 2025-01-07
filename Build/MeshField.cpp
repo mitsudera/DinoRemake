@@ -40,7 +40,7 @@ void MeshField::Awake(void)
 	mat->specular= { 0.1f,0.1f,0.1f,1.0f };
 	mat->SetTessEdgeFacter(16.0f);
 	mat->SetTessInsideFacter(16.0f);
-	mat->SetHeightFacter(20.0f);
+	mat->SetHeightFacter(0.0f);
 	mat->SetUVScale(XMFLOAT2(10.0f, 10.0f));
 	mat->SetHeghtMapUVScale(XMFLOAT2(1.0f, 1.0f));
 	meshField->LoadMaterial(mat);

@@ -33,22 +33,22 @@ void CameraControllerComponent::Uninit(void)
 void CameraControllerComponent::Update(void)
 {
 	Component::Update();
-	if (input->GetKeyboardPress(DIK_W))
+	if (input->GetKeyboardPress(DIK_UP))
 	{
 		GetTransFormComponent()->MoveZAxis(1.0f);
 
 	}
-	if (input->GetKeyboardPress(DIK_S))
+	if (input->GetKeyboardPress(DIK_DOWN))
 	{
 		GetTransFormComponent()->MoveZAxis(-1.0f);
 
 	}
-	if (input->GetKeyboardPress(DIK_D))
+	if (input->GetKeyboardPress(DIK_RIGHT))
 	{
 		GetTransFormComponent()->MoveXAxis(1.0f);
 
 	}
-	if (input->GetKeyboardPress(DIK_A))
+	if (input->GetKeyboardPress(DIK_LEFT))
 	{
 		GetTransFormComponent()->MoveXAxis(-1.0f);
 

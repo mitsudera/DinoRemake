@@ -19,6 +19,7 @@ GameEngine::GameEngine(Main* main)
 	this->main = main;
 	accumulatedTime = 0.0f;
 	fixedDeltaTime = 1.0f / 60.0f;
+	drawSkip = FALSE;
 }
 
 GameEngine::~GameEngine()
@@ -71,37 +72,48 @@ void GameEngine::Awake()
 
 void GameEngine::Update()
 {
+	deltaTime = main->GetDeltaTime();
+
 	if (activeScene != nextScene)
 	{
 		SwichScene();
-	}
+		drawSkip = TRUE;
+		return;
 
-	accumulatedTime += GetDeltaTime();
-	while (accumulatedTime >= fixedDeltaTime)
+	}
+	else
 	{
-		this->FixedUpdate();
-		accumulatedTime -= fixedDeltaTime;
+		accumulatedTime += deltaTime;
+		while (accumulatedTime >= fixedDeltaTime)
+		{
+			this->FixedUpdate();
+			accumulatedTime -= fixedDeltaTime;
+		}
+
+
+		this->mouseDeltaX = input->GetMouseX() - oldMousePosX;
+		this->mouseDeltaY = input->GetMouseY() - oldMousePosY;
+
+
+		this->oldMousePosX = input->GetMouseX();
+		this->oldMousePosY = input->GetMouseY();
+
+		this->input->Update();
+		this->activeScene->Update();
+
+		this->collisionManager->Update();
+
+		this->LateUpdate();
+
 	}
 
-
-	this->mouseDeltaX = input->GetMouseX() - oldMousePosX;
-	this->mouseDeltaY = input->GetMouseY() - oldMousePosY;
-
-
-	this->oldMousePosX = input->GetMouseX();
-	this->oldMousePosY = input->GetMouseY();
-
-	this->input->Update();
- 	this->activeScene->Update();
-
-	this->collisionManager->Update();
-
-	this->LateUpdate();
+	
 
 }
 
 void GameEngine::FixedUpdate()
 {
+	this->activeScene->FixedUpdate();
 
 }
 
@@ -116,6 +128,13 @@ void GameEngine::LateUpdate()
 
 void GameEngine::Draw()
 {
+
+	if (drawSkip)
+	{
+		drawSkip = FALSE;
+		return;
+	}
+
 	this->shadowMap->ShadowMapping();
 
 
@@ -172,7 +191,7 @@ long GameEngine::GetMouseMoveY(void)
 
 float GameEngine::GetDeltaTime(void)
 {
-	//return main->GetDeltaTime();
+	//return deltaTime;
 	return 1.0f/60.0f;
 }
 
@@ -300,6 +319,7 @@ void GameEngine::SwichScene(void)
 	this->activeScene = nextScene;
 	activeScene->Awake();
 	activeScene->Init();
+	drawSkip = TRUE;
 }
 
 float GameEngine::GetFixedDeltaTime(void)

@@ -210,7 +210,7 @@ void AnimationControlerComponent::CreateTransition(string beforeAnimName, string
 
 
 	AnimationTransition* transition = new AnimationTransition(this);
-	transition->CreateTransition(beforeNode, afterNode, 0.1f, conditionIndex, needCondition);
+	transition->CreateTransition(beforeNode, afterNode, 0.25f, conditionIndex, needCondition);
 	beforeNode->AddTransition(transition);
 
 }
@@ -455,8 +455,7 @@ void AnimationTransition::UpdateAnimation(GameObject* gameObject)
 
 	if (timeCnt > transitionTime)
 	{
-		float overTime = timeCnt - transitionTime;
-		afterAnimNode->StartAnimation(overTime);
+		afterAnimNode->StartAnimation(timeCnt);
 	}
 
 
@@ -603,7 +602,7 @@ void AnimationNode::AddTransition(AnimationTransition* transition)
 void AnimationNode::SetNotLoopExitTransition(AnimationTransition* transition)
 {
 	this->exitTransition = transition;
-	this->exitTime = transition->GetTransitionTime();
+	this->exitTime = this->endTime - transition->GetTransitionTime();
 }
 
 void AnimationNode::StartAnimation(float startTime)

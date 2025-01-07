@@ -38,6 +38,30 @@ void Scene::Init(void)
 
 }
 
+void Scene::FixedUpdate()
+{
+	for (Component* com : allComponent)
+	{
+		if (!com->GetActive())
+			continue;
+
+		com->FixedUpdate();
+
+	}
+
+	for (TransformComponent* com : allTransformComponent)
+	{
+		if (!com->GetActive())
+			continue;
+
+		com->UpdateMatrix();
+
+	}
+
+
+
+}
+
 void Scene::Update()
 {
 

@@ -128,17 +128,17 @@ int Main::Run(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int
 
 			if ((dwCurrentTime - dwFPSLastTime) >= 1000.0f)	// 1秒ごとに実行
 			{
-				//g_CountFPS = dwFrameCount;
+				countFPS = dwFrameCount;
 				dwFPSLastTime = dwCurrentTime;				// FPSを測定した時刻を保存
 				dwFrameCount = 0;							// カウントをクリア
 			}
 
 			if ((dwCurrentTime - dwExecLastTime) >= (1000.0f / 60))	// 1/60秒ごとに実行
 			{
-				dwExecLastTime = dwCurrentTime;	// 処理した時刻を保存
 
-				this->deltaTime = timeGetTime() - this->beforeTime;
-				this->beforeTime = (float)timeGetTime();
+				this->deltaTime = (float)(dwCurrentTime - dwExecLastTime);
+
+				dwExecLastTime = dwCurrentTime;	// 処理した時刻を保存
 
 				Update();			// 更新処理
 				Draw();				// 描画処理

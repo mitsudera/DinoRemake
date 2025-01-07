@@ -55,6 +55,8 @@ private:
 
 	LPRECT windowRect;
 
+	int countFPS;
+
 	GameEngine* pGameEngine;
 
 };

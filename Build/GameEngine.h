@@ -100,7 +100,11 @@ private:
 
 	XMFLOAT2 windowSize;
 
+	BOOL drawSkip;
+
+	float deltaTime;
 	float fixedDeltaTime;
 	float accumulatedTime;
+
 };
 

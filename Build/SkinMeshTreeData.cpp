@@ -60,8 +60,7 @@ void SkinMeshData::LoadNode(FbxNode* node, SkinMeshTreeNode* parent, SkinMeshTre
 
 
 	bool bIsUnmapped = false;
-
-	this->boneNum = skinMeshTree->GetBoneNum();
+	this->boneNum = skinMeshTree->GetBoneCnt();
 
 
 	CreateCpArray(controlNum);
@@ -78,17 +77,19 @@ void SkinMeshData::LoadNode(FbxNode* node, SkinMeshTreeNode* parent, SkinMeshTre
 			cpArray[i].weight[j] = 0.0f;
 		}
 	}
-
+	int dc = mesh->GetDeformerCount();
 	FbxSkin* skin = (FbxSkin*)mesh->GetDeformer(0);
-	for (int i = 0; i < boneNum; i++)
+	this->clusterNum = skin->GetClusterCount();
+	for (int i = 0; i < clusterNum; i++)
 	{
 		FbxCluster* cluster = skin->GetCluster(i);
-
 
 		FbxAMatrix initmat;
 		cluster->GetTransformLinkMatrix(initmat);
 
 		string na = cluster->GetLink()->GetName();
+
+		int boneIndex = this->skinMeshTree->GetBoneNumber(na);
 
 		int pointNum = cluster->GetControlPointIndicesCount();
 		int* pointAry = cluster->GetControlPointIndices();
@@ -101,7 +102,7 @@ void SkinMeshData::LoadNode(FbxNode* node, SkinMeshTreeNode* parent, SkinMeshTre
 			// 頂点インデックスとウェイトを取得
 			int   index = pointAry[j];
 			float weight = (float)weightAry[j];
-			this->cpArray[index].weight[i] = weight;
+			this->cpArray[index].weight[boneIndex] = weight;
 
 
 		}
@@ -507,7 +508,6 @@ SkinMeshTreeData::SkinMeshTreeData(AssetsManager* p)
 
 SkinMeshTreeData::~SkinMeshTreeData()
 {
-
 	delete[] linkMtxArray;
 
 	for (SkinMeshTreeNode* node:nodeArray)
@@ -539,31 +539,45 @@ void SkinMeshTreeData::LoadFbxFile(string fileName)
 	importer->Import(scene);
 	importer->Destroy(); // シーンを流し込んだらImporterは解放
 
-	FbxNode* root = scene->GetRootNode();
-
-	this->boneNum = scene->GetSrcObjectCount<FbxSkeleton>();
-
-	this->linkMtxArray = new pair<XMMATRIX, string>[boneNum];
-	FbxSkin* skin = scene->GetSrcObject<FbxSkin>(0);
-
-	for (int i = 0; i < boneNum; i++)
+	this->boneCnt = scene->GetSrcObjectCount<FbxSkeleton>();
+	this->linkMtxArray = new pair<XMMATRIX, string>[boneCnt];
+	for (int i = 0; i < boneCnt; i++)
 	{
-		FbxCluster* cluster = skin->GetCluster(i);
+		this->linkMtxArray[i].second = scene->GetSrcObject<FbxSkeleton>(i)->GetNode()->GetName();
+	}
 
+	FbxNode* root = scene->GetRootNode();
+	this->skinCnt= scene->GetSrcObjectCount<FbxSkin>();
+	clusterCnt = new int[skinCnt];
+	for (int i = 0; i < skinCnt; i++)
+	{
+		FbxSkin* skin = scene->GetSrcObject<FbxSkin>(i);
+		this->clusterCnt[i] = skin->GetClusterCount();
 
-		FbxAMatrix initmat;
-		cluster->GetTransformLinkMatrix(initmat);
+		for (int j = 0; j < clusterCnt[i]; j++)
+		{
+			FbxCluster* cluster = skin->GetCluster(j);
 
-		linkMtxArray[i].second = cluster->GetLink()->GetName();
+			FbxAMatrix initmat;
+			cluster->GetTransformLinkMatrix(initmat);
 
-		linkMtxArray[i].first = FbxMatrixConvertToXMMATRIX(initmat);
+			pair<XMMATRIX, string> linkMtx;
+
+			linkMtx.second = cluster->GetLink()->GetName();
+
+			linkMtx.first = FbxMatrixConvertToXMMATRIX(initmat);
+
+			SetLinkMtx(linkMtx);
+		}
 
 	}
+
+
 	for (int i = 0; i < root->GetChildCount(); i++)
 	{
 		FbxNode* child = root->GetChild(i);
 
-
+		FbxNodeAttribute* atr = child->GetNodeAttribute();
 
 		if (child->GetNodeAttribute()->GetAttributeType() == FbxNodeAttribute::eMesh)
 		{
@@ -581,7 +595,7 @@ void SkinMeshTreeData::LoadFbxFile(string fileName)
 		}
 		else
 		{
-			BoneData* childData = new BoneData(pAssetsManager);
+			NullData* childData = new NullData (pAssetsManager);
 			childData->LoadNode(child, nullptr, this);
 			nodeArray.push_back(childData);
 
@@ -613,9 +627,10 @@ string SkinMeshTreeData::GetFileName(void)
 	return fileName;
 }
 
-int SkinMeshTreeData::GetBoneNum(void)
+
+int SkinMeshTreeData::GetBoneCnt(void)
 {
-	return this->boneNum;
+	return boneCnt;
 }
 
 vector<SkinMeshTreeNode*>& SkinMeshTreeData::GetNodeArray(void)
@@ -626,15 +641,40 @@ vector<SkinMeshTreeNode*>& SkinMeshTreeData::GetNodeArray(void)
 
 XMMATRIX SkinMeshTreeData::GetInitMtx(string name)
 {
-	for (int i = 0; i < boneNum; i++)
+	for (int i = 0; i < boneCnt; i++)
 	{
-		if (linkMtxArray[i].second==name)
+		if (linkMtxArray[i].second == name)
 		{
 			return linkMtxArray[i].first;
 		}
 	}
 
 	return XMMatrixIdentity();
+}
+
+void SkinMeshTreeData::SetLinkMtx(pair<XMMATRIX, string> link)
+{
+	for (int i = 0; i < boneCnt; i++)
+	{
+		if (linkMtxArray[i].second==link.second)
+		{
+			linkMtxArray[i].first = link.first;
+		}
+		
+	}
+}
+
+int SkinMeshTreeData::GetBoneNumber(string name)
+{
+	for (int i = 0; i < boneCnt; i++)
+	{
+		if (linkMtxArray[i].second == name)
+		{
+			return i;
+		}
+
+	}
+	return -1;
 }
 
 BoneData::BoneData(AssetsManager* p)
@@ -646,62 +686,6 @@ BoneData::~BoneData()
 {
 }
 
-//void BoneData::LoadBone(FbxSkeleton* bone, BoneData* parent, SkinMeshTreeData* skinMeshTree)
-//{
-//	using namespace fbxsdk;
-//
-//	this->skinMeshTree = skinMeshTree;
-//	FbxNode* node = bone->GetNode();
-//
-//	this->name = node->GetName();
-//
-//	//FbxMatrix worldOffset = node->EvaluateGlobalTransform(FBXSDK_TIME_INFINITE);//オフセット行列の取得
-//	//this->worldOffset = FbxMatrixConvertToXMMATRIX(worldOffset);
-//
-//
-//	this->worldOffset = skinMeshTree->GetInitMtx(this->name);
-//
-//	FbxMatrix localOffset = node->EvaluateLocalTransform(FBXSDK_TIME_INFINITE);
-//	this->localOffset = FbxMatrixConvertToXMMATRIX(localOffset);
-//
-//	FbxVector4 pos = node->EvaluateLocalTranslation(FBXSDK_TIME_INFINITE);
-//	FbxVector4 scl = node->EvaluateLocalScaling(FBXSDK_TIME_INFINITE);
-//	FbxVector4 rot = node->EvaluateLocalRotation(FBXSDK_TIME_INFINITE);
-//
-//	this->posOffset.x = (float)pos[0];
-//	this->posOffset.y = (float)pos[1];
-//	this->posOffset.z = (float)pos[2];
-//
-//	this->sclOffset.x = (float)scl[0];
-//	this->sclOffset.y = (float)scl[1];
-//	this->sclOffset.z = (float)scl[2];
-//
-//	this->rotOffset.x = (float)(rot[0] / 180.0) * XM_PI;
-//	this->rotOffset.y = (float)(rot[1] / 180.0) * XM_PI;
-//	this->rotOffset.z = (float)(rot[2] / 180.0) * XM_PI;
-//
-//
-//
-//
-//	skinMeshTree->AddBone(this);
-//
-//	for (int i = 0; i < node->GetChildCount(); i++)
-//	{
-//		FbxNode* child = node->GetChild(i);
-//
-//		if (child->GetNodeAttribute()->GetAttributeType() == FbxNodeAttribute::eSkeleton)
-//		{
-//			BoneData* childData = new BoneData(pAssetsManager);
-//			childData->LoadBone(child->GetSkeleton(), this, skinMeshTree);
-//			childArray.push_back(childData);
-//
-//		}
-//
-//
-//
-//	}
-//
-//}
 
 void BoneData::LoadNode(FbxNode* node, SkinMeshTreeNode* parent, SkinMeshTreeData* skinMeshTree)
 {
@@ -815,7 +799,7 @@ void SkinMeshTreeNode::LoadChild(FbxNode* node)
 		}
 		else
 		{
-			BoneData* childData = new BoneData(pAssetsManager);
+			NullData* childData = new NullData(pAssetsManager);
 			childData->LoadNode(child, this, skinMeshTree);
 			childArray.push_back(childData);
 
@@ -850,4 +834,27 @@ void SkinMeshTreeNode::Destroy(void)
 		child->Destroy();
 		delete child;
 	}
+}
+
+NullData::NullData(AssetsManager* p)
+{
+	pAssetsManager = p;
+}
+
+NullData::~NullData()
+{
+}
+
+void NullData::LoadNode(FbxNode* node, SkinMeshTreeNode* parent, SkinMeshTreeData* skinMeshTree)
+{
+	this->nodeAttribute = Attribute::Null;
+
+	using namespace fbxsdk;
+
+	this->skinMeshTree = skinMeshTree;
+
+	this->name = node->GetName();
+
+	this->LoadChild(node);
+
 }

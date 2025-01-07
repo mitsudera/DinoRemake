@@ -285,7 +285,7 @@ void GameObject::LoadFbxFileSkinMesh(string fName)
 {
 	SkinMeshTreeData* root = pGameEngine->GetAssetsManager()->LoadSkinMeshFileFbx(fName);
 	SkinMeshLinkerComponent* linker = AddComponent<SkinMeshLinkerComponent>();
-	linker->SetBoneCount(root->GetBoneNum());
+	linker->SetBoneCount(root->GetBoneCnt());
 
 
 	for (SkinMeshTreeNode* childData:root->GetNodeArray())
@@ -307,7 +307,7 @@ void GameObject::LoadSkinMeshNode(SkinMeshTreeNode* node, SkinMeshLinkerComponen
 		skinmesh->SetSkinMeshData(data, linker);
 
 	}
-	if (node->GetAttribute() == SkinMeshTreeNode::Attribute::Bone)
+	else if (node->GetAttribute() == SkinMeshTreeNode::Attribute::Bone)
 	{
 		BoneData* data = dynamic_cast<BoneData*>(node);
 		BoneComponent* bone = AddComponent<BoneComponent>();
@@ -315,7 +315,7 @@ void GameObject::LoadSkinMeshNode(SkinMeshTreeNode* node, SkinMeshLinkerComponen
 
 
 	}
-	if (node->GetAttribute() == SkinMeshTreeNode::Attribute::Null)
+	else if (node->GetAttribute() == SkinMeshTreeNode::Attribute::Null)
 	{
 
 	}

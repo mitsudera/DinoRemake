@@ -19,6 +19,7 @@ public:
 
 	void Init(void);
 
+	void FixedUpdate();
 	void Update();
 	void LateUpdate();
 	void Draw();

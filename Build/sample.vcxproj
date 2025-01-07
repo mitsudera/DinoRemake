@@ -177,6 +177,7 @@
     <ClInclude Include="FbxConvertDX11.h" />
     <ClInclude Include="lib\DDSTextureLoader\DDSTextureLoader11.h" />
     <ClInclude Include="lib\WICTextureLoader\WICTextureLoader11.h" />
+    <ClInclude Include="MeshData.h" />
     <ClInclude Include="MeshField.h" />
     <ClInclude Include="FullScreenQuadVertex.h" />
     <ClInclude Include="GameEngine.h" />
@@ -193,11 +194,10 @@
     <ClInclude Include="Main.h" />
     <ClInclude Include="Material.h" />
     <ClInclude Include="math.h" />
-    <ClInclude Include="MeshAnimData.h" />
     <ClInclude Include="MeshComponent.h" />
-    <ClInclude Include="MeshData.h" />
     <ClInclude Include="MoveTestComponent.h" />
     <ClInclude Include="NotEffectShader.h" />
+    <ClInclude Include="PlayerAnimationControlComponent.h" />
     <ClInclude Include="RedEnemy.h" />
     <ClInclude Include="RigidBodyComponent.h" />
     <ClInclude Include="SkinMeshComponent.h" />
@@ -293,6 +293,7 @@
     <ClCompile Include="FbxConvertDX11.cpp" />
     <ClCompile Include="lib\DDSTextureLoader\DDSTextureLoader11.cpp" />
     <ClCompile Include="lib\WICTextureLoader\WICTextureLoader11.cpp" />
+    <ClCompile Include="MeshData.cpp" />
     <ClCompile Include="MeshField.cpp" />
     <ClCompile Include="FullScreenQuadVertex.cpp" />
     <ClCompile Include="GameEngine.cpp" />
@@ -309,11 +310,10 @@
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Material.cpp" />
     <ClCompile Include="math.cpp" />
-    <ClCompile Include="MeshAnimData.cpp" />
     <ClCompile Include="MeshComponent.cpp" />
-    <ClCompile Include="MeshData.cpp" />
     <ClCompile Include="MoveTestComponent.cpp" />
     <ClCompile Include="NotEffectShader.cpp" />
+    <ClCompile Include="PlayerAnimationControlComponent.cpp" />
     <ClCompile Include="RedEnemy.cpp" />
     <ClCompile Include="RigidBodyComponent.cpp" />
     <ClCompile Include="SkinMeshComponent.cpp" />

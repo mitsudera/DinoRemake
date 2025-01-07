@@ -86,7 +86,7 @@ cbuffer ShadowBuffer : register(b7)
     SHADOW Shadow;
 }
 
-#define BoneMax 64
+#define BoneMax 256
 cbuffer BoneBuffer : register(b8)
 {
     matrix boneMtx[BoneMax];

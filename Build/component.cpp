@@ -41,6 +41,10 @@ void Component::Uninit(void)
 	this->pGameObject->GetScene()->RemoveSceneComponent(this);
 }
 
+void Component::FixedUpdate(void)
+{
+}
+
 void Component::Update(void)
 {
 	if (!isActive) return;

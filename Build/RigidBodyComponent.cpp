@@ -24,6 +24,7 @@ void RigidBodyComponent::Awake(void)
     useGravity = TRUE;
     mass = 1.0f;
     drag = 0.1f;
+	onGround = TRUE;
 }
 
 void RigidBodyComponent::Init(void)
@@ -33,25 +34,25 @@ void RigidBodyComponent::Init(void)
 
 }
 
-void RigidBodyComponent::Update(void)
+void RigidBodyComponent::FixedUpdate(void)
 {
-	Component::Update();
+	Component::FixedUpdate();
 	// 重力の適用
 	if (useGravity)
 	{
 		XMVECTOR gravityV = XMLoadFloat3(&gravity); // 標準重力
-		velocity += gravityV * pGameEngine->GetDeltaTime();
+		velocity += gravityV * mass * pGameEngine->GetFixedDeltaTime();
 	}
 
 	// 空気抵抗の適用
 	XMVECTOR dragForce = velocity * drag * -1.0f;
-	velocity += dragForce * pGameEngine->GetDeltaTime();
+	velocity += dragForce * pGameEngine->GetFixedDeltaTime();
 
 	// 質量を考慮した速度更新
 	XMVECTOR acceleration = dragForce / mass;
-	velocity += acceleration * pGameEngine->GetDeltaTime();
+	velocity += acceleration * pGameEngine->GetFixedDeltaTime();
 
-	transform->MoveVelocity(velocity * pGameEngine->GetDeltaTime());
+	transform->MoveVelocity(velocity * pGameEngine->GetFixedDeltaTime());
 	if (collider->GetHitTag(GameObject::ObjectTag::Field))
 	{
 		float h = collider->GetHitTagObject(GameObject::ObjectTag::Field)->GetComponent<TerrainComponent>()->GetHeight(GetWorldPos());
@@ -71,6 +72,11 @@ void RigidBodyComponent::Update(void)
 		onGround = FALSE;
 	}
 
+
+}
+
+void RigidBodyComponent::Update(void)
+{
 
 }
 
@@ -127,6 +133,15 @@ void RigidBodyComponent::AddForce(XMVECTOR force)
 {
 	velocity += force;
 }
+
+void RigidBodyComponent::RotVelocityY(float f)
+{
+	XMVECTOR qton = XMQuaternionRotationAxis(yonevec(), f);
+
+	velocity = XMVector3Rotate(velocity, qton);
+
+}
+
 
 BOOL RigidBodyComponent::GetOnGround(void)
 {

@@ -44,7 +44,7 @@ void SkinMeshLinkerComponent::LateUpdate(void)
 	{
 		boneMtxArray[i] = boneArray[i]->GetBoneMtx();
 	}
-
+	boneMtxArray[255] = XMMatrixIdentity();
 
 }
 

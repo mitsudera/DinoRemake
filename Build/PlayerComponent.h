@@ -1,8 +1,27 @@
 #pragma once
 #include "component.h"
+
+class RigidBodyComponent;
+class PlayerAnimationControlComponent;
+
+
 class PlayerComponent :public Component
 {
 public:
+
+	enum class PlayerState :int
+	{
+		Idle,
+		ForwardWalk,
+		BackWalk,
+		RightWalk,
+		LeftWalk,
+		Run,
+		Jump,
+		Fall,
+
+	};
+
 	PlayerComponent(GameObject* gameObject);
 	~PlayerComponent();
 
@@ -13,12 +32,18 @@ public:
 
 	void SetContorol(BOOL enable);
 
-	void SetOffSet(float f);
+	PlayerState GetState(void);
 
 private:
 	BOOL control;
-	float PlayerOffset;
 
+	PlayerState state;
+	RigidBodyComponent* rb;
+	PlayerAnimationControlComponent* animControl;
+
+	TransformComponent* transform;
+
+	float velocity;
 
 };
 

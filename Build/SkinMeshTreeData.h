@@ -111,8 +111,9 @@ private:
 	Material* material;
 	Material* shadowMaterial;
 
-	int boneNum;
+	int clusterNum;
 
+	int boneNum;
 
 };
 
@@ -137,6 +138,19 @@ public:
 private:
 
 };
+class NullData :public SkinMeshTreeNode
+{
+public:
+	NullData(AssetsManager* p);
+	~NullData();
+	virtual void LoadNode(FbxNode* node, SkinMeshTreeNode* parent, SkinMeshTreeData* skinMeshTree) override;
+
+	
+
+
+private:
+
+};
 
 class SkinMeshTreeData
 {
@@ -148,20 +162,23 @@ public:
 	AssetsManager* GetAssetsMnager(void);
 	string GetFileName(void);
 
-	int GetBoneNum(void);
-
+	int GetBoneCnt(void);
 	vector<SkinMeshTreeNode*>& GetNodeArray(void);
 
 	XMMATRIX GetInitMtx(string name);
+	void SetLinkMtx(pair<XMMATRIX, string> link);
+
+	int GetBoneNumber(string name);
 
 private:
 	AssetsManager* pAssetsManager;
 	vector<SkinMeshTreeNode*> nodeArray;
 	string fileName;
 	string name;
-	int boneNum;
-
-	pair<XMMATRIX,string>* linkMtxArray;
+	int skinCnt;
+	int* clusterCnt;
+	int boneCnt;
+	pair<XMMATRIX, string>* linkMtxArray;
 
 };
 

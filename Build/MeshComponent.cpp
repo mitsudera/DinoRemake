@@ -4,7 +4,6 @@
 #include "Renderer.h"
 #include "AssetsManager.h"
 #include "MeshData.h"
-#include "MeshAnimData.h"
 #include "DX11Texture.h"
 #include "gameobject.h"
 #include "GameScene.h"

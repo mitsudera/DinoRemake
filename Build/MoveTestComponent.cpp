@@ -67,18 +67,18 @@ void MoveTestComponent::Update(void)
 	if (input->GetKeyboardTrigger(DIK_SPACE))
 	{
 		rb->AddForce(transform->GetAxisY() * 30.0f);
-		animControl->SetCondition("JumpTrigger", TRUE);
+		//animControl->SetCondition("JumpTrigger", TRUE);
 
 	}
 
 	if (rb->GetOnGround() == TRUE)
 	{
-		animControl->SetCondition("OnGround", TRUE);
+		//animControl->SetCondition("OnGround", TRUE);
 
 	}
 	else
 	{
-		animControl->SetCondition("OnGround", FALSE);
+		//animControl->SetCondition("OnGround", FALSE);
 
 	}
 }

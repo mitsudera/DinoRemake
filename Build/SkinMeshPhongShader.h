@@ -3,7 +3,7 @@
 
 class Renderer;
 class CBufferManager;
-constexpr auto BONE_MAX = (64);
+constexpr auto BONE_MAX = (256);
 
 struct SkinMeshVertex
 {

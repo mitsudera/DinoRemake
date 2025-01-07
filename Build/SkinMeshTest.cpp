@@ -9,6 +9,7 @@
 #include "GameEngine.h"
 #include "renderer.h"
 #include "SkySphere.h"
+#include "PlayerAnimationControlComponent.h"
 SkinMeshTest::SkinMeshTest(Scene* scene)
 {
 	pScene = scene;
@@ -24,25 +25,57 @@ void SkinMeshTest::Awake(void)
 	this->name = "Player";
 	this->transformComponent->SetPosition(XMFLOAT3(0.0f, 10.0f, 0.0f));
 	this->transformComponent->SetScale(XMFLOAT3(0.1f, 0.1f, 0.1f));
-	//this->transformComponent->RotWorldYaw(XM_PIDIV2);
 
-	this->LoadFbxFileSkinMesh("aqchan.fbx");
+	this->LoadFbxFileSkinMesh("Player2.fbx");
 
 	AnimationControlerComponent* animControler = this->AddComponent<AnimationControlerComponent>();
-	animControler->LoadDefaulAnimation("AQIdol.fbx", "Idol");
-	animControler->LoadAnimation("AQJump.fbx", "Jump", FALSE);
-	animControler->LoadAnimation("AQFallIdol.fbx", "FallIdol", TRUE);
+	animControler->LoadDefaulAnimation("PlayerIdle.fbx", "Idle");
+	animControler->LoadAnimation("PlayerWalk.fbx", "Walk", TRUE);
+	animControler->LoadAnimation("PlayerRun.fbx", "Run", TRUE);
+	animControler->LoadAnimation("PlayerJump.fbx", "Jump", FALSE);
+	animControler->LoadAnimation("PlayerFallIdle.fbx", "FallIdle", TRUE);
+
+	//アニメーショントランジション用パラメータの設定
+	//bool
 	AnimParameter para;
+	para.value = FALSE;
+	para.isTrigger = FALSE;
+	animControler->CreateCondition("Walk", para);
+	animControler->CreateCondition("Run", para);
+	animControler->CreateCondition("OnGround", para);
+
+	//trigger
 	para.value = FALSE;
 	para.isTrigger = TRUE;
 	animControler->CreateCondition("JumpTrigger", para);
-	animControler->CreateTransition("Idol", "Jump", "JumpTrigger", TRUE);
-	animControler->CreateNotLoopAnimExitTransition("Jump", "FallIdol");
-	para.value = TRUE;
-	para.isTrigger = FALSE;
-	animControler->CreateCondition("OnGround", para);
-	animControler->CreateTransition("Idol", "FallIdol", "OnGround", FALSE);
-	animControler->CreateTransition("FallIdol", "Idol", "OnGround", TRUE);
+
+
+	//トランジションの設定
+	//idolからの移行
+	animControler->CreateTransition("Idle", "Walk", "Walk", TRUE);
+	animControler->CreateTransition("Idle", "Run", "Run", TRUE);
+	animControler->CreateTransition("Idle", "Jump", "JumpTrigger", TRUE);
+	animControler->CreateTransition("Idle", "FallIdle", "OnGround", FALSE);
+
+	//walkからの移行
+	animControler->CreateTransition("Walk", "Idle", "Walk", FALSE);
+	animControler->CreateTransition("Walk", "Run", "Run", TRUE);
+	animControler->CreateTransition("Walk", "Jump", "JumpTrigger", TRUE);
+	animControler->CreateTransition("Walk", "FallIdle", "OnGround", FALSE);
+
+	//Runからの移行
+	animControler->CreateTransition("Run", "Walk", "Walk", TRUE);
+	animControler->CreateTransition("Run", "Idle", "Run", FALSE);
+	animControler->CreateTransition("Run", "Jump", "JumpTrigger", TRUE);
+	animControler->CreateTransition("Run", "FallIdle", "OnGround", FALSE);
+
+	//Jumpからの移行
+	animControler->CreateNotLoopAnimExitTransition("Jump", "FallIdle");
+
+	//FallIdleからの移行
+	animControler->CreateTransition("FallIdle", "Idle", "OnGround", TRUE);
+
+	AddComponent<PlayerAnimationControlComponent>();
 
 	AddComponent<CapsuleColliderComponent>();
 
@@ -55,7 +88,7 @@ void SkinMeshTest::Awake(void)
 	{
 		//ゲームオブジェクト生成
 		GameObject* child = AddChild("Camera");
-		child->GetTransFormComponent()->SetPosition(XMFLOAT3(0.0f, 200.0f, -400.0f));
+		child->GetTransFormComponent()->SetPosition(XMFLOAT3(0.0f, 150.0f, -300.0f));
 
 		//カメラコンポーネントの生成
 		CameraComponent* cameraComponent = child->AddComponent<CameraComponent>();
