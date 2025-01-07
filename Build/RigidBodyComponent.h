@@ -12,7 +12,6 @@ public:
 	virtual void Awake(void) override;
 	virtual void Init(void) override;
 	virtual void FixedUpdate(void) override;
-	virtual void Update(void) override;
 	virtual void LateUpdate(void) override;
 	virtual void Uninit(void) override;
 	virtual void OnEnable(void)override;
@@ -21,6 +20,7 @@ public:
 
 	void SetMass(float f);
 	void SetDrag(float f);
+	void SetFriction(float f);
 	void SetAngularDrag(float f);
 	void SetUseGarvity(BOOL b);
 	void SetIsKinematic(BOOL b);
@@ -36,6 +36,7 @@ private:
 	float mass;
 	float drag;
 	float angularDrag;
+	float friction;
 	BOOL useGravity;
 	BOOL isKinematic;
 	BOOL onGround;

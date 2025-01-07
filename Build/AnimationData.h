@@ -29,6 +29,8 @@ public:
 	int GetChildCnt(void);
 	MtxNode* GetChild(int n);
 
+	Attribute GetAttribute(void);
+
 private:
 
 	XMMATRIX* frameMtxArray;

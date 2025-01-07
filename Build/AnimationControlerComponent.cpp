@@ -8,6 +8,7 @@
 #include "AnimationData.h"
 #include "transformcomponent.h"
 #include "input.h"
+#include "BoneComponent.h"
 
 AnimationControlerComponent::AnimationControlerComponent(GameObject* gameObject)
 {
@@ -338,9 +339,16 @@ GameEngine* AnimationControlerComponent::GetGameEngine(void)
 void AnimationControlerComponent::UpdateAnimation(MtxNode* node, GameObject* gameObject)
 {
 
-	XMMATRIX frameMtx = node->GetFrameMtx(timeCnt);
+	if (node->GetAttribute()==MtxNode::Attribute::Bone&&gameObject->GetComponent<BoneComponent>()->GetIsPhysics())
+	{
 
-	gameObject->GetTransFormComponent()->SetLocalMtx(frameMtx);
+	}
+	else
+	{
+		XMMATRIX frameMtx = node->GetFrameMtx(timeCnt);
+		gameObject->GetTransFormComponent()->SetLocalMtx(frameMtx);
+
+	}
 
 	for (int i = 0; i < node->GetChildCnt(); i++)
 	{

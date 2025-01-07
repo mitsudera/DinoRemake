@@ -69,6 +69,7 @@ public:
 	void SwichScene(void);
 
 	float GetFixedDeltaTime(void);
+	float GetFixedDeltaTimeRate(void);
 
 private:
 
@@ -104,6 +105,7 @@ private:
 
 	float deltaTime;
 	float fixedDeltaTime;
+	float fixedDeltaTimeRate;
 	float accumulatedTime;
 
 };

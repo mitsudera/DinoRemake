@@ -45,12 +45,9 @@ void RigidBodyComponent::FixedUpdate(void)
 	}
 
 	// 空気抵抗の適用
-	XMVECTOR dragForce = velocity * drag * -1.0f;
+	XMVECTOR dragForce = velocity * drag * mass * -1.0f;
 	velocity += dragForce * pGameEngine->GetFixedDeltaTime();
 
-	// 質量を考慮した速度更新
-	XMVECTOR acceleration = dragForce / mass;
-	velocity += acceleration * pGameEngine->GetFixedDeltaTime();
 
 	transform->MoveVelocity(velocity * pGameEngine->GetFixedDeltaTime());
 	if (collider->GetHitTag(GameObject::ObjectTag::Field))
@@ -62,7 +59,12 @@ void RigidBodyComponent::FixedUpdate(void)
 		}
 		else
 		{
-			transform->SetPosY(h);
+			transform->SetWorldPosY(h);
+			XMFLOAT3 p = GetWorldPos();
+			// 摩擦の適用
+			XMVECTOR frictionForce = velocity * friction * -1.0f;
+			velocity += frictionForce * pGameEngine->GetFixedDeltaTime();
+
 			onGround = TRUE;
 
 		}
@@ -75,10 +77,6 @@ void RigidBodyComponent::FixedUpdate(void)
 
 }
 
-void RigidBodyComponent::Update(void)
-{
-
-}
 
 
 void RigidBodyComponent::LateUpdate(void)
@@ -112,6 +110,11 @@ void RigidBodyComponent::SetMass(float f)
 void RigidBodyComponent::SetDrag(float f)
 {
 	drag = f;
+}
+
+void RigidBodyComponent::SetFriction(float f)
+{
+	friction = f;
 }
 
 void RigidBodyComponent::SetAngularDrag(float f)

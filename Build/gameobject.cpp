@@ -306,6 +306,11 @@ void GameObject::LoadSkinMeshNode(SkinMeshTreeNode* node, SkinMeshLinkerComponen
 		SkinMeshComponent* skinmesh = AddComponent<SkinMeshComponent>();
 		skinmesh->SetSkinMeshData(data, linker);
 
+		for (SkinMeshTreeNode* childData : node->GetChildArray())
+		{
+			AddChild(childData->GetName())->LoadSkinMeshNode(childData, linker);
+		}
+
 	}
 	else if (node->GetAttribute() == SkinMeshTreeNode::Attribute::Bone)
 	{
@@ -314,18 +319,26 @@ void GameObject::LoadSkinMeshNode(SkinMeshTreeNode* node, SkinMeshLinkerComponen
 		bone->SetBone(data, linker);
 
 
+		for (SkinMeshTreeNode* childData : node->GetChildArray())
+		{
+			GameObject* chi = AddChild(childData->GetName());
+			chi->LoadSkinMeshNode(childData, linker);
+			bone->AddChild(chi);
+			
+		}
+
 	}
 	else if (node->GetAttribute() == SkinMeshTreeNode::Attribute::Null)
 	{
 
+		for (SkinMeshTreeNode* childData : node->GetChildArray())
+		{
+			AddChild(childData->GetName())->LoadSkinMeshNode(childData, linker);
+		}
+
 	}
 
 
-
-	for (SkinMeshTreeNode* childData : node->GetChildArray())
-	{
-		AddChild(childData->GetName())->LoadSkinMeshNode(childData, linker);
-	}
 
 }
 

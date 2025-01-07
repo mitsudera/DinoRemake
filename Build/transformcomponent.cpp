@@ -363,6 +363,39 @@ void TransformComponent::SetPosZ(float f)
 
 }
 
+void TransformComponent::SetWorldPosX(float f)
+{
+	XMFLOAT3 pos = GetWorldPos();
+	pos.x = f;
+	SetWorldPosition(pos);
+}
+
+void TransformComponent::SetWorldPosY(float f)
+{
+	XMFLOAT3 pos = GetWorldPos();
+	pos.y = f;
+	SetWorldPosition(pos);
+
+}
+
+void TransformComponent::SetWorldPosZ(float f)
+{
+	XMFLOAT3 pos = GetWorldPos();
+	pos.z = f;
+	SetWorldPosition(pos);
+
+}
+
+void TransformComponent::SetWorldPosition(XMFLOAT3 pos)
+{
+	XMVECTOR posv = XMLoadFloat3(&pos);
+	posv = XMVector3Transform(posv, XMMatrixMultiply(XMMatrixInverse(nullptr, GetWorldMtx()), lMtx));
+	XMFLOAT3 p;
+	XMStoreFloat3(&p, posv);
+	SetPosition(p);
+}
+
+
 XMFLOAT3 TransformComponent::GetWorldPos(void)
 {
 	UpdateMatrix();

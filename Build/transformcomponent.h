@@ -60,6 +60,12 @@ public:
 	void SetPosY(float f);
 	void SetPosZ(float f);
 
+	void SetWorldPosX(float f);
+	void SetWorldPosY(float f);
+	void SetWorldPosZ(float f);
+
+	void SetWorldPosition(XMFLOAT3 pos);
+
 	XMFLOAT3 GetWorldPos(void);
 
 	void MoveX(float f);

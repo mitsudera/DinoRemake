@@ -10,8 +10,8 @@
 #include "RigidBodyComponent.h"
 #include "GameEngine.h"
 
-constexpr float playerSpeed = 40.0f;
-constexpr float jumpForce = 80.0f;
+constexpr float playerSpeed = 800.0f;
+constexpr float jumpForce = 40.0f;
 
 PlayerComponent::PlayerComponent(GameObject* gameObject)
 {
@@ -50,39 +50,39 @@ void PlayerComponent::Update(void)
 		if (rb->GetOnGround() == TRUE)
 		{
 
-			if (input->GetKeyboardPress(DIK_LSHIFT))
-			{
-				velocity = playerSpeed * pGameEngine->GetDeltaTime() * 2.0f;
-			}
-			else
-			{
-				velocity = playerSpeed * pGameEngine->GetDeltaTime();
+			//if (input->GetKeyboardPress(DIK_LSHIFT))
+			//{
+			//	velocity = playerSpeed * pGameEngine->GetDeltaTime() * 2.0f;
+			//}
+			//else
+			//{
+			//	velocity = playerSpeed * pGameEngine->GetDeltaTime();
 
-			}
+			//}
 
 			if (input->GetKeyboardPress(DIK_W))
 			{
-				transform->MoveZAxis(velocity);
+				rb->AddForce(transform->GetAxisZ() * pGameEngine->GetDeltaTime() * playerSpeed);
 				state = PlayerState::ForwardWalk;
 
 			}
 			else if (input->GetKeyboardPress(DIK_S))
 			{
-				transform->MoveZAxis(-velocity);
+				rb->AddForce(-transform->GetAxisZ() * pGameEngine->GetDeltaTime() * playerSpeed);
 				state = PlayerState::BackWalk;
 
 
 			}
 			else if (input->GetKeyboardPress(DIK_D))
 			{
-				transform->MoveXAxis(velocity);
+				rb->AddForce(transform->GetAxisX() * pGameEngine->GetDeltaTime() * playerSpeed);
 				state = PlayerState::RightWalk;
 
 
 			}
 			else if (input->GetKeyboardPress(DIK_A))
 			{
-				transform->MoveXAxis(-velocity);
+				rb->AddForce(-transform->GetAxisX() * pGameEngine->GetDeltaTime() * playerSpeed);
 				state = PlayerState::LeftWalk;
 
 
@@ -92,6 +92,18 @@ void PlayerComponent::Update(void)
 				state = PlayerState::Idle;
 
 			}
+
+			if (input->GetKeyboardPress(DIK_Z))
+			{
+				GetTransFormComponent()->RotYaw(-(XM_PI / 180));
+
+			}
+			else if (input->GetKeyboardPress(DIK_C))
+			{
+				GetTransFormComponent()->RotYaw((XM_PI / 180));
+
+			}
+
 
 			if (input->GetKeyboardTrigger(DIK_SPACE))
 			{

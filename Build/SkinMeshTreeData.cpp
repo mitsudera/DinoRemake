@@ -836,6 +836,11 @@ void SkinMeshTreeNode::Destroy(void)
 	}
 }
 
+SkinMeshTreeNode* SkinMeshTreeNode::GetParent(void)
+{
+	return parent;
+}
+
 NullData::NullData(AssetsManager* p)
 {
 	pAssetsManager = p;

@@ -38,6 +38,8 @@ public:
 
 	virtual void Destroy(void);
 
+	SkinMeshTreeNode* GetParent(void);
+
 protected:
 	AssetsManager* pAssetsManager;
 	Renderer* pRenderer;

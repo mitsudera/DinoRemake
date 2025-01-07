@@ -129,6 +129,11 @@ MtxNode* MtxNode::GetChild(int n)
 	return this->childArray[n];
 }
 
+MtxNode::Attribute MtxNode::GetAttribute(void)
+{
+	return this->attribute;
+}
+
 
 AnimationData::AnimationData()
 {

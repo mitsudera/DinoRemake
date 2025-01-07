@@ -18,7 +18,8 @@ GameEngine::GameEngine(Main* main)
 {
 	this->main = main;
 	accumulatedTime = 0.0f;
-	fixedDeltaTime = 1.0f / 60.0f;
+	fixedDeltaTimeRate = 60.0f;
+	fixedDeltaTime = 1.0f / fixedDeltaTimeRate;
 	drawSkip = FALSE;
 }
 
@@ -325,6 +326,11 @@ void GameEngine::SwichScene(void)
 float GameEngine::GetFixedDeltaTime(void)
 {
 	return fixedDeltaTime;
+}
+
+float GameEngine::GetFixedDeltaTimeRate(void)
+{
+	return fixedDeltaTimeRate;
 }
 
 
