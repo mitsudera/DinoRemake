@@ -3,8 +3,9 @@
 
 class RigidBodyComponent;
 class PlayerAnimationControlComponent;
-
-
+class SkinMeshLinkerComponent;
+class ColliderComponent;
+class AttackComponent;
 class PlayerComponent :public Component
 {
 public:
@@ -12,10 +13,7 @@ public:
 	enum class PlayerState :int
 	{
 		Idle,
-		ForwardWalk,
-		BackWalk,
-		RightWalk,
-		LeftWalk,
+		Walk,
 		Run,
 		Jump,
 		Fall,
@@ -34,16 +32,25 @@ public:
 
 	PlayerState GetState(void);
 
+
 private:
 	BOOL control;
 
 	PlayerState state;
 	RigidBodyComponent* rb;
 	PlayerAnimationControlComponent* animControl;
-
+	SkinMeshLinkerComponent* linker;
 	TransformComponent* transform;
-
+	ColliderComponent* collider;
+	AttackComponent* atkCom;
 	float velocity;
+	float speed;
+	float jumpForce;
+	float attackCnt;
+	BOOL onAttack;
 
+	BOOL devicePad;
+
+	int combo;
 };
 

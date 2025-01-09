@@ -120,6 +120,7 @@ void PS_SM(
     //color.r = 0.0f;
     color.r = inPosition.z;
     color.g = color.r * color.r;
+    color.b = 0.0f;
     
     outDiffuse = color;
 }

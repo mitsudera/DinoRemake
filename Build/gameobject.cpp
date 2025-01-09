@@ -63,8 +63,16 @@ void GameObject::Awake(void)
 	this->isActive = TRUE;
 	this->transformComponent->Awake();
 	tag = ObjectTag::Default;
-
+	notAnim = FALSE;
 	this->layer = Layer::Default;
+	if (parent)
+	{
+		this->isActive = parent->GetActive();
+		tag = parent->GetTag();
+		notAnim = parent->GetNotAnim();;
+		this->layer = parent->GetLayer();
+
+	}
 
 }
 
@@ -99,6 +107,11 @@ TransformComponent* GameObject::GetTransFormComponent(void)
 	return this->transformComponent;
 }
 
+
+void GameObject::SetTag(ObjectTag tag)
+{
+	this->tag = tag;
+}
 
 GameObject::ObjectTag GameObject::GetTag(void)
 {
@@ -340,6 +353,21 @@ void GameObject::LoadSkinMeshNode(SkinMeshTreeNode* node, SkinMeshLinkerComponen
 
 
 
+}
+
+void GameObject::SetNotAnim(BOOL b)
+{
+	notAnim = b;
+
+	for (GameObject* child:childList)
+	{
+		child->SetNotAnim(b);
+	}
+}
+
+BOOL GameObject::GetNotAnim(void)
+{
+	return notAnim;
 }
 
 

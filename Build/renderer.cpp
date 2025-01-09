@@ -346,6 +346,7 @@ HRESULT Renderer::InitRenderer(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	m_D3DDevice->CreateRasterizerState(&rd, &RasterStateCullCCW);
 
 	rd.FillMode = D3D11_FILL_WIREFRAME;
+	rd.CullMode = D3D11_CULL_NONE;
 	m_D3DDevice->CreateRasterizerState(&rd, &RasterStateFillWIRE);
 
 	// カリングモード設定（CCW）

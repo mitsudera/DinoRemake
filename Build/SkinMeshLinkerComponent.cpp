@@ -85,3 +85,25 @@ void SkinMeshLinkerComponent::SetBoneCount(int cnt)
 	boneCount = cnt;
 }
 
+void SkinMeshLinkerComponent::SetRagdoll(BOOL enable)
+{
+	for (BoneComponent* bc : boneArray)
+	{
+		bc->SetIsPhysics(enable);
+		bc->SetJoint(BoneComponent::Joint::Standard);
+	}
+}
+
+void SkinMeshLinkerComponent::SetSpring(string name, float mass, float tension, float resistance)
+{
+	for (BoneComponent* bc : boneArray)
+	{
+		if (bc->GetRigName() == name)
+		{
+			bc->SetSpringPhysics(mass, tension, resistance);
+		}
+	}
+
+}
+
+

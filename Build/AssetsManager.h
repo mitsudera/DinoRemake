@@ -62,6 +62,10 @@ public:
 
 	AnimationData* LoadAnimationData(string fileName);
 
+	AnimationData* LoadAnimationData(string fileName1, string fileName2);
+
+	AnimationData* LoadAnimationData(string fileName1, string fileName2, string fileName3, string fileName4);
+
 
 	
 

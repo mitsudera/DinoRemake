@@ -8,6 +8,7 @@ class AnimationControlerComponent;
 class AnimationData;
 class AnimationNode;
 
+
 struct AnimParameter
 {
 	BOOL value;
@@ -73,12 +74,22 @@ private:
 class AnimationNode :public Animation
 {
 public:
+
+	enum class Blend:int
+	{
+		None,
+		Double,
+		Angle,
+	};
+
 	AnimationNode(AnimationControlerComponent* controler);
 	~AnimationNode();
 
 	virtual void UpdateAnimation(GameObject* gameObject)override;
 
 	void CreateNode(string fileName, string name,BOOL loop);
+	void CreateNode(string fileName1,string fileName2, string name,BOOL loop);
+	void CreateNode(string fileName1,string fileName2,string fileName3,string fileName4, string name,BOOL loop);
 	void SetLoop(BOOL loop);
 	AnimationData* GetAnimData(void);
 	string GetName(void);
@@ -90,6 +101,8 @@ public:
 
 	void StartAnimation(float startTime);
 
+	Blend GetBlend(void);
+
 private:
 	AnimationData* animData;
 	vector<AnimationTransition*> transitionArray;
@@ -99,10 +112,11 @@ private:
 	BOOL loop;
 	string name;
 
+	Blend blend;
+
 	void UpdateMtx(MtxNode* node, GameObject* gameObject);
 };
 
-//つけるのはメッシュコンポーネントのルート
 class AnimationControlerComponent : public Component
 {
 public:
@@ -126,6 +140,8 @@ public:
 
 	void LoadDefaulAnimation(string fileName, string name);
 	void LoadAnimation(string fileName, string name, BOOL loop);
+	void LoadAnimation(string fileName1,string fileName2, string name, BOOL loop);
+	void LoadAnimation(string fileNameFront,string fileNameRight,string fileNameBack,string fileNameLeft, string name, BOOL loop);
 
 	void CreateTransition(
 		string beforeAnimName,//このアニメーションから
@@ -179,6 +195,15 @@ public:
 	AssetsManager* GetAssetsmanager(void);
 	GameEngine* GetGameEngine(void);
 
+	void SetBlendWeight(float weight);
+	float GetBlendWeight(void);
+
+
+	void SetAngle(float angle);
+	float GetAngle(void);
+
+	BOOL GetIsTransition(void);
+
 protected:
 	
 	void UpdateAnimation(MtxNode* node, GameObject* gameObject);
@@ -201,8 +226,9 @@ protected:
 
 	int defaultAnimIndex;
 
+	float blendWeight;
 
-
+	float angle;
 
 
 

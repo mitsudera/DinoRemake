@@ -95,8 +95,8 @@ void CameraComponent::Awake(void)
 	// 仮
 	this->aspect = 16.0f / 9.0f;	// アスペクト比 
 	this->angle = XMConvertToRadians(90.0f);	// 視野角
-	this->nearZ = 10.0f;
-	this->farZ = 1000.0f;
+	this->nearZ = 100.0f;
+	this->farZ = 10000.0f;
 
 	this->len = 50.0f;
 
@@ -208,7 +208,7 @@ void CameraComponent::Render(void)
 
 			layerCulling[(int)GameObject::Layer::Sky] = TRUE;
 			pRenderer->SetDepthEnable(FALSE);
-			this->sky->GetTransFormComponent()->SetPosition(this->GetWorldPos());
+			this->sky->GetTransFormComponent()->SetWorldPosition(this->GetWorldPos());
 
 
 			for (PrimitiveComponent* com : skyComArray)
@@ -256,7 +256,7 @@ void CameraComponent::Render(void)
 
 			layerCulling[(int)GameObject::Layer::Sky] = TRUE;
 			pRenderer->SetDepthEnable(FALSE);
-			this->sky->GetTransFormComponent()->SetPosition(this->GetWorldPos());
+			this->sky->GetTransFormComponent()->SetWorldPosition(this->GetWorldPos());
 
 
 			for (PrimitiveComponent* com:skyComArray)
@@ -308,10 +308,11 @@ void CameraComponent::Render(void)
 		}
 	}
 
-	pGameEngine->GetDebugUtility()->SetDebugLineShader();
 	
 
-#ifdef DEBUG
+#ifdef _DEBUG
+	pGameEngine->GetDebugUtility()->SetDebugLineShader();
+
 	for (Component* com : pGameObject->GetScene()->GetAllComponent())
 	{
 		if (!com->GetActive())

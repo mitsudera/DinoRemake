@@ -31,7 +31,7 @@ void AnimationControlerComponent::Awake(void)
 void AnimationControlerComponent::Init(void)
 {
 	Component::Init();
-
+	angle = 0.0f;
 	timeCnt = 0.0f;
 }
 
@@ -69,6 +69,22 @@ void AnimationControlerComponent::LoadAnimation(string fileName, string name, BO
 	node->CreateNode(fileName, name, loop);
 	AnimNodeArray.push_back(node);
 	
+}
+
+void AnimationControlerComponent::LoadAnimation(string fileName1, string fileName2, string name, BOOL loop)
+{
+	AnimationNode* node = new AnimationNode(this);
+	node->CreateNode(fileName1, fileName2, name, loop);
+	AnimNodeArray.push_back(node);
+
+}
+
+void AnimationControlerComponent::LoadAnimation(string fileNameFront, string fileNameRight, string fileNameBack, string fileNameLeft, string name, BOOL loop)
+{
+	AnimationNode* node = new AnimationNode(this);
+	node->CreateNode(fileNameFront, fileNameRight, fileNameBack, fileNameLeft, name, loop);
+	AnimNodeArray.push_back(node);
+
 }
 
 void AnimationControlerComponent::CreateTransition(
@@ -336,6 +352,43 @@ GameEngine* AnimationControlerComponent::GetGameEngine(void)
 	return this->pGameEngine;
 }
 
+void AnimationControlerComponent::SetBlendWeight(float weight)
+{
+	blendWeight = weight;
+}
+
+float AnimationControlerComponent::GetBlendWeight(void)
+{
+	return blendWeight;
+}
+
+void AnimationControlerComponent::SetAngle(float angle)
+{
+	while (angle < 0.0f)
+	{
+		angle += XM_2PI;
+	}
+	while (angle >= XM_2PI)
+	{
+		angle -= XM_2PI;
+	}
+	this->angle = angle;
+}
+
+float AnimationControlerComponent::GetAngle(void)
+{
+	return this->angle;
+}
+
+BOOL AnimationControlerComponent::GetIsTransition(void)
+{
+	if (dynamic_cast<AnimationTransition*>(this->activeAnim))
+	{
+		return TRUE;
+	}
+	return FALSE;
+}
+
 void AnimationControlerComponent::UpdateAnimation(MtxNode* node, GameObject* gameObject)
 {
 
@@ -497,14 +550,78 @@ void AnimationTransition::StartTransition(float beforeAnimCnt, float afterAnimCn
 void AnimationTransition::UpdateMtx(MtxNode* node1, MtxNode* node2 , GameObject* gameObject)
 {
 
-	XMMATRIX frameMtx1 = node1->GetFrameMtx(beforeAnimCnt);
-	XMMATRIX frameMtx2 = node2->GetFrameMtx(afterAnimCnt);
 
-	XMMATRIX blendMtx = (frameMtx1 * weight1) + (frameMtx2 * weight2);
-	
+	if (node1->GetAttribute() == MtxNode::Attribute::Bone && gameObject->GetComponent<BoneComponent>()->GetIsPhysics())
+	{
 
-	//gameObject->GetTransFormComponent()->SetLocalMtx(blendMtx);
-	gameObject->GetTransFormComponent()->SetLocalMtx(frameMtx1, weight1, frameMtx2, weight2);
+	}
+	else
+	{
+		if (!gameObject->GetNotAnim())
+		{
+
+			XMMATRIX frameMtx1;
+			XMMATRIX frameMtx2;
+
+			switch (beforeAnimNode->GetBlend())
+			{
+			case AnimationNode::Blend::None:
+			{
+				frameMtx1 = node1->GetFrameMtx(beforeAnimCnt);
+
+			}
+
+			break;
+			case AnimationNode::Blend::Double:
+			{
+				frameMtx1 = node1->GetFrameMtx(timeCnt, controler->GetBlendWeight());
+
+			}
+
+			break;
+			case AnimationNode::Blend::Angle:
+			{
+				frameMtx1 = node1->GetFrameMtx(timeCnt, controler->GetAngle());
+
+			}
+
+			break;
+			default:
+				break;
+			}
+
+
+			switch (afterAnimNode->GetBlend())
+			{
+			case AnimationNode::Blend::None:
+			{
+				frameMtx2 = node2->GetFrameMtx(afterAnimCnt);
+
+			}
+
+			break;
+			case AnimationNode::Blend::Double:
+			{
+				frameMtx2 = node2->GetFrameMtx(timeCnt, controler->GetBlendWeight());
+
+			}
+
+			break;
+			case AnimationNode::Blend::Angle:
+			{
+				frameMtx2 = node2->GetFrameMtx(timeCnt, controler->GetAngle());
+
+			}
+
+			break;
+			default:
+				break;
+			}
+
+			gameObject->GetTransFormComponent()->SetLocalMtxNotScaling(frameMtx1, weight1, frameMtx2, weight2);
+		}
+	}
+
 
 	for (int i = 0; i < node1->GetChildCnt(); i++)
 	{
@@ -584,8 +701,28 @@ void AnimationNode::CreateNode(string fileName, string name, BOOL loop)
 	this->name = name;
 	this->loop = loop;
 	this->endTime = ((float)animData->GetFrameNum()) / 60.0f;
-	
+	blend = Blend::None;
 }
+
+void AnimationNode::CreateNode(string fileName1, string fileName2, string name, BOOL loop)
+{
+	this->animData = pAssetsManager->LoadAnimationData(fileName1, fileName2);
+	this->name = name;
+	this->loop = loop;
+	this->endTime = ((float)animData->GetFrameNum()) / 60.0f;
+	blend = Blend::Double;
+}
+
+void AnimationNode::CreateNode(string fileName1, string fileName2, string fileName3, string fileName4, string name, BOOL loop)
+{
+	this->animData = pAssetsManager->LoadAnimationData(fileName1, fileName2, fileName3, fileName4);
+	this->name = name;
+	this->loop = loop;
+	this->endTime = ((float)animData->GetFrameNum()) / 60.0f;
+	blend = Blend::Angle;
+
+}
+
 
 void AnimationNode::SetLoop(BOOL loop)
 {
@@ -609,6 +746,7 @@ void AnimationNode::AddTransition(AnimationTransition* transition)
 
 void AnimationNode::SetNotLoopExitTransition(AnimationTransition* transition)
 {
+	loop = FALSE;
 	this->exitTransition = transition;
 	this->exitTime = this->endTime - transition->GetTransitionTime();
 }
@@ -619,11 +757,53 @@ void AnimationNode::StartAnimation(float startTime)
 	controler->SetActiveAnimation(this);
 }
 
+AnimationNode::Blend AnimationNode::GetBlend(void)
+{
+	return blend;
+}
+
 void AnimationNode::UpdateMtx(MtxNode* node, GameObject* gameObject)
 {
-	XMMATRIX frameMtx = node->GetFrameMtx(timeCnt);
+	if (node->GetAttribute() == MtxNode::Attribute::Bone && gameObject->GetComponent<BoneComponent>()->GetIsPhysics())
+	{
 
-	gameObject->GetTransFormComponent()->SetLocalMtx(frameMtx);
+	}
+	else
+	{
+		if (!gameObject->GetNotAnim())
+		{
+			switch (blend)
+			{
+			case AnimationNode::Blend::None:
+			{
+				XMMATRIX frameMtx = node->GetFrameMtx(timeCnt);
+				gameObject->GetTransFormComponent()->SetLocalMtx(frameMtx);
+
+			}
+
+			break;
+			case AnimationNode::Blend::Double:
+			{
+				XMMATRIX frameMtx = node->GetFrameMtx(timeCnt, controler->GetBlendWeight());
+				gameObject->GetTransFormComponent()->SetLocalMtx(frameMtx);
+
+			}
+
+			break;
+			case AnimationNode::Blend::Angle:
+			{
+				XMMATRIX frameMtx = node->GetFrameMtx(timeCnt, controler->GetAngle());
+				gameObject->GetTransFormComponent()->SetLocalMtx(frameMtx);
+
+			}
+
+			break;
+			default:
+				break;
+			}
+		}
+	}
+
 
 	for (int i = 0; i < node->GetChildCnt(); i++)
 	{

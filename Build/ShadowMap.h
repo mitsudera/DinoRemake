@@ -14,7 +14,7 @@ struct ShadowCbuffer
 	int enable;
 	int mode;
 	float facter;
-	int dummy;
+	float bias;
 };
 
 class ShadowMap

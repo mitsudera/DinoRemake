@@ -150,9 +150,11 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AbilitySystemComponent.h" />
     <ClInclude Include="AnimationControlerComponent.h" />
     <ClInclude Include="AnimationData.h" />
     <ClInclude Include="AssetsManager.h" />
+    <ClInclude Include="AttackComponent.h" />
     <ClInclude Include="BGMPlayer.h" />
     <ClInclude Include="BoneComponent.h" />
     <ClInclude Include="BoxColliderComponent.h" />
@@ -173,8 +175,10 @@
     <ClInclude Include="DirectionalLight.h" />
     <ClInclude Include="DirectionalLightComponent.h" />
     <ClInclude Include="DX11Texture.h" />
+    <ClInclude Include="EnemyComponent.h" />
     <ClInclude Include="FadeShader.h" />
     <ClInclude Include="FbxConvertDX11.h" />
+    <ClInclude Include="GolemComponent.h" />
     <ClInclude Include="lib\DDSTextureLoader\DDSTextureLoader11.h" />
     <ClInclude Include="lib\WICTextureLoader\WICTextureLoader11.h" />
     <ClInclude Include="MeshData.h" />
@@ -198,7 +202,7 @@
     <ClInclude Include="MoveTestComponent.h" />
     <ClInclude Include="NotEffectShader.h" />
     <ClInclude Include="PlayerAnimationControlComponent.h" />
-    <ClInclude Include="RedEnemy.h" />
+    <ClInclude Include="Golem.h" />
     <ClInclude Include="RigidBodyComponent.h" />
     <ClInclude Include="SkinMeshComponent.h" />
     <ClInclude Include="SkinMeshComputeShader.h" />
@@ -267,9 +271,11 @@
     <ClInclude Include="WicFactory.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AbilitySystemComponent.cpp" />
     <ClCompile Include="AnimationControlerComponent.cpp" />
     <ClCompile Include="AnimationData.cpp" />
     <ClCompile Include="AssetsManager.cpp" />
+    <ClCompile Include="AttackComponent.cpp" />
     <ClCompile Include="BGMPlayer.cpp" />
     <ClCompile Include="BoneComponent.cpp" />
     <ClCompile Include="BoxColliderComponent.cpp" />
@@ -289,8 +295,10 @@
     <ClCompile Include="DirectionalLight.cpp" />
     <ClCompile Include="DirectionalLightComponent.cpp" />
     <ClCompile Include="DX11Texture.cpp" />
+    <ClCompile Include="EnemyComponent.cpp" />
     <ClCompile Include="FadeShader.cpp" />
     <ClCompile Include="FbxConvertDX11.cpp" />
+    <ClCompile Include="GolemComponent.cpp" />
     <ClCompile Include="lib\DDSTextureLoader\DDSTextureLoader11.cpp" />
     <ClCompile Include="lib\WICTextureLoader\WICTextureLoader11.cpp" />
     <ClCompile Include="MeshData.cpp" />
@@ -314,7 +322,7 @@
     <ClCompile Include="MoveTestComponent.cpp" />
     <ClCompile Include="NotEffectShader.cpp" />
     <ClCompile Include="PlayerAnimationControlComponent.cpp" />
-    <ClCompile Include="RedEnemy.cpp" />
+    <ClCompile Include="Golem.cpp" />
     <ClCompile Include="RigidBodyComponent.cpp" />
     <ClCompile Include="SkinMeshComponent.cpp" />
     <ClCompile Include="SkinMeshComputeShader.cpp" />

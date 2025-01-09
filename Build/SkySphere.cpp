@@ -28,6 +28,7 @@ void SkySphere::Awake(void)
 
 	this->LoadFbxFileMesh("SkySphere.fbx");
 	
-
+	this->SerchAllChild("pSphere1")->GetComponent<PrimitiveComponent>()->SetDrawShadow(FALSE);
+	this->SerchAllChild("pSphere1")->GetComponent<PrimitiveComponent>()->SetHasShadow(FALSE);
 
 }

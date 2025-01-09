@@ -7,21 +7,8 @@
 #include "main.h"
 #include "input.h"
 
-//*****************************************************************************
-// マクロ定義
-//*****************************************************************************
 
-
-//*****************************************************************************
-// プロトタイプ宣言
-//*****************************************************************************
-
-
-//*****************************************************************************
-// グローバル変数
-//*****************************************************************************
-
-
+static Input* pInput;
 
 
 
@@ -38,6 +25,7 @@ Input::~Input()
 //=============================================================================
 HRESULT Input::Awake(HINSTANCE hInst, HWND hWnd)
 {
+	pInput = this;
 	pDInput = NULL;
 	pDIDevKeyboard = NULL;
 	pMouse = NULL;
@@ -364,6 +352,9 @@ long Input::GetMouseZ(void)
 //---------------------------------------- コールバック関数
 BOOL CALLBACK SearchPadCallback(LPDIDEVICEINSTANCE lpddi, LPVOID )
 {
+	HRESULT result;
+
+	result = pInput->pDInput->CreateDevice(lpddi->guidInstance, &pInput->pGamePad[pInput->padCount++], NULL);
 
 	return DIENUM_CONTINUE;	// 次のデバイスを列挙
 

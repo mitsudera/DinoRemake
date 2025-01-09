@@ -27,6 +27,8 @@ public:
 		Default,
 		Player,
 		Enemy,
+		PlayerAttack,
+		EnemyAttack,
 		Field,
 
 		ObjectTagMax,
@@ -57,6 +59,7 @@ public:
 	Scene* GetScene(void);
 	TransformComponent* GetTransFormComponent(void);
 
+	void SetTag(ObjectTag tag);
 	ObjectTag GetTag(void);
 	Layer GetLayer(void);
 
@@ -102,7 +105,8 @@ public:
 
 	void LoadBoneNode(BoneData* node, SkinMeshLinkerComponent* linker);
 
-
+	void SetNotAnim(BOOL b);
+	BOOL GetNotAnim(void);
 protected:
 	Scene* pScene;
 	GameEngine* pGameEngine;
@@ -114,7 +118,7 @@ protected:
 	ObjectTag tag;
 	Layer layer;
 
-	
+	BOOL notAnim;
 
 	BOOL isActive;
 

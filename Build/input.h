@@ -68,6 +68,7 @@ public:
 	void UninitMouse();						// マウスの終了処理
 	HRESULT UpdateMouse();					// マウスの更新処理
 
+
 	HRESULT InitializePad(void);			// パッド初期化
 	void UpdatePad(void);
 	void UninitPad(void);
@@ -105,7 +106,6 @@ public:
 
 
 
-private:
 
 	//------------------------------- keyboard
 	LPDIRECTINPUT8			pDInput;					// IDirectInput8インターフェースへのポインタ
@@ -128,8 +128,11 @@ private:
 
 	DWORD	padState[GAMEPADMAX];	// パッド情報（複数対応）
 	DWORD	padTrigger[GAMEPADMAX];
-
 	int		padCount;			// 検出したパッドの数
+
+private:
+
+
 	LONG LeftStickY[GAMEPADMAX];
 	LONG LeftStickX[GAMEPADMAX];
 	LONG RightStickY[GAMEPADMAX];

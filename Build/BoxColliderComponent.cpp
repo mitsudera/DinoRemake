@@ -1,5 +1,7 @@
 #include "BoxColliderComponent.h"
-
+#include "GameEngine.h"
+#include "DebugUtility.h"
+#include "CBufferManager.h"
 BoxColliderComponent::BoxColliderComponent(GameObject* gameObject)
 {
 	this->pGameObject = gameObject;
@@ -23,6 +25,30 @@ void BoxColliderComponent::Uninit(void)
 void BoxColliderComponent::Update(void)
 {
 	ColliderComponent::Update();
+
+}
+void BoxColliderComponent::DebugDraw(void)
+{
+	Component::DebugDraw();
+	XMMATRIX world = XMMatrixIdentity();
+
+	XMVECTOR wposv = XMVector3Transform(pivot, GetWorldMtx());
+
+	XMMATRIX pos = XMMatrixTranslationFromVector(wposv);
+	XMMATRIX scl = XMMatrixScaling(size.x, size.y, size.z);
+
+
+	world = XMMatrixMultiply(scl, pos);
+
+
+
+
+
+
+
+	this->pGameEngine->GetCBufferManager()->SetWorldMtx(&world);
+
+	pGameEngine->GetDebugUtility()->DrawDebugBox();
 
 }
 

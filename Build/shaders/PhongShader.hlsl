@@ -84,7 +84,7 @@ struct SHADOW
     int enable;
     int mode;
     float facter;
-    int dummy;
+    float bias;
 };
 
 cbuffer ShadowBuffer : register(b7)
@@ -119,7 +119,7 @@ void VSmain(in float4 inPosition : POSITION0,
 {
     matrix wvp;
     wvp = mul(World, View);
-    wvp = mul(View, Projection);
+    wvp = mul(wvp, Projection);
     outPosition = mul(inPosition, wvp);
 
     outNormal = normalize(mul(float4(inNormal.xyz, 0.0f), World));
@@ -133,12 +133,7 @@ void VSmain(in float4 inPosition : POSITION0,
     outDiffuse = inDiffuse;
 	
 	
-	 //頂点座標　モデル座標系→透視座標系(シャドウマップ)
-    matrix SMWorldViewProj = mul(World, Shadow.wvp);
-    wvp = mul(World, View);
-    wvp = mul(wvp, Projection);
-
-    float4 pos4 = mul(inPosition, SMWorldViewProj);
+    float4 pos4 = mul(inPosition, Shadow.wvp);
     pos4.xyz = pos4.xyz / pos4.w;
     outPosSM.x = (pos4.x + 1.0) / 2.0;
     outPosSM.y = (-pos4.y + 1.0) / 2.0;
@@ -173,9 +168,9 @@ float GetVarianceDirectionalShadowFactor(float4 shadowCoord)
     float2 depth = ShadowMapNear.Sample(BorderSampler, shadowCoord.xy).xy;
     float depth_sq = depth.x * depth.x; // E(x)^2
     float variance = depth.y - depth_sq; // σ^2 = E(x^2) - E(x^2)
-    variance = saturate(variance + Shadow.facter); // facterを追加して安定性を向上
+    variance = saturate(variance + Shadow.facter + Shadow.facter); // facterを追加して安定性を向上
 
-    float fragDepth = shadowCoord.z;
+    float fragDepth = shadowCoord.z + Shadow.bias;
     float md = fragDepth - depth.x; // t - μ
     float p = variance / (variance + (md * md)); // σ^2 / (σ^2 + (t - μ)^2)
 

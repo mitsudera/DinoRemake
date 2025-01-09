@@ -692,7 +692,8 @@ void BoneData::LoadNode(FbxNode* node, SkinMeshTreeNode* parent, SkinMeshTreeDat
 	this->nodeAttribute = Attribute::Bone;
 
 	using namespace fbxsdk;
-
+	this->parent = parent;
+	this->nodeAttribute = Attribute::Bone;
 	this->skinMeshTree = skinMeshTree;
 	FbxSkeleton* bone = node->GetSkeleton();
 
@@ -771,6 +772,7 @@ void SkinMeshTreeNode::LoadNode(FbxNode* node, SkinMeshTreeNode* parent, SkinMes
 {
 	this->skinMeshTree = skinMeshTree;
 
+	this->parent = parent;
 	this->nodeAttribute = Attribute::Null;
 	this->name = node->GetName();
 
@@ -852,8 +854,8 @@ NullData::~NullData()
 
 void NullData::LoadNode(FbxNode* node, SkinMeshTreeNode* parent, SkinMeshTreeData* skinMeshTree)
 {
+	this->parent = parent;
 	this->nodeAttribute = Attribute::Null;
-
 	using namespace fbxsdk;
 
 	this->skinMeshTree = skinMeshTree;

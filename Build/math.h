@@ -17,3 +17,9 @@ XMVECTOR yonevec(void);
 XMVECTOR zonevec(void);
 
 float XMFLOAT3Length(XMFLOAT3 p1, XMFLOAT3 p2);
+
+float GetAngleInRadians(DirectX::XMFLOAT2 vector1, DirectX::XMFLOAT2 vector2);
+
+XMFLOAT2 GetVectorFromAngleInRadians(float angleInRadians);
+
+float GetAngleInRadiansFromVector(XMFLOAT2 vector);

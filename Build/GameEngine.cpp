@@ -44,7 +44,6 @@ void GameEngine::Awake()
 
 	this->collisionManager = new CollisionManager(this);
 
-	this->debugUtility = new DebugUtility(this);
 
 	this->lightManager = new LightManager(this);
 	lightManager->Awake();
@@ -53,6 +52,8 @@ void GameEngine::Awake()
 	this->assetsManager = new AssetsManager(this);
 	this->assetsManager->Awake();
 
+
+
 	this->wicFactory = new WicFactory(this);
 
 	this->input = new Input();
@@ -60,6 +61,8 @@ void GameEngine::Awake()
 
 	this->shadowMap = new ShadowMap(this);
 	this->shadowMap->CreateShadowMap(ShadowMap::ShadowQuality::High);
+
+	this->debugUtility = new DebugUtility(this);
 
 
 	this->sceneManager = new SceneManager(this);
@@ -102,7 +105,6 @@ void GameEngine::Update()
 		this->input->Update();
 		this->activeScene->Update();
 
-		this->collisionManager->Update();
 
 		this->LateUpdate();
 
@@ -114,7 +116,10 @@ void GameEngine::Update()
 
 void GameEngine::FixedUpdate()
 {
+	this->collisionManager->Update();
+
 	this->activeScene->FixedUpdate();
+
 
 }
 

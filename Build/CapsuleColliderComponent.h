@@ -15,6 +15,8 @@ public:
 	XMFLOAT3 GetEnd(void);
 	float GetRadius(void);
 
+	void DebugDraw(void);
+
 protected:
 
 	XMFLOAT3 startPoint;

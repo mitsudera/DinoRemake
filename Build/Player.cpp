@@ -11,6 +11,8 @@
 #include "SkySphere.h"
 #include "PlayerAnimationControlComponent.h"
 #include "PlayerComponent.h"
+#include "BoxColliderComponent.h"
+#include "AttackComponent.h"
 Player::Player(Scene* scene)
 {
 	pScene = scene;
@@ -24,94 +26,90 @@ void Player::Awake(void)
 {
 	GameObject::Awake();
 	this->name = "Player";
+	this->tag = ObjectTag::Player;
 	this->transformComponent->SetPosition(XMFLOAT3(0.0f, 10.0f, 0.0f));
-	this->transformComponent->SetScale(XMFLOAT3(0.1f, 0.1f, 0.1f));
+	this->transformComponent->SetScale(XMFLOAT3(1.0f, 1.0f, 1.0f));
 
 	this->LoadFbxFileSkinMesh("Player2.fbx");
 
-	//AnimationControlerComponent* animControler = this->AddComponent<AnimationControlerComponent>();
-	//animControler->LoadDefaulAnimation("PlayerIdle.fbx", "Idle");
-	//animControler->LoadAnimation("PlayerWalk.fbx", "Walk", TRUE);
-	//animControler->LoadAnimation("PlayerBackWalk.fbx", "BackWalk", TRUE);
-	//animControler->LoadAnimation("PlayerLeftWalk.fbx", "RightWalk", TRUE);
-	//animControler->LoadAnimation("PlayerRightWalk.fbx", "LeftWalk", TRUE);
-	//animControler->LoadAnimation("PlayerRun.fbx", "Run", TRUE);
-	//animControler->LoadAnimation("PlayerJump.fbx", "Jump", FALSE);
-	//animControler->LoadAnimation("PlayerFallIdle.fbx", "FallIdle", TRUE);
-
-	////アニメーショントランジション用パラメータの設定
-	////bool
-	//AnimParameter para;
-	//para.value = FALSE;
-	//para.isTrigger = FALSE;
-	//animControler->CreateCondition("Walk", para);
-	//animControler->CreateCondition("BackWalk", para);
-	//animControler->CreateCondition("RightWalk", para);
-	//animControler->CreateCondition("LeftWalk", para);
-	//animControler->CreateCondition("Run", para);
-	//animControler->CreateCondition("OnGround", para);
-
-	////trigger
-	//para.value = FALSE;
-	//para.isTrigger = TRUE;
-	//animControler->CreateCondition("JumpTrigger", para);
+	SerchAllChild("J_Bip_L_Index1")->SetNotAnim(TRUE);
+	SerchAllChild("J_Bip_L_Little1")->SetNotAnim(TRUE);
+	SerchAllChild("J_Bip_L_Middle1")->SetNotAnim(TRUE);
+	SerchAllChild("J_Bip_L_Ring1")->SetNotAnim(TRUE);
+	SerchAllChild("J_Bip_L_Thumb1")->SetNotAnim(TRUE);
 
 
-	////トランジションの設定
-	////idolからの移行
-	//animControler->CreateTransition("Idle", "Walk", "Walk", TRUE);
-	//animControler->CreateTransition("Idle", "BackWalk", "BackWalk", TRUE);
-	//animControler->CreateTransition("Idle", "RightWalk", "RightWalk", TRUE);
-	//animControler->CreateTransition("Idle", "LeftWalk", "LeftWalk", TRUE);
-	//animControler->CreateTransition("Idle", "Run", "Run", TRUE);
-	//animControler->CreateTransition("Idle", "Jump", "JumpTrigger", TRUE);
-	//animControler->CreateTransition("Idle", "FallIdle", "OnGround", FALSE);
+	AnimationControlerComponent* animControler = this->AddComponent<AnimationControlerComponent>();
 
-	////walkからの移行
-	//animControler->CreateTransition("Walk", "Idle", "Walk", FALSE);
-	//animControler->CreateTransition("Walk", "Run", "Run", TRUE);
-	//animControler->CreateTransition("Walk", "Jump", "JumpTrigger", TRUE);
-	//animControler->CreateTransition("Walk", "FallIdle", "OnGround", FALSE);
-	////backwalkからの移行
-	//animControler->CreateTransition("BackWalk", "Idle", "BackWalk", FALSE);
-	//animControler->CreateTransition("BackWalk", "Run", "Run", TRUE);
-	//animControler->CreateTransition("BackWalk", "Jump", "JumpTrigger", TRUE);
-	//animControler->CreateTransition("BackWalk", "FallIdle", "OnGround", FALSE);
-	////rightwalkからの移行
-	//animControler->CreateTransition("RightWalk", "Idle", "RightWalk", FALSE);
-	//animControler->CreateTransition("RightWalk", "Run", "Run", TRUE);
-	//animControler->CreateTransition("RightWalk", "Jump", "JumpTrigger", TRUE);
-	//animControler->CreateTransition("RightWalk", "FallIdle", "OnGround", FALSE);
-	////leftwalkからの移行
-	//animControler->CreateTransition("LeftWalk", "Idle", "LeftWalk", FALSE);
-	//animControler->CreateTransition("LeftWalk", "Run", "Run", TRUE);
-	//animControler->CreateTransition("LeftWalk", "Jump", "JumpTrigger", TRUE);
-	//animControler->CreateTransition("LeftWalk", "FallIdle", "OnGround", FALSE);
+	animControler->LoadDefaulAnimation("PlayerIdle.fbx", "Idle");
+
+	animControler->LoadAnimation("PlayerWalk.fbx", "PlayerRightWalk.fbx", "PlayerBackWalk.fbx", "PlayerLeftWalk.fbx", "Walk", TRUE);
+
+	animControler->LoadAnimation("PlayerRun.fbx", "Run", TRUE);
+	animControler->LoadAnimation("PlayerFallIdle.fbx", "FallIdle", TRUE);
+	animControler->LoadAnimation("PlayerAttack1.fbx", "Attack1", FALSE);
+	animControler->LoadAnimation("PlayerAttack2.fbx", "Attack2", FALSE);
+
+	//アニメーショントランジション用パラメータの設定
+	//bool
+	AnimParameter para;
+	para.value = FALSE;
+	para.isTrigger = FALSE;
+	animControler->CreateCondition("Walk", para);
+	animControler->CreateCondition("Run", para);
+	animControler->CreateCondition("OnGround", para);
+
+	//trigger
+	para.value = FALSE;
+	para.isTrigger = TRUE;
+	animControler->CreateCondition("JumpTrigger", para);
+	animControler->CreateCondition("Attack", para);
 
 
-	////Runからの移行
-	//animControler->CreateTransition("Run", "Walk", "Walk", TRUE);
-	//animControler->CreateTransition("Run", "Idle", "Run", FALSE);
-	//animControler->CreateTransition("Run", "Jump", "JumpTrigger", TRUE);
-	//animControler->CreateTransition("Run", "FallIdle", "OnGround", FALSE);
+	//トランジションの設定
+	//idolからの移行
+	animControler->CreateTransition("Idle", "Walk", "Walk", TRUE);
+	animControler->CreateTransition("Idle", "Run", "Run", TRUE);
+	animControler->CreateTransition("Idle", "FallIdle", "OnGround", FALSE);
+	animControler->CreateTransition("Idle", "Attack1", "Attack", TRUE);
 
-	////Jumpからの移行
-	//animControler->CreateNotLoopAnimExitTransition("Jump", "Idle",0.1f);
+	//walkからの移行
+	animControler->CreateTransition("Walk", "Idle", "Walk", FALSE);
+	animControler->CreateTransition("Walk", "Run", "Run", TRUE);
+	animControler->CreateTransition("Walk", "FallIdle", "OnGround", FALSE);
+	animControler->CreateTransition("Walk", "Attack1", "Attack", TRUE);
 
-	////FallIdleからの移行
-	//animControler->CreateTransition("FallIdle", "Idle", "OnGround", TRUE);
 
-	//AddComponent<PlayerComponent>();
+	//Runからの移行
+	animControler->CreateTransition("Run", "Walk", "Walk", TRUE);
+	animControler->CreateTransition("Run", "Idle", "Run", FALSE);
+	animControler->CreateTransition("Run", "FallIdle", "OnGround", FALSE);
+	animControler->CreateTransition("Run", "Attack1", "Attack", TRUE);
 
-	//AddComponent<PlayerAnimationControlComponent>();
 
-	AddComponent<CapsuleColliderComponent>();
+	//FallIdleからの移行
+	animControler->CreateTransition("FallIdle", "Idle", "OnGround", TRUE);
+
+	//Attack1
+	animControler->CreateNotLoopAnimExitTransition("Attack1", "Idle");
+	animControler->CreateTransition("Attack1", "Attack2","Attack",TRUE);
+
+	//Attack2
+	animControler->CreateNotLoopAnimExitTransition("Attack2", "Idle");
+
+
+	AddComponent<PlayerComponent>();
+
+	AddComponent<PlayerAnimationControlComponent>();
+
+	BoxColliderComponent* box = AddComponent<BoxColliderComponent>();
+	box->SetBox(XMFLOAT3(50.0f, 160.0f, 50.0f));
+	box->SetPivot(XMFLOAT3(0.0f, 80.0f, 0.0f));
 
 	RigidBodyComponent* rb = AddComponent<RigidBodyComponent>();
 
 	rb->SetDrag(0.1f);
-	rb->SetFriction(0.9f * pGameEngine->GetFixedDeltaTimeRate());
-	rb->SetMass(5.0f);
+	rb->SetMass(50.0f);
 
 	//子オブジェクトとしてカメラを作成
 	{
@@ -126,12 +124,27 @@ void Player::Awake(void)
 		cameraComponent->SetDepthStencilView(pScene->GetGameEngine()->GetRenderer()->GetBackBufferDSV());
 		cameraComponent->SetSky(pScene->GetGameObject<SkySphere>());
 		cameraComponent->SetTrackingMode(CameraComponent::TrackingMode::PARENT);
-		cameraComponent->SetNear(1.0f);
-		cameraComponent->SetFar(1000.0f);
+		cameraComponent->SetNear(10.0f);
+		cameraComponent->SetFar(10000.0f);
 
 		//エンジンのメインカメラにセット
 		pGameEngine->SetMainCamera(cameraComponent);
 
 	}
+
+	//weapon
+	GameObject* weapon = SerchAllChild("J_Bip_L_Hand")->AddChild("weapon");
+	weapon->LoadFbxFileMesh("WeaponKatana.fbx");
+	weapon->SetNotAnim(TRUE);
+	TransformComponent* weaponTrans = weapon->GetTransFormComponent();
+	weaponTrans->SetPosition(XMFLOAT3(4.166f, -1.822f, 2.484f));
+	weaponTrans->RotWorldPitch(XM_PIDIV2);
+	weaponTrans->RotWorldRoll(XM_PIDIV2);
+
+	weapon->SetTag(ObjectTag::PlayerAttack);
+	AttackComponent* atack = weapon->AddComponent<AttackComponent>();
+	CapsuleColliderComponent* weaponCollider = weapon->AddComponent<CapsuleColliderComponent>();
+	weaponCollider->SetCapsule(XMFLOAT3(0.0f, 0.0f, 0.0f), XMFLOAT3(0.0f, 70.0f, 0.0f), 10.0f);
+
 
 }

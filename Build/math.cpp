@@ -178,3 +178,42 @@ float XMFLOAT3Length(XMFLOAT3 p1, XMFLOAT3 p2)
 }
 
 
+
+float GetAngleInRadians(XMFLOAT2 vector1, XMFLOAT2 vector2)
+{
+	// ベクトルを正規化
+	XMVECTOR vec1 = XMLoadFloat2(&vector1);
+	XMVECTOR vec2 = XMLoadFloat2(&vector2);
+	vec1 = XMVector2Normalize(vec1);
+	vec2 = XMVector2Normalize(vec2);
+
+	// ドット積を計算
+	float dotProduct = XMVectorGetX(XMVector2Dot(vec1, vec2));
+
+	// ドット積からラジアン角度を取得
+	float angleInRadians = asinf(dotProduct);
+
+	return angleInRadians;
+}
+
+XMFLOAT2 GetVectorFromAngleInRadians(float angleInRadians)
+{
+	// 角度からXYベクトルを計算
+	float x = sinf(angleInRadians);
+	float y = cosf(angleInRadians);
+
+	return XMFLOAT2(x, y);
+}
+
+float GetAngleInRadiansFromVector(XMFLOAT2 vector)
+{
+	// ベクトルの正規化
+	float length = sqrtf(vector.x * vector.x + vector.y * vector.y);
+	float normalizedX = vector.x / length;
+	float normalizedY = vector.y / length;
+
+	// XYベクトルからラジアン角度を計算
+	float angleInRadians = atan2f(normalizedY, normalizedX);
+
+	return angleInRadians;
+}

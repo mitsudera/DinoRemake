@@ -66,9 +66,14 @@ public:
 
 	GameObject* GetHitTagObject(GameObject::ObjectTag tag);
 
+	vector<GameObject*> GetHitTagObjectAll(GameObject::ObjectTag tag);
+
+
 	void OnCollider(void);
 	void OffCollider(void);
 	void Clear(void);
+
+	void SetPivot(XMFLOAT3 pivot);
 
 	XMFLOAT3 GetCenter(void);
 	float GetCheckRadius(void);
@@ -82,6 +87,7 @@ protected:
 	BOOL enable;
 
 	XMFLOAT3 center;//’†S
+	XMVECTOR pivot;
 	float checkRadius;//‘å‚Ü‚©‚È“–‚½‚è”»’è‚ğs‚¤‚½‚ß‚Ì”¼Œa
 
 };

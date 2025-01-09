@@ -148,21 +148,12 @@ BOOL MeshData::GetIsRoot(void)
 	return this->isRoot;
 }
 
-
-XMFLOAT3 MeshData::GetPosOffset(void)
+XMMATRIX MeshData::GetLocalOffset(void)
 {
-	return this->posOffset;
+	return localOffset;
 }
 
-XMFLOAT3 MeshData::GetSclOffset(void)
-{
-	return this->sclOffset;
-}
 
-XMFLOAT3 MeshData::GetRotOffset(void)
-{
-	return this->rotOffset;
-}
 
 
 
@@ -493,21 +484,6 @@ void MeshData::LoadFbxMesh(FbxMesh* mesh,AssetsManager* ap,MeshData* parent)
 	FbxMatrix localOffset = node->EvaluateLocalTransform(FBXSDK_TIME_INFINITE);
 	this->localOffset = FbxMatrixConvertToXMMATRIX(localOffset);
 
-	FbxVector4 pos = node->EvaluateLocalTranslation(FBXSDK_TIME_INFINITE);
-	FbxVector4 scl = node->EvaluateLocalScaling(FBXSDK_TIME_INFINITE);
-	FbxVector4 rot = node->EvaluateLocalRotation(FBXSDK_TIME_INFINITE);
-
-	this->posOffset.x = (float)pos[0];
-	this->posOffset.y = (float)pos[1];
-	this->posOffset.z = (float)pos[2];
-
-	this->sclOffset.x = (float)scl[0];
-	this->sclOffset.y = (float)scl[1];
-	this->sclOffset.z = (float)scl[2];
-
-	this->rotOffset.x = (float)rot[0];
-	this->rotOffset.y = (float)rot[1];
-	this->rotOffset.z = (float)rot[2];
 
 	// ƒ}ƒeƒŠƒAƒ‹‚Ì”
 

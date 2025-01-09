@@ -58,11 +58,8 @@ class Material;
 	 Material* GetShadowMaterial(void);
 
 	 BOOL GetIsRoot(void);
+	 XMMATRIX GetLocalOffset(void);
 
-
-	 XMFLOAT3 GetPosOffset(void);
-	 XMFLOAT3 GetSclOffset(void);
-	 XMFLOAT3 GetRotOffset(void);
  private:
 	 AssetsManager* pAssetsManager;
 

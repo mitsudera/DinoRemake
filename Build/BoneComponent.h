@@ -34,9 +34,22 @@ public:
 	void SetParentBone(BoneComponent* parent);
 	void AddChild(GameObject* child);
 
+	void SetSpringPhysics(float mass, float tension, float resistance);
+
+	string GetRigName(void);
 private:
 	BOOL isPhysics;
 	Joint joint;
+	float mass; // ¿—Ê
+	// ’£—Í
+	float tension;
+	// ’ïR
+	float resistance;
+	XMVECTOR wpv;
+	XMVECTOR defaultLength;//‚Î‚Ë‚Ì©‘R’·
+
+	string rigName;
+
 	BoneComponent* parentBone;
 	vector<BoneComponent*> childArray;
 	BOOL isRoot;

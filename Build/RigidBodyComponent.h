@@ -26,6 +26,11 @@ public:
 	void SetIsKinematic(BOOL b);
 	void AddForce(XMVECTOR force);
 	void RotVelocityY(float f);
+	void MovePosition(XMVECTOR vec, float moveValue);
+	void MovePosition(XMFLOAT3 vec, float moveValue);
+
+	float GetOffGroundTime(void);
+	float GetGroundLength(void);
 
 	BOOL GetOnGround(void);
 
@@ -33,12 +38,16 @@ private:
 	ColliderComponent* collider;
 	TransformComponent* transform;
 	XMVECTOR velocity;
+	XMVECTOR worldPos;
+	XMVECTOR move;
 	float mass;
 	float drag;
 	float angularDrag;
 	float friction;
+	float offGroundTime;
 	BOOL useGravity;
 	BOOL isKinematic;
 	BOOL onGround;
+	float groundLen;
 };
 

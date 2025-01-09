@@ -1,10 +1,10 @@
 #pragma once
 #include "gameobject.h"
-class RedEnemy : public GameObject
+class Golem : public GameObject
 {
 public:
-	RedEnemy(Scene* scene);
-	~RedEnemy();
+	Golem(Scene* scene);
+	~Golem();
 
 	virtual void Awake(void) override;
 

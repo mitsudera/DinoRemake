@@ -9,6 +9,7 @@
 #include "renderer.h"
 #include "gameobject.h"
 #include "Scene.h"
+#include "ShadowMap.h"
 PrimitiveComponent::PrimitiveComponent()
 {
 	
@@ -35,8 +36,8 @@ void PrimitiveComponent::Awake(void)
 	this->pGameObject->GetScene()->AddScenePrimitiveComponent(this);
 	attribute = Attribute::Primitive;
 	alphaTest = FALSE;
-	hasShadow = FALSE;
-	drawShadow = FALSE;
+	hasShadow = TRUE;
+	drawShadow = TRUE;
 }
 
 void PrimitiveComponent::Update(void)
@@ -64,6 +65,11 @@ void PrimitiveComponent::Draw(void)
 	}
 	if (drawShadow)
 	{
+		pGameEngine->GetShadowMap()->SetEnable(TRUE);
+	}
+	else
+	{
+		pGameEngine->GetShadowMap()->SetEnable(FALSE);
 
 	}
 }

@@ -2,169 +2,31 @@
 #include "GameEngine.h"
 #include "DebugLineShader.h"
 #include "renderer.h"
+#include "MeshData.h"
+#include "AssetsManager.h"
+#include "CBufferManager.h"
 DebugUtility::DebugUtility(GameEngine* gameEngine)
 {
     pGameEngine = gameEngine;
     pRenderer = pGameEngine->GetRenderer();
 
     debugLineShader = new DebugLineShader(pRenderer);
+    cBufferManager = pGameEngine->GetCBufferManager();
+    AssetsManager* assetsManager = pGameEngine->GetAssetsManager();
 
-    unsigned int vertexIndex = 0;
-    latitudeBands = 20;
-    longitudeBands = 20;
-    float radius = 1.0f;
-    unsigned int vertexCount = (latitudeBands-1) * (longitudeBands)+2;
-    unsigned int indexCount = (latitudeBands * longitudeBands) * 2 + ((latitudeBands - 1) * longitudeBands) * 2;
-    sphereIndexCnt = indexCount;
-    spherevertCnt = vertexCount;
-    DebugLineVertex* vertArray = new DebugLineVertex[vertexCount];
-    unsigned int* indexArray = new unsigned int[indexCount];
-
-
-
-    int vcnt = 0;
-    for (unsigned int i = 0; i < latitudeBands+1; i++)
-    {
-        float y = radius-((radius * 2.0f) / latitudeBands) * (float)i;
-        float theta = (float)i * (XM_PI / latitudeBands);
-        if (i==0)
-        {
-            vertArray[vcnt].pos = { 0.0f,y,0.0f };
-            vertArray[vcnt].color = { 0.0f,1.0f,0.0f,1.0f };
-            vcnt++;
-        }
-        else if(i==latitudeBands)
-        {
-            vertArray[vcnt].pos = { 0.0f,y,0.0f };
-            vertArray[vcnt].color = { 0.0f,1.0f,0.0f,1.0f };
-
-            vcnt++;
-
-
-        }
-        else
-        {
-            for (unsigned int j = 0; j < longitudeBands; j++) {
-                float phi = (float)j * (2.0f * XM_PI / longitudeBands); // Longitude angle 
-                float x = radius * sinf(theta) * cosf(phi);
-                float z = radius * sinf(theta) * sinf(phi);
-                vertArray[vcnt].pos = { x, y, z }; 
-                vertArray[vcnt].color = { 0.0f,1.0f,0.0f,1.0f };
-                vcnt++;
-
-            }        
-        }
-    }
-
-
-    // 縦の線のインデックス
-    int ic = 0;
-    //for (int i = 0; i < longitudeBands; i++)
-    //{
-    //    for (int j = 0; j < latitudeBands; j++)
-    //    {
-    //        if (j==0)
-    //        {
-    //            indexArray[ic] = 0;
-    //            ic++;
-    //            indexArray[ic] = (i * j)+j + 1;
-    //            ic++;
-    //        }
-    //        else if (j == longitudeBands-1)
-    //        {
-    //            indexArray[ic] = (i * j) + j;
-    //            ic++;
-    //            indexArray[ic] = vcnt-1;
-    //            ic++;
-    //        }
-    //        else
-    //        {
-    //            indexArray[ic] = (i * (j)) + j;
-    //            ic++;
-    //            indexArray[ic] = (i * (j)) + j + 1;
-    //            ic++;
-    //        }
-    //    }
-    //}
-    //横の線
-    for (unsigned int i = 0; i < latitudeBands-1; i++)
-    {
-        for (unsigned int j = 0; j < longitudeBands; j++)
-        {
-            if (j == longitudeBands - 1)
-            {
-
-                indexArray[ic] = i * j + 1;
-                ic++;
-                indexArray[ic] = i * j + j + 2;
-                ic++;
-
-            }
-            else
-            {
-                indexArray[ic] = i * j + j + 1;
-                ic++;
-                indexArray[ic] = i * j + j + 2;
-                ic++;
-
-            }
-        }
-    }
-
+    sphereMeshData = assetsManager->LoadMeshFileFbx("Sphere.fbx")->GetChild()[0];
+    capsuleMeshData1 = assetsManager->LoadMeshFileFbx("Capsule.fbx")->GetChild()[0];
+    capsuleMeshData2 = assetsManager->LoadMeshFileFbx("Capsule.fbx")->GetChild()[1];
+    capsuleMeshData3 = assetsManager->LoadMeshFileFbx("Capsule.fbx")->GetChild()[2];
 
 
     HRESULT hr;
 
-    // 頂点バッファ生成
-    D3D11_BUFFER_DESC bd;
-    ZeroMemory(&bd, sizeof(bd));
-    bd.Usage = D3D11_USAGE_DYNAMIC;
-    bd.ByteWidth = sizeof(DebugLineVertex) * vertexCount;
-    bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-    bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-
-    hr = this->pRenderer->GetDevice()->CreateBuffer(&bd, NULL, &this->vertexSphere);
-
-    if (FAILED(hr))
-        return;
-
-    // 頂点バッファへのポインタを取得
-    D3D11_MAPPED_SUBRESOURCE msr;
-    this->pRenderer->GetDeviceContext()->Map(this->vertexSphere, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
-
-    DebugLineVertex* pVtx = (DebugLineVertex*)msr.pData;
-
-    memcpy(pVtx, vertArray, sizeof(DebugLineVertex) * vertexCount);
-
-    this->pRenderer->GetDeviceContext()->Unmap(this->vertexSphere, 0);
-
-
-    // indexバッファ生成
-    ZeroMemory(&bd, sizeof(bd));
-    bd.Usage = D3D11_USAGE_DYNAMIC;
-    bd.ByteWidth = sizeof(unsigned int) * indexCount;
-    bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
-    bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
-
-    this->pRenderer->GetDevice()->CreateBuffer(&bd, NULL, &this->indexSphere);
 
 
 
-    this->pRenderer->GetDeviceContext()->Map(this->indexSphere, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
-
-    unsigned int* pIdx = (unsigned int*)msr.pData;
-
-    memcpy(pIdx, indexArray, sizeof(unsigned int) * vertexCount);
-
-    this->pRenderer->GetDeviceContext()->Unmap(this->indexSphere, 0);
-
-
-
-    if (vertArray) delete[] vertArray;
-    if (indexArray) delete[] indexArray;
-
-    vertArray = new DebugLineVertex[8];
-    indexArray = new unsigned int[24];
+    DebugLineVertex* vertArray = new DebugLineVertex[8];
+    unsigned int* indexArray = new unsigned int[24];
     vertArray[0].pos = { -0.5f,0.5f,0.5f };
     vertArray[0].color = { 0.0f,1.0f,0.0f,1.0f };
     vertArray[1].pos = { 0.5f,0.5f,0.5f };
@@ -181,7 +43,8 @@ DebugUtility::DebugUtility(GameEngine* gameEngine)
     vertArray[6].color = { 0.0f,1.0f,0.0f,1.0f };
     vertArray[7].pos = { -0.5f,-0.5f,-0.5f };
     vertArray[7].color = { 0.0f,1.0f,0.0f,1.0f };
-    ic = 0;
+
+
     indexArray[0] = 0;
     indexArray[1] = 1;
     indexArray[2] = 1;
@@ -207,6 +70,7 @@ DebugUtility::DebugUtility(GameEngine* gameEngine)
     indexArray[22] = 3;
     indexArray[23] = 7;
 
+    D3D11_BUFFER_DESC bd;
     ZeroMemory(&bd, sizeof(bd));
     bd.Usage = D3D11_USAGE_DYNAMIC;
     bd.ByteWidth = sizeof(DebugLineVertex) * 8;
@@ -219,9 +83,11 @@ DebugUtility::DebugUtility(GameEngine* gameEngine)
         return;
 
     // 頂点バッファへのポインタを取得
+    D3D11_MAPPED_SUBRESOURCE msr;
+
     this->pRenderer->GetDeviceContext()->Map(this->vertexBox, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
 
-    pVtx = (DebugLineVertex*)msr.pData;
+    DebugLineVertex* pVtx = (DebugLineVertex*)msr.pData;
 
     memcpy(pVtx, vertArray, sizeof(DebugLineVertex) * 8);
 
@@ -235,17 +101,20 @@ DebugUtility::DebugUtility(GameEngine* gameEngine)
     bd.BindFlags = D3D11_BIND_INDEX_BUFFER;
     bd.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
 
-    this->pRenderer->GetDevice()->CreateBuffer(&bd, NULL, &this->indexBox);
+    hr = this->pRenderer->GetDevice()->CreateBuffer(&bd, NULL, &this->indexBox);
 
 
 
     this->pRenderer->GetDeviceContext()->Map(this->indexBox, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
 
-    pIdx = (unsigned int*)msr.pData;
+    unsigned int* pIdx = (unsigned int*)msr.pData;
 
     memcpy(pIdx, indexArray, sizeof(unsigned int) * 24);
 
     this->pRenderer->GetDeviceContext()->Unmap(this->indexBox, 0);
+
+    if (vertArray) delete[] vertArray;
+    if (indexArray) delete[] indexArray;
 
 
 
@@ -265,16 +134,15 @@ DebugUtility::~DebugUtility()
 
 void DebugUtility::DrawDebugSphere(void)
 {
-	// 頂点バッファ設定
-	UINT stride = sizeof(DebugLineVertex);
-	UINT worldOffset = 0;
 
-	this->pRenderer->GetDeviceContext()->IASetVertexBuffers(0, 1, &this->vertexSphere, &stride, &worldOffset);
-	this->pRenderer->GetDeviceContext()->IASetIndexBuffer(this->indexSphere, DXGI_FORMAT_R32_UINT, 0);
+    pRenderer->SetFillMode(FILL_MODE::FILL_MODE_WIREFRAME);
 
-	this->pRenderer->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_LINESTRIP);
+    sphereMeshData->BufferSetVertex();
+    sphereMeshData->BufferSetIndex();
+    this->pRenderer->GetDeviceContext()->DrawIndexed(sphereMeshData->GetIndexNum(), 0, 0);
 
-    this->pRenderer->GetDeviceContext()->Draw(spherevertCnt, 0);
+    pRenderer->SetCullingMode(CULL_MODE::CULL_MODE_BACK);
+
 }
 
 void DebugUtility::DrawDebugBox(void)
@@ -289,6 +157,98 @@ void DebugUtility::DrawDebugBox(void)
     this->pRenderer->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY::D3D_PRIMITIVE_TOPOLOGY_LINELIST);
 
     this->pRenderer->GetDeviceContext()->DrawIndexed(24, 0, 0);
+
+}
+
+void DebugUtility::DrawDebugCapsule(XMFLOAT3 p, float length, float radius,XMMATRIX rot)
+{
+    pRenderer->SetFillMode(FILL_MODE::FILL_MODE_WIREFRAME);
+
+    XMMATRIX pos, scl;
+    XMMATRIX world;
+    XMVECTOR pv = XMLoadFloat3(&p);
+    scl = XMMatrixScaling(radius, length, radius);
+    pos = XMMatrixTranslationFromVector(pv);
+    world = scl * rot * pos;
+    cBufferManager->SetWorldMtx(&world);
+
+
+    capsuleMeshData1->BufferSetVertex();
+    capsuleMeshData1->BufferSetIndex();
+    this->pRenderer->GetDeviceContext()->DrawIndexed(capsuleMeshData1->GetIndexNum(), 0, 0);
+
+    scl = XMMatrixScaling(radius, radius, radius);
+    XMVECTOR up = XMVector3Rotate(yonevec(), XMQuaternionRotationMatrix(rot)) * length * 0.5f;
+    pos = XMMatrixTranslationFromVector(pv+up);
+    world = scl * pos;
+    cBufferManager->SetWorldMtx(&world);
+
+
+    capsuleMeshData2->BufferSetVertex();
+    capsuleMeshData2->BufferSetIndex();
+    this->pRenderer->GetDeviceContext()->DrawIndexed(capsuleMeshData2->GetIndexNum(), 0, 0);
+
+
+
+    scl = XMMatrixScaling(radius, radius, radius);
+    XMVECTOR down = XMVector3Rotate(-yonevec(), XMQuaternionRotationMatrix(rot)) * length * 0.5f;
+    pos = XMMatrixTranslationFromVector(pv + down);
+    world = scl * pos;
+    cBufferManager->SetWorldMtx(&world);
+
+    capsuleMeshData3->BufferSetVertex();
+    capsuleMeshData3->BufferSetIndex();
+    this->pRenderer->GetDeviceContext()->DrawIndexed(capsuleMeshData3->GetIndexNum(), 0, 0);
+
+    pRenderer->SetCullingMode(CULL_MODE::CULL_MODE_BACK);
+
+}
+
+void DebugUtility::DrawDebugCapsule(XMFLOAT3 sp, XMFLOAT3 ep, float radius,XMMATRIX world)
+{
+    pRenderer->SetFillMode(FILL_MODE::FILL_MODE_WIREFRAME);
+    XMVECTOR spv = XMVector3Transform(XMLoadFloat3(&sp), world);
+    XMVECTOR epv = XMVector3Transform(XMLoadFloat3(&ep), world);
+    XMVECTOR lspv = XMLoadFloat3(&sp);
+    XMVECTOR lepv = XMLoadFloat3(&ep);
+    XMVECTOR pv = (lspv + lepv) * 0.5f;
+    float len;
+    XMStoreFloat(&len, XMVector3Length(epv - spv));
+
+    XMMATRIX pos, scl;
+    XMMATRIX mtx;
+    scl = XMMatrixScaling(radius, len*0.5, radius);
+    pos = XMMatrixTranslationFromVector(pv);
+    mtx = scl *pos* world;
+    cBufferManager->SetWorldMtx(&mtx);
+
+
+    capsuleMeshData1->BufferSetVertex();
+    capsuleMeshData1->BufferSetIndex();
+    this->pRenderer->GetDeviceContext()->DrawIndexed(capsuleMeshData1->GetIndexNum(), 0, 0);
+
+
+    scl = XMMatrixScaling(radius, radius, radius);
+    pos = XMMatrixTranslationFromVector(lepv);
+    mtx = scl * pos * world;
+    cBufferManager->SetWorldMtx(&mtx);
+
+    capsuleMeshData2->BufferSetVertex();
+    capsuleMeshData2->BufferSetIndex();
+    this->pRenderer->GetDeviceContext()->DrawIndexed(capsuleMeshData2->GetIndexNum(), 0, 0);
+
+
+    scl = XMMatrixScaling(radius, radius, radius);
+    pos = XMMatrixTranslationFromVector(lspv);
+    mtx = scl * pos * world;
+    cBufferManager->SetWorldMtx(&mtx);
+
+
+    capsuleMeshData3->BufferSetVertex();
+    capsuleMeshData3->BufferSetIndex();
+    this->pRenderer->GetDeviceContext()->DrawIndexed(capsuleMeshData3->GetIndexNum(), 0, 0);
+
+    pRenderer->SetCullingMode(CULL_MODE::CULL_MODE_BACK);
 
 }
 

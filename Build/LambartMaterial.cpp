@@ -111,37 +111,28 @@ void LambartMaterial::LoadFbxMaterial(FbxSurfaceMaterial* fbxmaterial)
 		FbxFileTexture::ETextureUse m_type = FbxFileTexture::ETextureUse(pFileTexture->GetTextureUse());
 
 
-		//ディフューズテクスチャなら
 		if (m_type == FbxFileTexture::ETextureUse::eStandard)
 		{
 			const char* fileName = pFileTexture->GetFileName();
+			string path;
+			string basePath = "data/TEXTURE";
 
-			int slush = '/';
-			char* path;
-			path = new char[256];
+			// 最後に / または \\ が出てくる場所
+			const char* lastSlash = strrchr(fileName, '/');
+			const char* lastBackslash = strrchr(fileName, '\\');
 
-			//最後に/が出てくる場所
-			const char* last = strrchr(fileName, slush);
-
+			const char* last = max(lastSlash, lastBackslash);
 
 			if (last == nullptr)
 			{
-				strcpy(path, "data/TEXTURE/");
-
-				strcat(path, fileName);
-
+				path = basePath + "/" + fileName;
 			}
 			else
 			{
-				strcpy(path, "data/TEXTURE");
-
-				strcat(path, last);
-
+				path = basePath + "/" + (last + 1); // 最後の / または \ の次の文字から
 			}
 
-			this->LoadDiffuseTex(path);
-
-			delete[]path;
+			this->LoadDiffuseTex(path.c_str());
 
 			// マテリアル設定
 			noDiffuseTex = false;
@@ -149,50 +140,109 @@ void LambartMaterial::LoadFbxMaterial(FbxSurfaceMaterial* fbxmaterial)
 
 	}
 
-
-
+	//this->noDiffuseTex = true;
+	//this->noNormalTex = true;
+	//this->noArmTex = true;
 
 
 
 	// プロパティ取得。
-	const FbxProperty propertynormal = fbxmaterial->FindProperty(
+	const FbxProperty propertybump = fbxmaterial->FindProperty(
 		FbxSurfaceMaterial::sBump    // const char* pName
 	);                                  // bool pCaseSensitive = true
 
 
 
+
 	// プロパティが持っているレイヤードテクスチャの枚数をチェック
-	layerNum = propertynormal.GetSrcObjectCount<FbxFileTexture>();
+	layerNum = propertybump.GetSrcObjectCount<FbxFileTexture>();
 
 	if (layerNum > 0)
 	{
-		FbxFileTexture* pFileTextureNormal = propertynormal.GetSrcObject<FbxFileTexture>(0);
+		FbxFileTexture* pFileTextureBump = propertybump.GetSrcObject<FbxFileTexture>(0);
 
-		FbxFileTexture::ETextureUse m_type = FbxFileTexture::ETextureUse(pFileTextureNormal->GetTextureUse());
+		FbxFileTexture::ETextureUse m_type = FbxFileTexture::ETextureUse(pFileTextureBump->GetTextureUse());
 
 
 		if (m_type == FbxFileTexture::ETextureUse::eStandard)
 		{
 
-			const char* fileName1 = pFileTextureNormal->GetFileName();
-			int slush = '/';
-			char* path;
-			path = new char[256];
+			const char* fileName = pFileTextureBump->GetFileName();
+			string path;
+			string basePath = "data/TEXTURE";
 
-			//最後に/が出てくる場所
-			const char* last = strrchr(fileName1, slush);
+			// 最後に / または \\ が出てくる場所
+			const char* lastSlash = strrchr(fileName, '/');
+			const char* lastBackslash = strrchr(fileName, '\\');
 
-			strcpy(path, "data/TEXTURE");
-			strcat(path, last);
+			const char* last = max(lastSlash, lastBackslash);
 
-			this->LoadNormalTex(path);
+			if (last == nullptr)
+			{
+				path = basePath + "/" + fileName;
+			}
+			else
+			{
+				path = basePath + "/" + (last + 1); // 最後の / または \ の次の文字から
+			}
 
-			delete[]path;
+			this->LoadNormalTex(path.c_str());
+
 
 			noNormalTex = FALSE;
 
 		}
 
+
+	}
+	else
+	{
+		// プロパティ取得。
+		const FbxProperty propertynormal = fbxmaterial->FindProperty(
+			FbxSurfaceMaterial::sNormalMap    // const char* pName
+		);                                  // bool pCaseSensitive = true
+
+	// プロパティが持っているレイヤードテクスチャの枚数をチェック
+		layerNum = propertynormal.GetSrcObjectCount<FbxFileTexture>();
+
+		if (layerNum > 0)
+		{
+			FbxFileTexture* pFileTextureNormal = propertynormal.GetSrcObject<FbxFileTexture>(0);
+
+			FbxFileTexture::ETextureUse m_type = FbxFileTexture::ETextureUse(pFileTextureNormal->GetTextureUse());
+
+
+			if (m_type == FbxFileTexture::ETextureUse::eStandard)
+			{
+
+				const char* fileName = pFileTextureNormal->GetFileName();
+				string path;
+				string basePath = "data/TEXTURE";
+
+				// 最後に / または \\ が出てくる場所
+				const char* lastSlash = strrchr(fileName, '/');
+				const char* lastBackslash = strrchr(fileName, '\\');
+
+				const char* last = max(lastSlash, lastBackslash);
+
+				if (last == nullptr)
+				{
+					path = basePath + "/" + fileName;
+				}
+				else
+				{
+					path = basePath + "/" + (last + 1); // 最後の / または \ の次の文字から
+				}
+
+				this->LoadNormalTex(path.c_str());
+
+
+				noNormalTex = FALSE;
+
+			}
+
+
+		}
 
 	}
 

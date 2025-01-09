@@ -26,7 +26,6 @@
 #define MESH_PATH "data/MODEL/mesh/"
 #define SKINMESH_PATH "data/MODEL/skinmesh/"
 
-#define ANIMATION_PATH "data/Animation/"
 
 
 AssetsManager::AssetsManager()
@@ -152,7 +151,7 @@ AnimationData* AssetsManager::LoadAnimationData(string fileName)
 	{
 
 		string filePath = AnimDataArray[i]->GetFileName();
-		if ((ANIMATION_PATH + fileName) == filePath)
+		if ((fileName) == filePath)
 		{
 			return AnimDataArray[i];
 		}
@@ -160,8 +159,61 @@ AnimationData* AssetsManager::LoadAnimationData(string fileName)
 
 	
 	AnimationData* animdata = new AnimationData;
-	string path = ANIMATION_PATH + fileName;
+	string path = fileName;
 	animdata->LoadAnimation(path, this);
+	this->AnimDataArray.push_back(animdata);
+	return animdata;
+}
+
+AnimationData* AssetsManager::LoadAnimationData(string fileName1,string fileName2)
+{
+
+	for (int i = 0; i < AnimDataArray.size(); i++)
+	{
+
+		string filePath1 = AnimDataArray[i]->GetFileName();
+		string filePath2 = AnimDataArray[i]->GetFileNameSecond();
+		if (((fileName1) == filePath1)&&((fileName2) == filePath2))
+		{
+			return AnimDataArray[i];
+		}
+	}
+
+	
+	AnimationData* animdata = new AnimationData;
+	string path1 = fileName1;
+	string path2 = fileName2;
+	animdata->LoadAnimation(path1, path2, this);
+	this->AnimDataArray.push_back(animdata);
+	return animdata;
+}
+
+AnimationData* AssetsManager::LoadAnimationData(string fileName1, string fileName2, string fileName3, string fileName4)
+{
+
+	for (int i = 0; i < AnimDataArray.size(); i++)
+	{
+
+		string filePath1 = AnimDataArray[i]->GetFileName();
+		string filePath2 = AnimDataArray[i]->GetFileNameSecond();
+		string filePath3 = AnimDataArray[i]->GetFileName3();
+		string filePath4 = AnimDataArray[i]->GetFileName4();
+		if (((fileName1) == filePath1) 
+			&& ((fileName2) == filePath2)
+			&& ((fileName3) == filePath3)
+			&& ((fileName4) == filePath4))
+		{
+			return AnimDataArray[i];
+		}
+	}
+
+
+	AnimationData* animdata = new AnimationData;
+	string path1 = fileName1;
+	string path2 = fileName2;
+	string path3 = fileName3;
+	string path4 = fileName4;
+	animdata->LoadAnimation(path1, path2, path3, path4, this);
 	this->AnimDataArray.push_back(animdata);
 	return animdata;
 }

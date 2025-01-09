@@ -98,6 +98,11 @@ void SkinMeshPhongMaterial::LoadFbxMaterial(FbxSurfaceMaterial* fbxmaterial)
 	FbxDouble shine = phong->Shininess;
 	shininess = (float)shine;
 
+	this->noDiffuseTex = true;
+	this->noNormalTex = true;
+	this->noArmTex = true;
+
+
 
 	// プロパティ取得。
 	const FbxProperty property = fbxmaterial->FindProperty(
@@ -145,9 +150,6 @@ void SkinMeshPhongMaterial::LoadFbxMaterial(FbxSurfaceMaterial* fbxmaterial)
 
 	}
 
-	//this->noDiffuseTex = true;
-	//this->noNormalTex = true;
-	//this->noArmTex = true;
 
 
 

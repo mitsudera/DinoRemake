@@ -14,7 +14,7 @@
 #include "MeshField.h"
 #include "Player.h"
 #include "Stage1Manager.h"
-#include "RedEnemy.h"
+#include "Golem.h"
 #include "CameraComponent.h"
 #include "TextMesh.h"
 #include "TextMeshComponent.h"
@@ -48,6 +48,8 @@ void Stage1Scene::Awake()
 	CreateGameObject<MeshField>();
 
 	CreateGameObject<Player>();
+
+	CreateGameObject<Golem>();
 
 	CreateGameObject<GameManager>();
 

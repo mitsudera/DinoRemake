@@ -190,6 +190,24 @@
     <Filter Include="component\RigidBody">
       <UniqueIdentifier>{3049d48b-5a26-4146-9883-13fc8ecc5f8d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="component\ProjectOriginal">
+      <UniqueIdentifier>{2dfee81f-0137-4d8a-8016-9f3a5b70e1d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="component\ProjectOriginal\Enemy">
+      <UniqueIdentifier>{2fc9e88d-c595-4cdc-a69f-64ffa78a1107}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="component\ProjectOriginal\Player">
+      <UniqueIdentifier>{bff19dcf-6dc8-4558-845f-ff82edc492f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="component\ProjectOriginal\Scene">
+      <UniqueIdentifier>{1d2db180-d91d-49b6-b408-d9a310ea4fed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="component\ProjectOriginal\Test">
+      <UniqueIdentifier>{3a27d45e-4954-45d7-a6c3-d7cc61544883}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Ability">
+      <UniqueIdentifier>{e9a40ebf-dc5e-484a-9325-3bff734b9dc1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Coreminimal.h">
@@ -237,17 +255,8 @@
     <ClInclude Include="GameScene.h">
       <Filter>Scene</Filter>
     </ClInclude>
-    <ClInclude Include="UIManagerComponent.h">
-      <Filter>component</Filter>
-    </ClInclude>
     <ClInclude Include="gameobject.h">
       <Filter>gameobject\GameObject</Filter>
-    </ClInclude>
-    <ClInclude Include="GameManagerComponent.h">
-      <Filter>component</Filter>
-    </ClInclude>
-    <ClInclude Include="TitleManagerComponent.h">
-      <Filter>component</Filter>
     </ClInclude>
     <ClInclude Include="Camera.h">
       <Filter>gameobject\Camera</Filter>
@@ -402,14 +411,8 @@
     <ClInclude Include="TutorialManager.h">
       <Filter>gameobject\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="TutorialManagerComponent.h">
-      <Filter>component</Filter>
-    </ClInclude>
     <ClInclude Include="StageSelectScene.h">
       <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="StageSelectManagerComponent.h">
-      <Filter>component</Filter>
     </ClInclude>
     <ClInclude Include="StageSelectManager.h">
       <Filter>gameobject\Manager</Filter>
@@ -423,16 +426,10 @@
     <ClInclude Include="Stage1Manager.h">
       <Filter>gameobject\Manager</Filter>
     </ClInclude>
-    <ClInclude Include="Stage1ManagerComponent.h">
-      <Filter>component</Filter>
-    </ClInclude>
-    <ClInclude Include="PlayerComponent.h">
-      <Filter>component</Filter>
-    </ClInclude>
     <ClInclude Include="TerrainColliderComponent.h">
       <Filter>component\ColliderComponent</Filter>
     </ClInclude>
-    <ClInclude Include="RedEnemy.h">
+    <ClInclude Include="Golem.h">
       <Filter>gameobject\3D\Enemy</Filter>
     </ClInclude>
     <ClInclude Include="Player.h">
@@ -492,9 +489,6 @@
     <ClInclude Include="SkinMeshComputeShader.h">
       <Filter>Shader\ComputeShader\skinmesh</Filter>
     </ClInclude>
-    <ClInclude Include="MoveTestComponent.h">
-      <Filter>component</Filter>
-    </ClInclude>
     <ClInclude Include="SkinMeshPhongMaterial.h">
       <Filter>Shader\SkinMeshShader</Filter>
     </ClInclude>
@@ -525,8 +519,44 @@
     <ClInclude Include="MeshData.h">
       <Filter>Assets</Filter>
     </ClInclude>
+    <ClInclude Include="GolemComponent.h">
+      <Filter>component\ProjectOriginal\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyComponent.h">
+      <Filter>component\ProjectOriginal\Enemy</Filter>
+    </ClInclude>
     <ClInclude Include="PlayerAnimationControlComponent.h">
-      <Filter>component</Filter>
+      <Filter>component\ProjectOriginal\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="PlayerComponent.h">
+      <Filter>component\ProjectOriginal\Player</Filter>
+    </ClInclude>
+    <ClInclude Include="GameManagerComponent.h">
+      <Filter>component\ProjectOriginal\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Stage1ManagerComponent.h">
+      <Filter>component\ProjectOriginal\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="StageSelectManagerComponent.h">
+      <Filter>component\ProjectOriginal\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="TitleManagerComponent.h">
+      <Filter>component\ProjectOriginal\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="TutorialManagerComponent.h">
+      <Filter>component\ProjectOriginal\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="UIManagerComponent.h">
+      <Filter>component\ProjectOriginal\Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveTestComponent.h">
+      <Filter>component\ProjectOriginal\Test</Filter>
+    </ClInclude>
+    <ClInclude Include="AttackComponent.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="AbilitySystemComponent.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -572,17 +602,8 @@
     <ClCompile Include="GameScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="UIManagerComponent.cpp">
-      <Filter>component</Filter>
-    </ClCompile>
     <ClCompile Include="gameobject.cpp">
       <Filter>gameobject\GameObject</Filter>
-    </ClCompile>
-    <ClCompile Include="GameManagerComponent.cpp">
-      <Filter>component</Filter>
-    </ClCompile>
-    <ClCompile Include="TitleManagerComponent.cpp">
-      <Filter>component</Filter>
     </ClCompile>
     <ClCompile Include="Camera.cpp">
       <Filter>gameobject\Camera</Filter>
@@ -734,17 +755,11 @@
     <ClCompile Include="TutorialScene.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="TutorialManagerComponent.cpp">
-      <Filter>component</Filter>
-    </ClCompile>
     <ClCompile Include="TutorialManager.cpp">
       <Filter>gameobject\Manager</Filter>
     </ClCompile>
     <ClCompile Include="StageSelectScene.cpp">
       <Filter>Scene</Filter>
-    </ClCompile>
-    <ClCompile Include="StageSelectManagerComponent.cpp">
-      <Filter>component</Filter>
     </ClCompile>
     <ClCompile Include="StageSelectManager.cpp">
       <Filter>gameobject\Manager</Filter>
@@ -758,16 +773,10 @@
     <ClCompile Include="Stage1Manager.cpp">
       <Filter>gameobject\Manager</Filter>
     </ClCompile>
-    <ClCompile Include="Stage1ManagerComponent.cpp">
-      <Filter>component</Filter>
-    </ClCompile>
-    <ClCompile Include="PlayerComponent.cpp">
-      <Filter>component</Filter>
-    </ClCompile>
     <ClCompile Include="TerrainColliderComponent.cpp">
       <Filter>component\ColliderComponent</Filter>
     </ClCompile>
-    <ClCompile Include="RedEnemy.cpp">
+    <ClCompile Include="Golem.cpp">
       <Filter>gameobject\3D\Enemy</Filter>
     </ClCompile>
     <ClCompile Include="Player.cpp">
@@ -827,9 +836,6 @@
     <ClCompile Include="SkinMeshComputeShader.cpp">
       <Filter>Shader\ComputeShader\skinmesh</Filter>
     </ClCompile>
-    <ClCompile Include="MoveTestComponent.cpp">
-      <Filter>component</Filter>
-    </ClCompile>
     <ClCompile Include="SkinMeshPhongMaterial.cpp">
       <Filter>Shader\SkinMeshShader</Filter>
     </ClCompile>
@@ -860,8 +866,44 @@
     <ClCompile Include="MeshData.cpp">
       <Filter>Assets</Filter>
     </ClCompile>
+    <ClCompile Include="GolemComponent.cpp">
+      <Filter>component\ProjectOriginal\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyComponent.cpp">
+      <Filter>component\ProjectOriginal\Enemy</Filter>
+    </ClCompile>
     <ClCompile Include="PlayerAnimationControlComponent.cpp">
-      <Filter>component</Filter>
+      <Filter>component\ProjectOriginal\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="PlayerComponent.cpp">
+      <Filter>component\ProjectOriginal\Player</Filter>
+    </ClCompile>
+    <ClCompile Include="GameManagerComponent.cpp">
+      <Filter>component\ProjectOriginal\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Stage1ManagerComponent.cpp">
+      <Filter>component\ProjectOriginal\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="StageSelectManagerComponent.cpp">
+      <Filter>component\ProjectOriginal\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="TitleManagerComponent.cpp">
+      <Filter>component\ProjectOriginal\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="TutorialManagerComponent.cpp">
+      <Filter>component\ProjectOriginal\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="UIManagerComponent.cpp">
+      <Filter>component\ProjectOriginal\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveTestComponent.cpp">
+      <Filter>component\ProjectOriginal\Test</Filter>
+    </ClCompile>
+    <ClCompile Include="AttackComponent.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="AbilitySystemComponent.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

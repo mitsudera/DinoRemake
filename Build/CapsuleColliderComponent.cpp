@@ -1,5 +1,6 @@
 #include "CapsuleColliderComponent.h"
-
+#include "GameEngine.h"
+#include "DebugUtility.h"
 CapsuleColliderComponent::CapsuleColliderComponent(GameObject* gameObject)
 {
 	this->pGameObject = gameObject;
@@ -63,4 +64,10 @@ XMFLOAT3 CapsuleColliderComponent::GetEnd(void)
 float CapsuleColliderComponent::GetRadius(void)
 {
 	return this->radius;
+}
+void CapsuleColliderComponent::DebugDraw(void)
+{
+	Component::DebugDraw();
+	pGameEngine->GetDebugUtility()->DrawDebugCapsule(lStartPoint,lEndPoint,radius,GetWorldMtx());
+
 }

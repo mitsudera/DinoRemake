@@ -19,8 +19,10 @@ public:
 	void SetWalkRight(BOOL b);
 	void SetWalkLeft(BOOL b);
 	void SetRun(BOOL b);
+	void AttackTrigger(void);
 	void JumpTrigger(void);
-
+	void SetAngle(float f);
+	BOOL GetIsTransition(void);
 private:
 	PlayerComponent* playerCom;
 	AnimationControlerComponent* animControler;

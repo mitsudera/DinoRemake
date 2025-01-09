@@ -35,12 +35,12 @@ ShadowMap::ShadowMap(GameEngine* gameEngine)
 	pRenderer->GetDevice()->CreateBuffer(&hBufferDesc, nullptr, &this->shadowBuffer);
 	pCBufferManager->SetShadowBuffer(this->shadowBuffer);
 	quality = ShadowQuality::High;
-	vhwn = 128.0f;
+	vhwn = 1024.0f;
 	vhwf = 1024.0f;
 	variance = TRUE;
 
 	vNear = 0.0f;
-	vFar = 128.0f;
+	vFar = 1024.0f*2.0f;
 
 }
 
@@ -99,8 +99,9 @@ void ShadowMap::ShadowMapping(void)
 		return;
 
 
-	this->shadowBufferStruct.mode = variance;
-	this->shadowBufferStruct.facter = (3.0f/vFar);
+	this->shadowBufferStruct.mode = 1;
+	this->shadowBufferStruct.facter = (0.01f);
+	this->shadowBufferStruct.bias = (-0.005f);
 
 	XMMATRIX view;
 	XMMATRIX proj;
@@ -121,7 +122,7 @@ void ShadowMap::ShadowMapping(void)
 
 	lDir = XMVector3Normalize(lDir);
 
-	mapPos = camPos- (lDir * vFar * 0.1f);
+	mapPos = camPos- (lDir * vFar * 0.7f);
 
 
 
@@ -224,10 +225,14 @@ void ShadowMap::SetNear(float vNear)
 void ShadowMap::SetEnable(BOOL enable)
 {
 	this->shadowBufferStruct.enable = enable;
+	pGameEngine->GetRenderer()->GetDeviceContext()->UpdateSubresource(shadowBuffer, 0, NULL, &shadowBufferStruct, 0, 0);
+
 }
 
 void ShadowMap::SetVariance(BOOL enable)
 {
 	this->variance = enable;
 	this->shadowBufferStruct.mode = variance;
+	pGameEngine->GetRenderer()->GetDeviceContext()->UpdateSubresource(shadowBuffer, 0, NULL, &shadowBufferStruct, 0, 0);
+
 }

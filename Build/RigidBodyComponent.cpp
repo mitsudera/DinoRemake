@@ -6,7 +6,7 @@
 #include "ColliderComponent.h"
 
 constexpr XMFLOAT3 gravity = XMFLOAT3(0.0f, -9.81f, 0.0f); // 標準重力
-
+constexpr float onGroundFacter = 5.0f;
 
 RigidBodyComponent::RigidBodyComponent(GameObject* gameObject)
 {
@@ -31,42 +31,54 @@ void RigidBodyComponent::Init(void)
 {
 	Component::Init();
 	transform = GetTransFormComponent();
+	worldPos = XMLoadFloat3(&transform->GetWorldPos());
+	offGroundTime = 0.0f;
+	groundLen = 0.0f;
+	move = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 
 }
 
 void RigidBodyComponent::FixedUpdate(void)
 {
 	Component::FixedUpdate();
+
+	float deltaTime = pGameEngine->GetFixedDeltaTime();
+
+	worldPos += move;
+
 	// 重力の適用
 	if (useGravity)
 	{
 		XMVECTOR gravityV = XMLoadFloat3(&gravity); // 標準重力
-		velocity += gravityV * mass * pGameEngine->GetFixedDeltaTime();
+		velocity += gravityV * mass * deltaTime;
 	}
 
 	// 空気抵抗の適用
-	XMVECTOR dragForce = velocity * drag * mass * -1.0f;
-	velocity += dragForce * pGameEngine->GetFixedDeltaTime();
+	XMVECTOR dragForce = velocity * drag * -1.0f;
+	velocity += dragForce * deltaTime;
+
+	worldPos += velocity * deltaTime;
 
 
-	transform->MoveVelocity(velocity * pGameEngine->GetFixedDeltaTime());
+
+	//地面との当たり判定を取得し座標修正
 	if (collider->GetHitTag(GameObject::ObjectTag::Field))
 	{
 		float h = collider->GetHitTagObject(GameObject::ObjectTag::Field)->GetComponent<TerrainComponent>()->GetHeight(GetWorldPos());
-		if (transform->GetWorldPos().y > h)
+		if (worldPos.m128_f32[1] > h)
 		{
 			onGround = FALSE;
+			offGroundTime += deltaTime;
+			groundLen = worldPos.m128_f32[1] - h;
 		}
 		else
 		{
-			transform->SetWorldPosY(h);
-			XMFLOAT3 p = GetWorldPos();
-			// 摩擦の適用
-			XMVECTOR frictionForce = velocity * friction * -1.0f;
-			velocity += frictionForce * pGameEngine->GetFixedDeltaTime();
 
+			worldPos.m128_f32[1] = h;
+			velocity.m128_f32[1] = 0.0f;
 			onGround = TRUE;
-
+			offGroundTime = 0.0f;
+			groundLen = 0.0f;
 		}
 	}
 	else
@@ -74,6 +86,8 @@ void RigidBodyComponent::FixedUpdate(void)
 		onGround = FALSE;
 	}
 
+	transform->SetWorldPosition(worldPos);
+	move = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 
 }
 
@@ -143,6 +157,26 @@ void RigidBodyComponent::RotVelocityY(float f)
 
 	velocity = XMVector3Rotate(velocity, qton);
 
+}
+
+void RigidBodyComponent::MovePosition(XMVECTOR vec, float moveValue)
+{
+	move += vec * moveValue;
+}
+
+void RigidBodyComponent::MovePosition(XMFLOAT3 vec, float moveValue)
+{
+	MovePosition(XMLoadFloat3(&vec), moveValue);
+}
+
+float RigidBodyComponent::GetOffGroundTime(void)
+{
+	return offGroundTime;
+}
+
+float RigidBodyComponent::GetGroundLength(void)
+{
+	return groundLen;
 }
 
 

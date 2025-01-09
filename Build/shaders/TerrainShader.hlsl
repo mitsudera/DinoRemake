@@ -342,17 +342,17 @@ struct PSout
 
 PSout PSmain(GS_OUTPUT input)
 {
+    PSout psout;
+
     float4 color;
 
-    float sma = 1.0;
-    bool shadow;
     
-    PSout psout;
     
     float4 normal = input.Normal;
     
 
-    
+    float sma = 1.0;
+
     float4 pos4 = mul(input.WorldPos, Shadow.wvp);
     float4 PosSM;
     PosSM.x = (pos4.x + 1.0) / 2.0;
@@ -403,7 +403,7 @@ PSout PSmain(GS_OUTPUT input)
             sma = GetVarianceDirectionalShadowFactor(PosSM);
             if (sma != 1.0f)
             {
-                sma = sma * sma;
+                sma = sma*0.5;
 
             }
 

@@ -123,8 +123,8 @@ void TransformComponent::Draw(void)
 
 void TransformComponent::UpdateMatrix(void)
 {
-	if (!this->isMtxUpdate)
-		return;
+	//if (!this->isMtxUpdate)
+	//	return;
 	lMtx = XMMatrixIdentity();
 	lMtx = XMMatrixMultiply(lMtx, mtxscl);
 	mtxrot = XMMatrixRotationQuaternion(this->quaternion);
@@ -218,7 +218,7 @@ void TransformComponent::SetRotation(XMVECTOR qton)
 void TransformComponent::SetRotation(XMFLOAT3 rot)
 {
 	this->rot = rot;
-	quaternion = XMQuaternionRotationMatrix(XMMatrixRotationRollPitchYaw(rot.x, rot.y, rot.z));
+	this->quaternion = XMQuaternionRotationMatrix(XMMatrixRotationRollPitchYaw(rot.x, rot.y, rot.z));
 }
 
 void TransformComponent::SetScale(XMFLOAT3 scl)
@@ -292,11 +292,16 @@ void TransformComponent::SetLocalMtx(XMMATRIX mtx)
 
 	bool b= XMMatrixDecompose(&scl, &rot, &pos, mtx);
 
-	XMStoreFloat3(&this->scl, scl);
+	if (!b)
+	{
+		return;
+	}
+
+	//XMStoreFloat3(&this->scl, scl);
 	XMStoreFloat3(&this->pos, pos);
 
 
-	this->mtxscl = XMMatrixScaling(this->scl.x, this->scl.y, this->scl.z);
+	//this->mtxscl = XMMatrixScaling(this->scl.x, this->scl.y, this->scl.z);
 	this->quaternion = rot;
 	this->mtxpos = XMMatrixTranslation(this->pos.x, this->pos.y, this->pos.z);
 
@@ -327,6 +332,35 @@ void TransformComponent::SetLocalMtx(XMMATRIX mtx1,float weight1,XMMATRIX mtx2,f
 
 
 	this->mtxscl = XMMatrixScaling(this->scl.x, this->scl.y, this->scl.z);
+	this->quaternion = XMQuaternionRotationMatrix(rotMtx);
+	this->mtxpos = XMMatrixTranslation(this->pos.x, this->pos.y, this->pos.z);
+
+
+	
+}
+void TransformComponent::SetLocalMtxNotScaling(XMMATRIX mtx1,float weight1,XMMATRIX mtx2,float weight2)
+{
+	XMVECTOR scl1;
+	XMVECTOR rot1;
+	XMVECTOR pos1;
+
+	XMVECTOR scl2;
+	XMVECTOR rot2;
+	XMVECTOR pos2;
+
+	XMMatrixDecompose(&scl1, &rot1, &pos1, mtx1);
+	XMMatrixDecompose(&scl2, &rot2, &pos2, mtx2);
+
+	XMStoreFloat3(&this->scl, (scl1 * weight1) + (scl2 * weight2));
+	XMStoreFloat3(&this->pos, (pos1 * weight1) + (pos2 * weight2));
+
+
+	XMMATRIX rotMtx = (XMMatrixRotationQuaternion(rot1) * weight1) + (XMMatrixRotationQuaternion(rot2) * weight2);
+
+
+
+
+	this->mtxscl = XMMatrixScaling(1.0f, 1.0f, 1.0f);
 	this->quaternion = XMQuaternionRotationMatrix(rotMtx);
 	this->mtxpos = XMMatrixTranslation(this->pos.x, this->pos.y, this->pos.z);
 
@@ -393,6 +427,14 @@ void TransformComponent::SetWorldPosition(XMFLOAT3 pos)
 	XMFLOAT3 p;
 	XMStoreFloat3(&p, posv);
 	SetPosition(p);
+}
+
+void TransformComponent::SetWorldPosition(XMVECTOR pos)
+{
+	XMFLOAT3 p;
+	XMStoreFloat3(&p, pos);
+	SetWorldPosition(p);
+
 }
 
 

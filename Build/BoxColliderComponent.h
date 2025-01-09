@@ -10,6 +10,8 @@ public:
 	virtual void Uninit(void) override;
 	virtual void Update(void) override;
 
+	virtual void DebugDraw(void) override;
+
 
 	void SetBox(XMFLOAT3 size);
 

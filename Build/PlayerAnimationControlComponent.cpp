@@ -41,27 +41,9 @@ void PlayerAnimationControlComponent::Update(void)
 		{
 			break;
 		}
-		case PlayerComponent::PlayerState::ForwardWalk:
+		case PlayerComponent::PlayerState::Walk:
 		{
 			this->animControler->SetCondition("Walk", FALSE);
-			break;
-		}
-		case PlayerComponent::PlayerState::BackWalk:
-		{
-			this->animControler->SetCondition("BackWalk", FALSE);
-
-			break;
-		}
-		case PlayerComponent::PlayerState::RightWalk:
-		{
-			this->animControler->SetCondition("RightWalk", FALSE);
-
-			break;
-		}
-		case PlayerComponent::PlayerState::LeftWalk:
-		{
-			this->animControler->SetCondition("LeftWalk", FALSE);
-
 			break;
 		}
 		case PlayerComponent::PlayerState::Run:
@@ -86,27 +68,9 @@ void PlayerAnimationControlComponent::Update(void)
 		{
 			break;
 		}
-		case PlayerComponent::PlayerState::ForwardWalk:
+		case PlayerComponent::PlayerState::Walk:
 		{
 			this->animControler->SetCondition("Walk", TRUE);
-			break;
-		}
-		case PlayerComponent::PlayerState::BackWalk:
-		{
-			this->animControler->SetCondition("BackWalk", TRUE);
-
-			break;
-		}
-		case PlayerComponent::PlayerState::RightWalk:
-		{
-			this->animControler->SetCondition("RightWalk", TRUE);
-
-			break;
-		}
-		case PlayerComponent::PlayerState::LeftWalk:
-		{
-			this->animControler->SetCondition("LeftWalk", TRUE);
-
 			break;
 		}
 		case PlayerComponent::PlayerState::Run:
@@ -134,7 +98,7 @@ void PlayerAnimationControlComponent::Update(void)
 
 
 
-	if (rb->GetOnGround() == TRUE)
+	if (rb->GetGroundLength() < 10.0f)
 	{
 		this->animControler->SetCondition("OnGround", TRUE);
 
@@ -154,23 +118,6 @@ void PlayerAnimationControlComponent::SetWalkForward(BOOL b)
 
 }
 
-void PlayerAnimationControlComponent::SetWalkBack(BOOL b)
-{
-	this->animControler->SetCondition("BackWalk", b);
-
-}
-
-void PlayerAnimationControlComponent::SetWalkRight(BOOL b)
-{
-	this->animControler->SetCondition("RightWalk", b);
-
-}
-
-void PlayerAnimationControlComponent::SetWalkLeft(BOOL b)
-{
-	this->animControler->SetCondition("LeftWalk", b);
-
-}
 
 void PlayerAnimationControlComponent::SetRun(BOOL b)
 {
@@ -178,7 +125,17 @@ void PlayerAnimationControlComponent::SetRun(BOOL b)
 
 }
 
-void PlayerAnimationControlComponent::JumpTrigger(void)
+void PlayerAnimationControlComponent::AttackTrigger(void)
 {
-	this->animControler->SetCondition("JumpTrigger",TRUE);
+	this->animControler->SetCondition("Attack",TRUE);
+}
+
+void PlayerAnimationControlComponent::SetAngle(float f)
+{
+	animControler->SetAngle(f);
+}
+
+BOOL PlayerAnimationControlComponent::GetIsTransition(void)
+{
+	return animControler->GetIsTransition();
 }

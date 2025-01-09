@@ -140,9 +140,7 @@ void MeshComponent::SetMeshData(MeshData* data)
 	this->material = meshData->GetMaterial();
 	this->shadowMaterial = meshData->GetShadowMaterial();
 
-	this->GetTransFormComponent()->SetPosition(meshData->GetPosOffset());
-	this->GetTransFormComponent()->SetRotation(meshData->GetRotOffset());
-	this->GetTransFormComponent()->SetScale(meshData->GetSclOffset());
+	this->GetTransFormComponent()->SetLocalMtx(meshData->GetLocalOffset());
 
 	this->GetTransFormComponent()->UpdateMatrix();
 

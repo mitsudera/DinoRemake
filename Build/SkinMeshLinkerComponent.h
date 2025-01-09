@@ -28,6 +28,10 @@ public:
 
 	void SetBoneCount(int cnt);
 
+	void SetRagdoll(BOOL enable);
+
+	void SetSpring(string name, float mass, float tension, float resistance);
+
 private:
 	vector<BoneComponent*> boneArray;
 	Renderer* pRenderer;

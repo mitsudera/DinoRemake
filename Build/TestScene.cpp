@@ -14,7 +14,6 @@
 #include "MeshField.h"
 #include "Player.h"
 #include "Stage1Manager.h"
-#include "RedEnemy.h"
 #include "CameraComponent.h"
 #include "TextMesh.h"
 #include "TextMeshComponent.h"

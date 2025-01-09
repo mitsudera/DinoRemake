@@ -135,6 +135,21 @@ GameObject* ColliderComponent::GetHitTagObject(GameObject::ObjectTag tag)
 	return nullptr;
 }
 
+vector<GameObject*> ColliderComponent::GetHitTagObjectAll(GameObject::ObjectTag tag)
+{
+	vector<GameObject*> hitArray;
+
+	for (GameObject* obj: result.hitObject)
+	{
+		if (obj->GetTag() == tag)
+		{
+			hitArray.push_back(obj);
+		}
+	}
+
+	return hitArray;
+}
+
 void ColliderComponent::Clear(void)
 {
 	this->result.hitObject.clear();
@@ -145,6 +160,11 @@ void ColliderComponent::Clear(void)
 	}
 
 
+}
+
+void ColliderComponent::SetPivot(XMFLOAT3 pivot)
+{
+	this->pivot = XMLoadFloat3(&pivot);
 }
 
 XMFLOAT3 ColliderComponent::GetCenter(void)
@@ -164,7 +184,7 @@ void ColliderComponent::SetCheckRadius(float r)
 
 void ColliderComponent::UpdateCenter(void)
 {
-	this->center = GetWorldPos();
+	XMStoreFloat3(&this->center, XMVector3Transform(pivot, GetWorldMtx()));
 
 }
 
