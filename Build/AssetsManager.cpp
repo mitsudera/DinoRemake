@@ -22,6 +22,8 @@
 #include "SkinMeshPhongShader.h"
 #include "SkinMeshShadowShader.h"
 #include "DebugLineShader.h"
+#include "StandardMaterial.h"
+#include "StandardShader.h"
 
 #define MESH_PATH "data/MODEL/mesh/"
 #define SKINMESH_PATH "data/MODEL/skinmesh/"
@@ -295,6 +297,9 @@ void AssetsManager::CreateAllShader(void)
 	skinMeshPhongShader = new SkinMeshPhongShader(this->pGameEngine->GetRenderer());
 	ShaderSetArray.push_back(skinMeshPhongShader);
 	
+	standardShader = new StandardShader(this->pGameEngine->GetRenderer());
+	ShaderSetArray.push_back(standardShader);
+	
 	//shadow
 	shadowShader = new ShadowShader(this->pGameEngine->GetRenderer());
 	ShaderSetArray.push_back(shadowShader);
@@ -324,6 +329,10 @@ void AssetsManager::CreateDefaultMaterial(void)
 	UIMaterial* uiMat = new UIMaterial(this);
 	uiMat->SetName("UIMaterial");
 	MaterialArray.push_back(uiMat);
+
+	StandardMaterial* standard = new StandardMaterial(this);
+	standard->SetName("StandardMaterial");
+	MaterialArray.push_back(standard);
 }
 
 LambartShader* AssetsManager::GetLambartShader(void)
@@ -360,6 +369,11 @@ TerrainShader* AssetsManager::GetTerrainShader(void)
 SkinMeshPhongShader* AssetsManager::GetSkinMeshShader(void)
 {
 	return this->skinMeshPhongShader;
+}
+
+StandardShader* AssetsManager::GetStandardShader(void)
+{
+	return standardShader;
 }
 
 GausianBlurShader* AssetsManager::GetGausianBlurShader(void)
@@ -402,6 +416,9 @@ void AssetsManager::SetShader(ShaderSet::ShaderIndex index)
 	case ShaderSet::SkinMeshPhong:
 		this->skinMeshPhongShader->SetShaderRenderer();
 		break;
+	case ShaderSet::Standard:
+		this->standardShader->SetShaderRenderer();
+		break;
 	}
 }
 
@@ -432,7 +449,7 @@ int AssetsManager::CreateRenderTexture(int widht, int height, string name)
 
 
 
-	return RenderTextureArray.size() - 1;
+	return (int)RenderTextureArray.size() - 1;
 }
 
 int AssetsManager::GetRenderTextureIndex(string name)

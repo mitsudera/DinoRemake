@@ -389,6 +389,21 @@ BOOL AnimationControlerComponent::GetIsTransition(void)
 	return FALSE;
 }
 
+void AnimationControlerComponent::StopAnim(void)
+{
+	stop = TRUE;
+}
+
+void AnimationControlerComponent::StartAnim(void)
+{
+	stop = FALSE;
+}
+
+BOOL AnimationControlerComponent::GetStop(void)
+{
+	return this->stop;
+}
+
 void AnimationControlerComponent::UpdateAnimation(MtxNode* node, GameObject* gameObject)
 {
 
@@ -507,11 +522,16 @@ void AnimationTransition::UpdateAnimation(GameObject* gameObject)
 	}
 
 
+	if (!controler->GetStop())
+	{
+		float deltaTime = pGameEngine->GetDeltaTime();
+		timeCnt += deltaTime;
+		beforeAnimCnt += deltaTime;
+		afterAnimCnt += deltaTime;
 
-	float deltaTime = pGameEngine->GetDeltaTime();
-	timeCnt += deltaTime;
-	beforeAnimCnt += deltaTime;
-	afterAnimCnt += deltaTime;
+	}
+
+
 
 
 	if (timeCnt > transitionTime)
@@ -661,11 +681,13 @@ void AnimationNode::UpdateAnimation(GameObject* gameObject)
 		UpdateMtx(child, childObj);
 	}
 
-	timeCnt += pGameEngine->GetDeltaTime();
+
+	if (!controler->GetStop())
+		timeCnt += pGameEngine->GetDeltaTime();
 
 	if (loop)
 	{
-		if (timeCnt > endTime)
+		while(timeCnt > endTime)
 		{
 			timeCnt -= endTime;
 		}
@@ -679,8 +701,19 @@ void AnimationNode::UpdateAnimation(GameObject* gameObject)
 		{
 
 			float overTime = timeCnt - exitTime;
-			if(exitTransition!=nullptr) exitTransition->StartTransition(timeCnt, overTime);
+			if (exitTransition != nullptr)
+			{
+				exitTransition->StartTransition(timeCnt, overTime);
+			}
+			else if (timeCnt > endTime)
+			{
+				timeCnt = endTime;
+				controler->StopAnim();
+			}
+
 		}
+
+
 	}
 	for (AnimationTransition* transition : transitionArray)
 	{

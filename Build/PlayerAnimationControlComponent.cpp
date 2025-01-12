@@ -129,6 +129,10 @@ void PlayerAnimationControlComponent::AttackTrigger(void)
 {
 	this->animControler->SetCondition("Attack",TRUE);
 }
+void PlayerAnimationControlComponent::DodgeTrigger(void)
+{
+	this->animControler->SetCondition("Dodge",TRUE);
+}
 
 void PlayerAnimationControlComponent::SetAngle(float f)
 {

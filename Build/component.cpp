@@ -24,6 +24,7 @@ void Component::Awake(void)
 {
 	this->pGameEngine = pGameObject->GetScene()->GetGameEngine();
 	this->pGameObject->GetScene()->AddSceneComponent(this);
+	this->pScene = pGameObject->GetScene();
 	this->attribute = Attribute::Component;
 	this->input = pGameEngine->GetInput();
 	
@@ -42,6 +43,10 @@ void Component::Uninit(void)
 }
 
 void Component::FixedUpdate(void)
+{
+}
+
+void Component::FixedLateUpdate(void)
 {
 }
 

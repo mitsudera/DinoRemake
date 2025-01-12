@@ -20,6 +20,10 @@ public:
 	void SetSpriteCenter(string texPath, XMFLOAT3 pos, float width, float height);
 	void SetSpriteLeftDown(string texPath, XMFLOAT3 pos, float width, float height);
 
+	void SetSpriteCenter(XMFLOAT3 pos, float width, float height);
+
+	void SetSpriteLeftDown(XMFLOAT3 pos, float width, float height);
+
 	void SetFullScreen(string texPath);
 
 	void SetTexSlice(XMINT2 slice);
@@ -32,6 +36,8 @@ public:
 
 	void SetLRRev(BOOL enable);
 
+	void SetWidth(float width);
+
 private:
 	VERTEX_3D vertexArray[4];
 
@@ -42,6 +48,8 @@ private:
 	int sliceMax;
 
 	BOOL texLRrev;
+
+	
 
 };
 

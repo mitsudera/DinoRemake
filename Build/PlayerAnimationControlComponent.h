@@ -20,6 +20,7 @@ public:
 	void SetWalkLeft(BOOL b);
 	void SetRun(BOOL b);
 	void AttackTrigger(void);
+	void DodgeTrigger(void);
 	void JumpTrigger(void);
 	void SetAngle(float f);
 	BOOL GetIsTransition(void);

@@ -25,6 +25,7 @@ public:
 
 	BOOL CheckCillision(ColliderPair pair);
 
+	XMFLOAT4 CheckPenetrationDepth(ColliderPair pair);
 
 private:
 

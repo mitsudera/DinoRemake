@@ -23,3 +23,8 @@ float GetAngleInRadians(DirectX::XMFLOAT2 vector1, DirectX::XMFLOAT2 vector2);
 XMFLOAT2 GetVectorFromAngleInRadians(float angleInRadians);
 
 float GetAngleInRadiansFromVector(XMFLOAT2 vector);
+
+BOOL IsInsideFrustum(XMVECTOR center, XMVECTOR size, XMMATRIX frustum);
+
+BOOL IsCenterInsideFrustum(XMVECTOR center, XMMATRIX frustum);
+

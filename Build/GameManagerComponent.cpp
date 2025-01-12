@@ -32,7 +32,7 @@ void GameManagerComponent::Init(void)
 {
 	Component::Init();
 	this->gameScene = pGameObject->GetScene();
-	this->gameCamera = gameScene->GetGameObjectName("Player")->GetChild("Camera")->GetComponent<CameraComponent>();
+	this->gameCamera = gameScene->GetGameObjectName("Player")->SerchAllChild("Camera")->GetComponent<CameraComponent>();
 	this->debugCamera = gameScene->GetGameObjectName("DebugCamera")->GetComponent<CameraComponent>();
 	this->player = gameScene->GetGameObjectName("Player");
 	pGameEngine->GetShadowMap()->SetEnable(TRUE);

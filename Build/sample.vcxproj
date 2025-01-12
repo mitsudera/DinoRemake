@@ -203,7 +203,9 @@
     <ClInclude Include="NotEffectShader.h" />
     <ClInclude Include="PlayerAnimationControlComponent.h" />
     <ClInclude Include="Golem.h" />
+    <ClInclude Include="QuadComponent.h" />
     <ClInclude Include="RigidBodyComponent.h" />
+    <ClInclude Include="RotBoxColliderComponent.h" />
     <ClInclude Include="SkinMeshComponent.h" />
     <ClInclude Include="SkinMeshComputeShader.h" />
     <ClInclude Include="SkinMeshLinkerComponent.h" />
@@ -213,6 +215,8 @@
     <ClInclude Include="SkinMeshShadowShader.h" />
     <ClInclude Include="SkinMeshTest.h" />
     <ClInclude Include="SkinMeshTreeData.h" />
+    <ClInclude Include="StandardMaterial.h" />
+    <ClInclude Include="StandardShader.h" />
     <ClInclude Include="TerrainComponent.h" />
     <ClInclude Include="MeshFieldVertex.h" />
     <ClInclude Include="MikanSoftLogo.h" />
@@ -262,6 +266,7 @@
     <ClInclude Include="TitleManagerComponent.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="transformcomponent.h" />
+    <ClInclude Include="Tree1.h" />
     <ClInclude Include="TutorialManager.h" />
     <ClInclude Include="TutorialManagerComponent.h" />
     <ClInclude Include="TutorialScene.h" />
@@ -323,7 +328,9 @@
     <ClCompile Include="NotEffectShader.cpp" />
     <ClCompile Include="PlayerAnimationControlComponent.cpp" />
     <ClCompile Include="Golem.cpp" />
+    <ClCompile Include="QuadComponent.cpp" />
     <ClCompile Include="RigidBodyComponent.cpp" />
+    <ClCompile Include="RotBoxColliderComponent.cpp" />
     <ClCompile Include="SkinMeshComponent.cpp" />
     <ClCompile Include="SkinMeshComputeShader.cpp" />
     <ClCompile Include="SkinMeshLinkerComponent.cpp" />
@@ -333,6 +340,8 @@
     <ClCompile Include="SkinMeshShadowShader.cpp" />
     <ClCompile Include="SkinMeshTest.cpp" />
     <ClCompile Include="SkinMeshTreeData.cpp" />
+    <ClCompile Include="StandardMaterial.cpp" />
+    <ClCompile Include="StandardShader.cpp" />
     <ClCompile Include="TerrainComponent.cpp" />
     <ClCompile Include="MeshFieldVertex.cpp" />
     <ClCompile Include="MikanSoftLogo.cpp" />
@@ -379,6 +388,7 @@
     <ClCompile Include="TitleManagerComponent.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="transformcomponent.cpp" />
+    <ClCompile Include="Tree1.cpp" />
     <ClCompile Include="TutorialManager.cpp" />
     <ClCompile Include="TutorialManagerComponent.cpp" />
     <ClCompile Include="TutorialScene.cpp" />
@@ -459,6 +469,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="shaders\StandardShader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
     <FxCompile Include="shaders\TerrainShader.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>

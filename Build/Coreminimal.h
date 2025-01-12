@@ -35,7 +35,7 @@
 #include <filesystem>
 #include <cwchar>
 #include <list>
-#include <minmax.h>
+//#include <minmax.h>
 #include <functional>
 
 //FBXSDKƒ‰ƒCƒuƒ‰ƒŠ

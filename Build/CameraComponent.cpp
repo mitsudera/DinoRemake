@@ -112,7 +112,7 @@ void CameraComponent::Awake(void)
 	SetViewPort(VIEWPORT_TYPE::TYPE_FULL_SCREEN);
 	this->mtxProj = XMMatrixPerspectiveFovLH(this->angle, this->aspect, this->nearZ, this->farZ);
 
-	renderTextureIndex= pGameEngine->GetAssetsManager()->CreateRenderTexture(1920.0f, 1080.0f, "cameraRT");
+	renderTextureIndex= pGameEngine->GetAssetsManager()->CreateRenderTexture((int)1920.0f, (int)1080.0f, "cameraRT");
 	renderTexture = pGameEngine->GetAssetsManager()->GetRenderTexture(renderTextureIndex);
 	postEffectIndex = 0;
 
@@ -159,7 +159,12 @@ void CameraComponent::Render(void)
 		break;
 	case TrackingMode::NONE:
 
-		this->mtxView = XMMatrixLookToLH(XMLoadFloat3(&this->GetWorldPos()), GetTransFormComponent()->GetAxisZ(), this->GetTransFormComponent()->GetAxisY());
+		XMVECTOR az = XMVector3TransformNormal(GetTransFormComponent()->GetAxisZ(),GetWorldMtx());
+		XMVECTOR ay = XMVector3TransformNormal(GetTransFormComponent()->GetAxisY(), GetWorldMtx());
+
+		XMFLOAT3 wpos = this->GetWorldPos();
+
+		this->mtxView = XMMatrixLookToLH(XMLoadFloat3(&this->GetWorldPos()), az, ay);
 		break;
 
 	default:
@@ -167,8 +172,6 @@ void CameraComponent::Render(void)
 	}
 
 	pGameEngine->GetCBufferManager()->SetCameraBuffer(&GetWorldPos());
-
-	pGameEngine->GetCBufferManager()->SetViewMtx(&this->mtxView);
 
 
 	pGameEngine->GetCBufferManager()->SetProjectionMtx(&this->mtxProj);
@@ -208,12 +211,16 @@ void CameraComponent::Render(void)
 
 			layerCulling[(int)GameObject::Layer::Sky] = TRUE;
 			pRenderer->SetDepthEnable(FALSE);
-			this->sky->GetTransFormComponent()->SetWorldPosition(this->GetWorldPos());
+
+
+			XMMATRIX cMtx = this->mtxView;
+			cMtx.r[3] = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
+
+			pGameEngine->GetCBufferManager()->SetViewMtx(&cMtx);
 
 
 			for (PrimitiveComponent* com : skyComArray)
 			{
-				com->GetTransFormComponent()->UpdateMatrix();
 				com->GetMaterial()->GetShaderSet()->SetShaderRenderer();
 				com->Draw();
 			}
@@ -256,12 +263,14 @@ void CameraComponent::Render(void)
 
 			layerCulling[(int)GameObject::Layer::Sky] = TRUE;
 			pRenderer->SetDepthEnable(FALSE);
-			this->sky->GetTransFormComponent()->SetWorldPosition(this->GetWorldPos());
+			XMMATRIX cMtx = this->mtxView;
+			cMtx.r[3] = XMVectorSet(0.0f, 0.0f, 0.0f, 1.0f);
+
+			pGameEngine->GetCBufferManager()->SetViewMtx(&cMtx);
 
 
 			for (PrimitiveComponent* com:skyComArray)
 			{
-				com->GetTransFormComponent()->UpdateMatrix();
 				com->GetMaterial()->GetShaderSet()->SetShaderRenderer();
 				com->Draw();
 			}
@@ -275,7 +284,9 @@ void CameraComponent::Render(void)
 
 	}
 
-
+	pGameEngine->GetCBufferManager()->SetViewMtx(&this->mtxView);
+	XMFLOAT2 screenSize = GetGameObject()->GetScene()->GetGameEngine()->GetWindowSize();
+	XMMATRIX viewproj = XMMatrixMultiply(this->mtxView, this->mtxProj);
 	//シェーダー毎に描画
 	for (int i = 0; i < ShaderSet::ShaderIndex::MAXShader; i++)
 	{
@@ -301,6 +312,10 @@ void CameraComponent::Render(void)
 			if (com->GetMaterial()->GetShaderSet()->GetShaderIndex() != i)
 				continue;
 
+			
+
+			if (com->GetIsFrustumCulling(viewproj))
+				continue;
 
 			com->Draw();
 

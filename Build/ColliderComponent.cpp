@@ -3,6 +3,7 @@
 #include "CollisionManager.h"
 #include "Scene.h"
 #include "GameEngine.h"
+#include "RigidBodyComponent.h"
 ColliderComponent::ColliderComponent()
 {
 	this->attribute = Component::Attribute::Collider;
@@ -28,7 +29,7 @@ void ColliderComponent::Awake(void)
 	result.hitObject.clear();
 	enable = FALSE;
 	this->checkRadius = 1.0f;
-
+	isRigid = FALSE;
 	for (int i = 0; i < (int)GameObject::ObjectTag::ObjectTagMax; i++)
 	{
 		result.isHit[i] = FALSE;
@@ -52,6 +53,12 @@ void ColliderComponent::Update(void)
 	Component::Update();
 
 
+
+}
+
+void ColliderComponent::FixedUpdate(void)
+{
+	Component::FixedUpdate();
 
 }
 
@@ -150,10 +157,15 @@ vector<GameObject*> ColliderComponent::GetHitTagObjectAll(GameObject::ObjectTag 
 	return hitArray;
 }
 
+vector<pair<GameObject*, XMFLOAT4>>& ColliderComponent::GetHitRigidObject(void)
+{
+	return result.hitRigidObject;
+}
+
 void ColliderComponent::Clear(void)
 {
 	this->result.hitObject.clear();
-
+	this->result.hitRigidObject.clear();
 	for (int i = 0; i < (int)GameObject::ObjectTag::ObjectTagMax; i++)
 	{
 		this->result.isHit[i] = FALSE;
@@ -187,6 +199,23 @@ void ColliderComponent::UpdateCenter(void)
 	XMStoreFloat3(&this->center, XMVector3Transform(pivot, GetWorldMtx()));
 
 }
+
+void ColliderComponent::SetIsRigid(BOOL b)
+{
+	isRigid = b;
+}
+
+BOOL ColliderComponent::GetIsRigid(void)
+{
+	return isRigid;
+}
+
+void ColliderComponent::SetRigidObject(GameObject* obj, XMFLOAT4 depth)
+{
+	result.hitRigidObject.push_back(make_pair(obj, depth));
+}
+
+
 
 
 

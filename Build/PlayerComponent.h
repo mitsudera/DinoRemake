@@ -6,6 +6,7 @@ class PlayerAnimationControlComponent;
 class SkinMeshLinkerComponent;
 class ColliderComponent;
 class AttackComponent;
+class SpriteComponent;
 class PlayerComponent :public Component
 {
 public:
@@ -17,6 +18,15 @@ public:
 		Run,
 		Jump,
 		Fall,
+
+	};
+
+	enum class Combo :int
+	{
+		Zero,
+		Attack1,
+		Attack2,
+		Dodge,
 
 	};
 
@@ -32,6 +42,9 @@ public:
 
 	PlayerState GetState(void);
 
+	BOOL FindHitObject(GameObject* obj);
+
+
 
 private:
 	BOOL control;
@@ -43,14 +56,34 @@ private:
 	TransformComponent* transform;
 	ColliderComponent* collider;
 	AttackComponent* atkCom;
+	TransformComponent* camAt;
+	SpriteComponent* hpLine;
+	SpriteComponent* hpFrame;
+	float hpLineWidth;
+	float hpLineHeight;
+	XMFLOAT3 hpLinePos;
+
 	float velocity;
 	float speed;
 	float jumpForce;
 	float attackCnt;
+	float dodgeCnt;
 	BOOL onAttack;
+	BOOL onDodge;
+	float dodgeForce;
+	float dodgeUpForce;
+
+	void Dodge(void);
+	void UIUpdate(void);
 
 	BOOL devicePad;
 
-	int combo;
+	Combo combo;
+
+	int hpMax;
+	int hp;
+
+	list<GameObject*> hitList;
+
 };
 

@@ -208,6 +208,12 @@
     <Filter Include="Ability">
       <UniqueIdentifier>{e9a40ebf-dc5e-484a-9325-3bff734b9dc1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="gameobject\3D\Tree">
+      <UniqueIdentifier>{8a0d247c-cb32-43b6-989d-42ec90f34541}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\Standard">
+      <UniqueIdentifier>{5f321d7b-018d-4e85-a8e7-e52db9eda477}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Coreminimal.h">
@@ -558,6 +564,21 @@
     <ClInclude Include="AbilitySystemComponent.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="RotBoxColliderComponent.h">
+      <Filter>component\ColliderComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="Tree1.h">
+      <Filter>gameobject\3D\Tree</Filter>
+    </ClInclude>
+    <ClInclude Include="QuadComponent.h">
+      <Filter>component\primitiveComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="StandardMaterial.h">
+      <Filter>Shader\Standard</Filter>
+    </ClInclude>
+    <ClInclude Include="StandardShader.h">
+      <Filter>Shader\Standard</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -905,6 +926,21 @@
     <ClCompile Include="AbilitySystemComponent.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="RotBoxColliderComponent.cpp">
+      <Filter>component\ColliderComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="Tree1.cpp">
+      <Filter>gameobject\3D\Tree</Filter>
+    </ClCompile>
+    <ClCompile Include="QuadComponent.cpp">
+      <Filter>component\primitiveComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="StandardShader.cpp">
+      <Filter>Shader\Standard</Filter>
+    </ClCompile>
+    <ClCompile Include="StandardMaterial.cpp">
+      <Filter>Shader\Standard</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\shader.hlsl">
@@ -954,6 +990,9 @@
     </FxCompile>
     <FxCompile Include="shaders\FullScreenVertexShader.hlsl">
       <Filter>GameEngine\Renderer\Utility</Filter>
+    </FxCompile>
+    <FxCompile Include="shaders\StandardShader.hlsl">
+      <Filter>Shader\Standard</Filter>
     </FxCompile>
   </ItemGroup>
 </Project>

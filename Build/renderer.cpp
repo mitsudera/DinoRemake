@@ -686,7 +686,7 @@ void Renderer::DrawStringText(string text, float fontSize, XMFLOAT4 color, XMFLO
 			HGDIOBJ hgdi = SelectObject(hdc, font);
 
 			//テキスト出力
-			DrawText(hdc, const_cast<char*>(text.c_str()), text.length(), &rect, rectDT);
+			DrawText(hdc, const_cast<char*>(text.c_str()), (int)text.length(), &rect, rectDT);
 
 			SelectObject(hdc, hgdi); //フォントを元に戻す
 			DeleteObject(font);	//オブジェクト削除

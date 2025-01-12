@@ -210,6 +210,19 @@ void TransformComponent::SetPosition(XMFLOAT3 pos)
 	this->mtxpos = XMMatrixTranslation(pos.x, pos.y, pos.z);
 }
 
+void TransformComponent::SetPosition(float x, float y, float z)
+{
+	this->pos = XMFLOAT3(x, y, z);
+	this->mtxpos = XMMatrixTranslation(pos.x, pos.y, pos.z);
+
+}
+void TransformComponent::SetPosition(XMVECTOR pos)
+{
+	XMStoreFloat3(&this->pos, pos);
+	this->mtxpos = XMMatrixTranslation(this->pos.x, this->pos.y, this->pos.z);
+
+}
+
 void TransformComponent::SetRotation(XMVECTOR qton)
 {
 	this->quaternion = qton;

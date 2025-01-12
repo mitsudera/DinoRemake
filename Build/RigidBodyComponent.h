@@ -12,6 +12,7 @@ public:
 	virtual void Awake(void) override;
 	virtual void Init(void) override;
 	virtual void FixedUpdate(void) override;
+	virtual void FixedLateUpdate(void) override;
 	virtual void LateUpdate(void) override;
 	virtual void Uninit(void) override;
 	virtual void OnEnable(void)override;
@@ -34,10 +35,14 @@ public:
 
 	BOOL GetOnGround(void);
 
+	void SetIsStatic(BOOL b);
+
+
 private:
 	ColliderComponent* collider;
 	TransformComponent* transform;
 	XMVECTOR velocity;
+	XMVECTOR accel;
 	XMVECTOR worldPos;
 	XMVECTOR move;
 	float mass;
@@ -48,6 +53,7 @@ private:
 	BOOL useGravity;
 	BOOL isKinematic;
 	BOOL onGround;
+	BOOL isStatic;
 	float groundLen;
 };
 

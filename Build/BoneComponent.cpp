@@ -7,8 +7,7 @@
 #include "DebugUtility.h"
 #include "CBufferManager.h"
 
-constexpr XMFLOAT3 gravity = XMFLOAT3(0.0f, -9.81f, 0.0f); // 標準重力
-constexpr float gravityFacter = 9.81;
+constexpr XMFLOAT3 gravity = XMFLOAT3(0.0f, -981.0f, 0.0f); // 標準重力
 
 BoneComponent::BoneComponent(GameObject* gameObject)
 {
@@ -99,18 +98,17 @@ void BoneComponent::FixedUpdate(void)
 			force += -lenv * tension;
 
 			// 重力の適用
-			XMVECTOR gravityV = XMLoadFloat3(&gravity); // 標準重力
+			XMVECTOR gravityV = XMLoadFloat3(&gravity);
 			force += gravityV * mass;
 
-			//抵抗
-			force -= velocity * resistance;
+			////抵抗
+			force += velocity * -resistance;
 
 
 
 			accel += (force / mass);
 
 			velocity += accel * pGameEngine->GetFixedDeltaTime();
-
 
 			wpv += velocity * pGameEngine->GetFixedDeltaTime();
 			
@@ -171,7 +169,6 @@ void BoneComponent::SetBone(BoneData* data, SkinMeshLinkerComponent* linker)
 		defaultLength = XMLoadFloat3(&zero);
 		XMFLOAT3 wpos = GetWorldPos();
 		wpv = XMLoadFloat3(&wpos);
-
 		this->parentBone = nullptr;
 
 	}

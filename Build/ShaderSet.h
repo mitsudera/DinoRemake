@@ -26,6 +26,7 @@ public:
 		UI,
 		Terrain,
 		SkinMeshPhong,
+		Standard,
 		MAXShader,
 
 	}ShaderIndex;

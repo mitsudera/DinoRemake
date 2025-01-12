@@ -62,6 +62,28 @@ void Scene::FixedUpdate()
 
 }
 
+void Scene::FixedLateUpdate()
+{
+	for (Component* com : allComponent)
+	{
+		if (!com->GetActive())
+			continue;
+
+		com->FixedLateUpdate();
+
+	}
+
+	for (TransformComponent* com : allTransformComponent)
+	{
+		if (!com->GetActive())
+			continue;
+
+		com->UpdateMatrix();
+
+	}
+
+}
+
 void Scene::Update()
 {
 
@@ -188,6 +210,11 @@ list<PrimitiveComponent*>& Scene::GetAllPrimitiveComponent(void)
 	return allPrimitiveComponent;
 }
 
+list<RigidBodyComponent*>& Scene::GetAllRigidBodyComponent(void)
+{
+	return allRigidBodyComponent;
+}
+
 void Scene::AddSceneComponent(Component* com)
 {
 	this->allComponent.push_back(com);
@@ -203,6 +230,11 @@ void Scene::AddScenePrimitiveComponent(PrimitiveComponent* com)
 	this->allPrimitiveComponent.push_back(com);
 }
 
+void Scene::AddSceneRigidBodyComponent(RigidBodyComponent* com)
+{
+	this->allRigidBodyComponent.push_back(com);
+}
+
 void Scene::RemoveSceneComponent(Component* com)
 {
 	allComponent.remove(com);
@@ -216,4 +248,9 @@ void Scene::RemoveSceneTransformComponent(TransformComponent* com)
 void Scene::RemoveScenePrimitiveComponent(PrimitiveComponent* com)
 {
 	allPrimitiveComponent.remove(com);
+}
+
+void Scene::RemoveSceneRigidBodyComponent(RigidBodyComponent* com)
+{
+	allRigidBodyComponent.remove(com);
 }

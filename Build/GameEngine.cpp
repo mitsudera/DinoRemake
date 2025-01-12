@@ -77,6 +77,7 @@ void GameEngine::Awake()
 void GameEngine::Update()
 {
 	deltaTime = main->GetDeltaTime();
+	//deltaTime = 1.0f / 60.0f;;
 
 	if (activeScene != nextScene)
 	{
@@ -116,9 +117,12 @@ void GameEngine::Update()
 
 void GameEngine::FixedUpdate()
 {
+	this->activeScene->FixedUpdate();
+
 	this->collisionManager->Update();
 
-	this->activeScene->FixedUpdate();
+	this->activeScene->FixedLateUpdate();
+
 
 
 }
@@ -197,8 +201,7 @@ long GameEngine::GetMouseMoveY(void)
 
 float GameEngine::GetDeltaTime(void)
 {
-	//return deltaTime;
-	return 1.0f/60.0f;
+	return deltaTime;
 }
 
 XMFLOAT2 GameEngine::GetWindowSize(void)

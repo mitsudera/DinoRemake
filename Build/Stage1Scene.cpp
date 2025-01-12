@@ -19,6 +19,7 @@
 #include "TextMesh.h"
 #include "TextMeshComponent.h"
 #include "ShadowMap.h"
+#include "Tree1.h"
 
 Stage1Scene::Stage1Scene(GameEngine* pGameEngine)
 {
@@ -49,11 +50,12 @@ void Stage1Scene::Awake()
 
 	CreateGameObject<Player>();
 
-	CreateGameObject<Golem>();
+	CreateGameObject<Golem>()->GetTransFormComponent()->SetPosition(0.0f,0.0f,2000.0f);
+
+	CreateGameObject<Tree1>()->GetTransFormComponent()->SetPosition(300.0f, 0.0f, 300.0f);
+	CreateGameObject<Tree1>()->GetTransFormComponent()->SetPosition(-300.0f, 0.0f, 300.0f);
+
 
 	CreateGameObject<GameManager>();
-
-
-
 
 }

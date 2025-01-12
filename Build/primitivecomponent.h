@@ -42,6 +42,12 @@ public:
 	void SetAlphaTest(BOOL enable);
 	BOOL GetAlphaTest(void);
 
+	BOOL GetIsFrustumCulling(XMMATRIX frustum);
+
+	void SetBoxCenterSize(vector<XMFLOAT3> vertices);
+	void SetBoxCenterSize(XMFLOAT3 center, XMFLOAT3 size);
+
+
 protected:
 	Renderer* pRenderer;
 	BOOL hasShadow;
@@ -52,6 +58,9 @@ protected:
 	CBufferManager* pCBufferManager;
 	AssetsManager* pAssetsManager;
 	int cullMode;
+	BOOL isFrustumCulling;
+	XMVECTOR pivot;
+	XMFLOAT3 size;
 
 };
 

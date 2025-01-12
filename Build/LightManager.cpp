@@ -97,16 +97,16 @@ int LightManager::AddLight(DirectionalLightComponent* com)
 	direcLightList.push_back(com);
 	if (direcLightList.size() <= MAX_DIREC_LIGHT)
 	{
-		SetDirecLight(com, direcLightList.size() - 1);
+		SetDirecLight(com, (int)direcLightList.size() - 1);
 	}
-	return direcLightList.size() - 1;
+	return (int)direcLightList.size() - 1;
 
 }
 
 int LightManager::AddLight(PointLightComponent* com)
 {
 	pointLightList.push_back(com);
-	return pointLightList.size() - 1;
+	return (int)pointLightList.size() - 1;
 
 }
 

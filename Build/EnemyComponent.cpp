@@ -1,6 +1,14 @@
 #include "EnemyComponent.h"
 #include "ColliderComponent.h"
 #include "AttackComponent.h"
+#include "AnimationControlerComponent.h"
+#include "Scene.h"
+#include "Player.h"
+#include "RigidBodyComponent.h"
+#include "GameEngine.h"
+#include "QuadComponent.h"
+
+
 EnemyComponent::EnemyComponent()
 {
 }
@@ -13,11 +21,47 @@ EnemyComponent::~EnemyComponent()
 {
 }
 
+void EnemyComponent::Awake(void)
+{
+	Component::Awake();
+	hpFrame= pGameObject->AddChild("hpFrame");
+	hpLine= pGameObject->AddChild("hpLine");
+
+}
+
 void EnemyComponent::Init(void)
 {
 	Component::Init();
 	collider = GetComponent<ColliderComponent>();
-	
+	animControler = GetComponent<AnimationControlerComponent>();
+	rb = GetComponent<RigidBodyComponent>();
+	rb->SetIsStatic(FALSE);
+	transform = GetTransFormComponent();
+	player = pGameObject->GetScene()->GetGameObject<Player>();
+	playerTransform = player->GetComponent<TransformComponent>();
+	onAttack = FALSE;
+	atkCnt = 0.0f;
+	atkTime = 0.0f;
+
+	QuadComponent* quad = hpFrame->AddComponent<QuadComponent>();
+	quad->Init();
+	quad->LoadTexture("data/texture/Hp_frame.png");
+	quad->SetBillBorad(TRUE);
+	hpFrameTrans = hpFrame->GetTransFormComponent();
+
+	quad = hpLine->AddComponent<QuadComponent>();
+	quad->Init();
+	quad->LoadTexture("data/texture/Hp_line.png");
+	quad->SetBillBorad(TRUE);
+	hpLineTrans = hpLine->GetTransFormComponent();
+	hpWidth = 300.0f;
+	hpHeght = 10.0f;
+
+	hpFrameTrans->SetScale(XMFLOAT3(hpWidth, hpHeght, 1.0f));
+	hpLineTrans->SetScale(XMFLOAT3(hpWidth, hpHeght, 0.5f));
+	hpFrameTrans->SetPosition(XMFLOAT3(0.0f, 310.0f, 0.0f));
+	hpLineTrans->SetPosition(XMFLOAT3(0.0f, 310.0f, 0.0f));
+
 }
 
 void EnemyComponent::Update(void)
@@ -70,6 +114,90 @@ void EnemyComponent::Update(void)
 		}
 	}
 
+	if (onAttack)
+	{
+		atkCnt += pGameEngine->GetDeltaTime();
+		if (atkCnt > atkTime)
+		{
+			onAttack = FALSE;
+		}
+	}
+
+}
+
+void EnemyComponent::LateUpdate(void)
+{
+	Component::LateUpdate();
+	//アニメーション制御
+	if (lastState != state)
+	{
+
+
+		switch (lastState)
+		{
+		case EnemyComponent::EnemyState::Idle:
+		{
+			break;
+		}
+		case EnemyComponent::EnemyState::Walk:
+		{
+			this->animControler->SetCondition("Walk", FALSE);
+			break;
+		}
+		case EnemyComponent::EnemyState::Run:
+		{
+			this->animControler->SetCondition("Run", FALSE);
+
+			break;
+		}
+		case EnemyComponent::EnemyState::Fall:
+		{
+
+			break;
+		}
+
+		default:
+			break;
+		}
+
+		switch (state)
+		{
+		case EnemyComponent::EnemyState::Idle:
+		{
+			break;
+		}
+		case EnemyComponent::EnemyState::Walk:
+		{
+			this->animControler->SetCondition("Walk", TRUE);
+			break;
+		}
+		case EnemyComponent::EnemyState::Run:
+		{
+			this->animControler->SetCondition("Run", TRUE);
+
+			break;
+		}
+		case EnemyComponent::EnemyState::Fall:
+		{
+
+			break;
+		}
+
+		default:
+			break;
+		}
+
+
+
+
+		lastState = state;
+
+	}
+
+
+	float hpLen = ((float)hp / (float)hpMax) * hpWidth;
+	hpLineTrans->SetScale(XMFLOAT3(hpLen, hpHeght, 0.5f));
+
 }
 
 BOOL EnemyComponent::FindHitObject(GameObject* obj)
@@ -86,5 +214,18 @@ BOOL EnemyComponent::FindHitObject(GameObject* obj)
 	}
 
 	return FALSE;
+}
+
+void EnemyComponent::StartAtk(float atkTime)
+{
+	this->atkTime = atkTime;
+	atkCnt = 0.0f;
+	onAttack = TRUE;
+	state = EnemyState::Attack;
+}
+
+BOOL EnemyComponent::GetOnAttack(void)
+{
+	return onAttack;
 }
 

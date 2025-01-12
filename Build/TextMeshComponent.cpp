@@ -101,8 +101,8 @@ void TextMeshComponent::CreateTextMeshCenter(string text, XMFLOAT3 pos, float wi
 
 	float w = (width / screenHW.x) * 2.0f;
 	float h = (height / screenHW.y) * 2.0f;
-	float l = (pos.x / screenHW.x) - w * 0.5;
-	float t = (pos.y / screenHW.y) - h * 0.5;
+	float l = (pos.x / screenHW.x) - w * 0.5f;
+	float t = (pos.y / screenHW.y) - h * 0.5f;
 
 
 

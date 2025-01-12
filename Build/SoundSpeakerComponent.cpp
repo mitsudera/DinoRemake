@@ -65,7 +65,7 @@ int SoundSpeakerComponent::LoadSound(string fileName, string name, SoundType typ
 	
 	audioDataArray.push_back(newData);
 
-	return audioDataArray.size() - 1;
+	return (int)audioDataArray.size() - 1;
 }
 
 void SoundSpeakerComponent::StartSound(int index)

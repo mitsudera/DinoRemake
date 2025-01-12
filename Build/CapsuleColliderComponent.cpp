@@ -24,6 +24,13 @@ void CapsuleColliderComponent::Uninit(void)
 void CapsuleColliderComponent::Update(void)
 {
 	ColliderComponent::Update();
+
+
+}
+
+void CapsuleColliderComponent::FixedUpdate(void)
+{
+	ColliderComponent::FixedUpdate();
 	XMMATRIX worldMtx = GetWorldMtx();
 	XMVECTOR sp = XMLoadFloat3(&lStartPoint);
 	XMVECTOR ep = XMLoadFloat3(&lEndPoint);
@@ -33,7 +40,6 @@ void CapsuleColliderComponent::Update(void)
 
 	XMStoreFloat3(&startPoint, sp);
 	XMStoreFloat3(&endPoint, ep);
-
 
 }
 

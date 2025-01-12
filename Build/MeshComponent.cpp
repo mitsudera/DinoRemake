@@ -144,5 +144,5 @@ void MeshComponent::SetMeshData(MeshData* data)
 
 	this->GetTransFormComponent()->UpdateMatrix();
 
-
+	SetBoxCenterSize(data->GetBoxCenter(), data->GetBoxSize());
 }

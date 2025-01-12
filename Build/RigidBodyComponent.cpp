@@ -4,8 +4,9 @@
 #include "GameEngine.h"
 #include "TerrainComponent.h"
 #include "ColliderComponent.h"
+#include "Scene.h"
 
-constexpr XMFLOAT3 gravity = XMFLOAT3(0.0f, -9.81f, 0.0f); // 標準重力
+constexpr XMFLOAT3 gravity = XMFLOAT3(0.0f, -981.f, 0.0f); // 標準重力
 constexpr float onGroundFacter = 5.0f;
 
 RigidBodyComponent::RigidBodyComponent(GameObject* gameObject)
@@ -21,10 +22,15 @@ void RigidBodyComponent::Awake(void)
 {
 	Component::Awake();
 	collider = pGameObject->GetComponent<ColliderComponent>();
+	collider->SetIsRigid(TRUE);
+	this->pGameObject->GetScene()->AddSceneRigidBodyComponent(this);
+
     useGravity = TRUE;
     mass = 1.0f;
     drag = 0.1f;
+	friction = 50.0f;
 	onGround = TRUE;
+	isStatic = TRUE;
 }
 
 void RigidBodyComponent::Init(void)
@@ -35,6 +41,7 @@ void RigidBodyComponent::Init(void)
 	offGroundTime = 0.0f;
 	groundLen = 0.0f;
 	move = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+	velocity= XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
 
 }
 
@@ -44,22 +51,86 @@ void RigidBodyComponent::FixedUpdate(void)
 
 	float deltaTime = pGameEngine->GetFixedDeltaTime();
 
-	worldPos += move;
+	XMVECTOR bWpos = worldPos;
 
-	// 重力の適用
-	if (useGravity)
+	worldPos += move;
+	move = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+
+	
+	if (!isStatic)
 	{
-		XMVECTOR gravityV = XMLoadFloat3(&gravity); // 標準重力
-		velocity += gravityV * mass * deltaTime;
+
+
+		XMVECTOR accel= XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+		// 重力の適用
+		if (useGravity)
+		{
+			XMVECTOR gravityV = XMLoadFloat3(&gravity); // 標準重力
+			accel += gravityV * deltaTime;
+		}
+
+
+
+		// 空気抵抗の適用
+		XMVECTOR dragForce = velocity * drag * -1.0f;
+		accel += dragForce * deltaTime;
+
+
+		if (onGround)
+		{
+			XMVECTOR fricForce = velocity * friction * -1.0f;
+			fricForce.m128_f32[1] = 0.0f;
+			accel += fricForce * deltaTime;
+		}
+		velocity += accel;
+		worldPos += velocity * deltaTime;
+
+
+
+
+		transform->SetWorldPosition(worldPos);
+
 	}
 
-	// 空気抵抗の適用
-	XMVECTOR dragForce = velocity * drag * -1.0f;
-	velocity += dragForce * deltaTime;
 
-	worldPos += velocity * deltaTime;
+}
+
+void RigidBodyComponent::FixedLateUpdate(void)
+{
+	Component::FixedLateUpdate();
+
+	float deltaTime = pGameEngine->GetFixedDeltaTime();
 
 
+	//他の剛体との当たり判定を取得し座標修正
+	for (pair<GameObject*, XMFLOAT4> rbObj : collider->GetHitRigidObject())
+	{
+		RigidBodyComponent* colRb = rbObj.first->GetComponent<RigidBodyComponent>();
+		float penetrationDepth = rbObj.second.w;
+
+		XMFLOAT3 cnormal = XMFLOAT3(rbObj.second.x, rbObj.second.y, rbObj.second.z);
+
+
+		// 自分の中心と衝突オブジェクトの中心のベクトルを計算
+		XMFLOAT3 myCenter = GetWorldPos();
+		XMFLOAT3 colCenter = colRb->GetWorldPos();
+		XMVECTOR v = XMLoadFloat3(&myCenter) - XMLoadFloat3(&colCenter);
+
+		if (v.m128_f32[0] > 0.0f) cnormal.x *= -1;
+		if (v.m128_f32[1] > 0.0f) cnormal.y *= -1;
+		if (v.m128_f32[2] > 0.0f) cnormal.z *= -1;
+
+
+		XMVECTOR direction = XMLoadFloat3(&cnormal);
+
+
+		// 位置の修正
+		XMVECTOR correction = penetrationDepth * -direction;
+		worldPos += correction;
+
+
+
+	}
 
 	//地面との当たり判定を取得し座標修正
 	if (collider->GetHitTag(GameObject::ObjectTag::Field))
@@ -86,8 +157,7 @@ void RigidBodyComponent::FixedUpdate(void)
 		onGround = FALSE;
 	}
 
-	transform->SetWorldPosition(worldPos);
-	move = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
+
 
 }
 
@@ -103,6 +173,8 @@ void RigidBodyComponent::LateUpdate(void)
 void RigidBodyComponent::Uninit(void)
 {
 	Component::Uninit();
+	this->pGameObject->GetScene()->RemoveSceneRigidBodyComponent(this);
+
 }
 
 void RigidBodyComponent::OnEnable(void)
@@ -183,4 +255,9 @@ float RigidBodyComponent::GetGroundLength(void)
 BOOL RigidBodyComponent::GetOnGround(void)
 {
 	return this->onGround;
+}
+
+void RigidBodyComponent::SetIsStatic(BOOL b)
+{
+	isStatic = b;
 }

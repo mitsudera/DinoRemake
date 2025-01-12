@@ -10,7 +10,8 @@ class GausianBlurShader;
 
 struct ShadowCbuffer
 {
-	XMMATRIX wvp;
+	XMMATRIX wvpn;
+	XMMATRIX wvpf;
 	int enable;
 	int mode;
 	float facter;
@@ -52,6 +53,7 @@ private:
 	int shadowNearTextureIndex;
 	int shadowNearResultTextureIndex;
 	int shadowFarTextureIndex;
+	int shadowFarResultTextureIndex;
 	ShadowQuality quality;
 	ID3D11Buffer* shadowBuffer;
 	ShadowCbuffer shadowBufferStruct;

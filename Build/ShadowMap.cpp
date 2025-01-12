@@ -110,6 +110,9 @@ void ShadowMap::ShadowMapping(void)
 	XMVECTOR camPos;
 	XMVECTOR lDir;
 
+	XMVECTOR camv = XMVector3TransformNormal( pGameEngine->GetMainCamera()->GetTransFormComponent()->GetAxisZ(), pGameEngine->GetMainCamera()->GetTransFormComponent()->GetWorldMtx());
+	camv.m128_f32[1] = 0.0f;
+	camv = XMVector3Normalize(camv);
 
 	camPos = XMLoadFloat3(&pGameEngine->GetMainCamera()->GetWorldPos());
 	if (pGameEngine->GetMainCamera()->GetTrackingMode()!=CameraComponent::TrackingMode::NONE)
@@ -122,7 +125,7 @@ void ShadowMap::ShadowMapping(void)
 
 	lDir = XMVector3Normalize(lDir);
 
-	mapPos = camPos- (lDir * vFar * 0.7f);
+	mapPos = camPos - (lDir * vFar * 0.7f) + (camv * 250.0f);
 
 
 
@@ -148,7 +151,7 @@ void ShadowMap::ShadowMapping(void)
 	pCBufferManager->SetViewMtx(&view);
 	pCBufferManager->SetProjectionMtx(&proj);
 
-	this->shadowBufferStruct.wvp = XMMatrixTranspose(XMMatrixIdentity() * view * proj);
+	this->shadowBufferStruct.wvpn = XMMatrixTranspose(XMMatrixIdentity() * view * proj);
 	pAssetsManager->GetShadowShader()->SetShaderRenderer();
 
 	//シェーダー毎に描画

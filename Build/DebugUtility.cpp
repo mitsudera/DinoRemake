@@ -217,7 +217,7 @@ void DebugUtility::DrawDebugCapsule(XMFLOAT3 sp, XMFLOAT3 ep, float radius,XMMAT
 
     XMMATRIX pos, scl;
     XMMATRIX mtx;
-    scl = XMMatrixScaling(radius, len*0.5, radius);
+    scl = XMMatrixScaling(radius, len * 0.5f, radius);
     pos = XMMatrixTranslationFromVector(pv);
     mtx = scl *pos* world;
     cBufferManager->SetWorldMtx(&mtx);

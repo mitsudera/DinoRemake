@@ -22,6 +22,7 @@ class PhongShader;
 class UIShader;
 class TerrainShader;
 class SkinMeshPhongShader;
+class StandardShader;
 //shadow
 class ShadowShader;
 class SkinMeshShadowShader;
@@ -90,6 +91,7 @@ public:
 	UIShader* GetUIShader(void);
 	TerrainShader* GetTerrainShader(void);
 	SkinMeshPhongShader* GetSkinMeshShader(void);
+	StandardShader* GetStandardShader(void);
 
 	ShadowShader* GetShadowShader(void);
 	SkinMeshShadowShader* GetSkinMeshShadowShader(void);
@@ -134,6 +136,7 @@ private:
 
 
 	LambartShader* lambartShader;
+	StandardShader* standardShader;
 	PhongShader* phongShader;
 	UIShader* uiShader;
 	TerrainShader* terrainShader;

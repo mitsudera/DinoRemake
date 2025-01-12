@@ -204,6 +204,10 @@ public:
 
 	BOOL GetIsTransition(void);
 
+	void StopAnim(void);
+	void StartAnim(void);
+	BOOL GetStop(void);
+
 protected:
 	
 	void UpdateAnimation(MtxNode* node, GameObject* gameObject);
@@ -231,7 +235,7 @@ protected:
 	float angle;
 
 
-
+	BOOL stop;
 
 
 };

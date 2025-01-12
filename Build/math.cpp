@@ -217,3 +217,54 @@ float GetAngleInRadiansFromVector(XMFLOAT2 vector)
 
 	return angleInRadians;
 }
+
+BOOL IsInsideFrustum(XMVECTOR center, XMVECTOR size, XMMATRIX wvp)
+{
+	// バウンディングボックスの8つの頂点を計算
+	XMVECTOR vertices[8];
+	vertices[0] = XMVectorSet(center.m128_f32[0] - size.m128_f32[0] / 2, center.m128_f32[1] - size.m128_f32[1] / 2, center.m128_f32[2] - size.m128_f32[2] / 2, 1.0f);
+	vertices[1] = XMVectorSet(center.m128_f32[0] + size.m128_f32[0] / 2, center.m128_f32[1] - size.m128_f32[1] / 2, center.m128_f32[2] - size.m128_f32[2] / 2, 1.0f);
+	vertices[2] = XMVectorSet(center.m128_f32[0] - size.m128_f32[0] / 2, center.m128_f32[1] + size.m128_f32[1] / 2, center.m128_f32[2] - size.m128_f32[2] / 2, 1.0f);
+	vertices[3] = XMVectorSet(center.m128_f32[0] + size.m128_f32[0] / 2, center.m128_f32[1] + size.m128_f32[1] / 2, center.m128_f32[2] - size.m128_f32[2] / 2, 1.0f);
+	vertices[4] = XMVectorSet(center.m128_f32[0] - size.m128_f32[0] / 2, center.m128_f32[1] - size.m128_f32[1] / 2, center.m128_f32[2] + size.m128_f32[2] / 2, 1.0f);
+	vertices[5] = XMVectorSet(center.m128_f32[0] + size.m128_f32[0] / 2, center.m128_f32[1] - size.m128_f32[1] / 2, center.m128_f32[2] + size.m128_f32[2] / 2, 1.0f);
+	vertices[6] = XMVectorSet(center.m128_f32[0] - size.m128_f32[0] / 2, center.m128_f32[1] + size.m128_f32[1] / 2, center.m128_f32[2] + size.m128_f32[2] / 2, 1.0f);
+	vertices[7] = XMVectorSet(center.m128_f32[0] + size.m128_f32[0] / 2, center.m128_f32[1] + size.m128_f32[1] / 2, center.m128_f32[2] + size.m128_f32[2] / 2, 1.0f);
+
+	// 各頂点を視錘台空間に変換し、スクリーン内にあるかチェック
+	for (int i = 0; i < 8; ++i)
+	{
+		XMVECTOR transformedVertex = XMVector3TransformCoord(vertices[i], wvp);
+		XMFLOAT3 cp;
+		cp.x = (XMVectorGetX(transformedVertex) + 1.0f) * 0.5f;
+		cp.y= (-XMVectorGetY(transformedVertex) + 1.0f) * 0.5f;
+		cp.z = XMVectorGetZ(transformedVertex);
+
+		if ((cp.x > -1.0f && cp.x < 1.0f) &&
+			(cp.y > -1.0f && cp.y < 1.0f) &&
+			(cp.z > 0.0f && cp.z < 1.0f))
+		{
+			return TRUE;
+		}
+	}
+
+	return FALSE;
+}
+
+BOOL IsCenterInsideFrustum(XMVECTOR center, XMMATRIX frustum)
+{
+	XMFLOAT3 cp;
+	XMStoreFloat3(&cp, XMVector3TransformCoord(center, frustum));
+	cp.x = (cp.x + 1.0f) * 0.5f;
+	cp.y = (-cp.y + 1.0f) * 0.5f;
+
+
+	if ((cp.x > -1.0f && cp.x < 1.0f) &&
+		(cp.y > -1.0f && cp.y < 1.0f) &&
+		(cp.z > 0.0f && cp.z < 1.0f))
+	{
+		return TRUE;
+
+	}
+	return FALSE;
+}

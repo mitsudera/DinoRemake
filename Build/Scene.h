@@ -6,7 +6,7 @@ class GameEngine;
 class CollisionManager;
 class CameraComponent;
 class PrimitiveComponent;
-
+class RigidBodyComponent;
 class Scene
 {
 public:
@@ -20,6 +20,7 @@ public:
 	void Init(void);
 
 	void FixedUpdate();
+	void FixedLateUpdate();
 	void Update();
 	void LateUpdate();
 	void Draw();
@@ -57,14 +58,17 @@ public:
 	list<Component*>& GetAllComponent(void);
 	list<TransformComponent*>& GetAllTransformComponent(void);
 	list<PrimitiveComponent*>& GetAllPrimitiveComponent(void);
+	list<RigidBodyComponent*>& GetAllRigidBodyComponent(void);
 
 	void AddSceneComponent(Component* com);
 	void AddSceneTransformComponent(TransformComponent* com);
 	void AddScenePrimitiveComponent(PrimitiveComponent* com);
+	void AddSceneRigidBodyComponent(RigidBodyComponent* com);
 
 	void RemoveSceneComponent(Component* com);
 	void RemoveSceneTransformComponent(TransformComponent* com);
 	void RemoveScenePrimitiveComponent(PrimitiveComponent* com);
+	void RemoveSceneRigidBodyComponent(RigidBodyComponent* com);
 
 protected:
 	GameEngine* pGameEngine;
@@ -74,6 +78,7 @@ protected:
 	list<Component*> allComponent;
 	list<TransformComponent*> allTransformComponent;
 	list<PrimitiveComponent*> allPrimitiveComponent;
+	list<RigidBodyComponent*> allRigidBodyComponent;
 
 };
 

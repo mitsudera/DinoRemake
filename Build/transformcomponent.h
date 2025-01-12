@@ -45,6 +45,8 @@ public:
 	XMMATRIX GetLocalMtx(void);
 
 	void SetPosition(XMFLOAT3 pos);
+	void SetPosition(float x, float y, float z);
+	void SetPosition(XMVECTOR pos);
 	void SetRotation(XMVECTOR qton);
 	void SetRotation(XMFLOAT3 rot);
 	void SetScale(XMFLOAT3 scl);

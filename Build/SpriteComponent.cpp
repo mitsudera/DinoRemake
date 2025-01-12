@@ -100,8 +100,8 @@ void SpriteComponent::SetSpriteCenter(string texPath, XMFLOAT3 pos, float width,
 
 	float w = (width / screenHW.x) * 2.0f;
 	float h = (height / screenHW.y) * 2.0f;
-	float l = (pos.x / screenHW.x) - w * 0.5;
-	float t = (pos.y / screenHW.y) - h * 0.5;
+	float l = (pos.x / screenHW.x) - w * 0.5f;
+	float t = (pos.y / screenHW.y) - h * 0.5f;
 
 
 
@@ -133,6 +133,79 @@ void SpriteComponent::SetSpriteCenter(string texPath, XMFLOAT3 pos, float width,
 void SpriteComponent::SetSpriteLeftDown(string texPath, XMFLOAT3 pos, float width, float height)
 {
 	this->texture = pAssetsManager->LoadTexture(texPath);
+
+
+	XMFLOAT2 screenHW = pGameEngine->GetWindowSize();
+	float z = pos.z;
+
+	float w = (width / screenHW.x) * 2.0f;
+	float h = (height / screenHW.y) * 2.0f;
+	float l = ((pos.x / screenHW.x) - 0.5f) * 2.0f;
+	float t = ((pos.y / screenHW.y) - 0.5f) * 2.0f;
+
+
+
+
+
+	vertexArray[0].Position = { l,t+h,z };
+	vertexArray[0].Diffuse = { 1.0f,1.0f,1.0f,1.0f };
+	vertexArray[0].TexCoord = { 0.0f,0.0f };
+
+
+	vertexArray[1].Position = { l + w,t+h,z };
+	vertexArray[1].Diffuse = { 1.0f,1.0f,1.0f,1.0f };
+	vertexArray[1].TexCoord = { 1.0f,0.0f };
+
+	vertexArray[2].Position = { l,t ,z };
+	vertexArray[2].Diffuse = { 1.0f,1.0f,1.0f,1.0f };
+	vertexArray[2].TexCoord = { 0.0f,1.0f };
+
+	vertexArray[3].Position = { l+w ,t,z };
+	vertexArray[3].Diffuse = { 1.0f,1.0f,1.0f,1.0f };
+	vertexArray[3].TexCoord = { 1.0f,1.0f };
+
+
+}
+void SpriteComponent::SetSpriteCenter(XMFLOAT3 pos, float width, float height)
+{
+
+	XMFLOAT2 screenHW = pGameEngine->GetWindowSize();
+	float z = pos.z;
+
+	float w = (width / screenHW.x) * 2.0f;
+	float h = (height / screenHW.y) * 2.0f;
+	float l = (pos.x / screenHW.x) - w * 0.5f;
+	float t = (pos.y / screenHW.y) - h * 0.5f;
+
+
+
+
+
+	vertexArray[0].Position = { l,t + h,z };
+	vertexArray[0].Diffuse = { 1.0f,1.0f,1.0f,1.0f };
+	vertexArray[0].TexCoord = { 0.0f,0.0f };
+
+
+	vertexArray[1].Position = { l + w,t + h,z };
+	vertexArray[1].Diffuse = { 1.0f,1.0f,1.0f,1.0f };
+	vertexArray[1].TexCoord = { 1.0f,0.0f };
+
+	vertexArray[2].Position = { l,t ,z };
+	vertexArray[2].Diffuse = { 1.0f,1.0f,1.0f,1.0f };
+	vertexArray[2].TexCoord = { 0.0f,1.0f };
+
+	vertexArray[3].Position = { l + w ,t,z };
+	vertexArray[3].Diffuse = { 1.0f,1.0f,1.0f,1.0f };
+	vertexArray[3].TexCoord = { 1.0f,1.0f };
+
+
+
+
+
+}
+
+void SpriteComponent::SetSpriteLeftDown(XMFLOAT3 pos, float width, float height)
+{
 
 
 	XMFLOAT2 screenHW = pGameEngine->GetWindowSize();
@@ -259,3 +332,4 @@ void SpriteComponent::SetLRRev(BOOL enable)
 {
 	texLRrev = enable;
 }
+

@@ -181,7 +181,7 @@ XMMATRIX MtxNode::GetFrameMtx(float time, float weight)
 
 int MtxNode::GetChildCnt(void)
 {
-	return this->childArray.size();
+	return (int)this->childArray.size();
 }
 
 MtxNode* MtxNode::GetChild(int n)
@@ -463,7 +463,7 @@ XMMATRIX BlendMtxNode::GetFrameMtx(float time, float weight)
 
 
 
-	return 	(mtx1->GetFrameMtxLerp(f) * weight) + (mtx2->GetFrameMtxLerp(f) * (1.0 - weight));
+	return 	(mtx1->GetFrameMtxLerp(f) * weight) + (mtx2->GetFrameMtxLerp(f) * (1.0f - weight));
 }
 
 AngleBlendMtxNode::AngleBlendMtxNode()
@@ -553,7 +553,6 @@ XMMATRIX AngleBlendMtxNode::GetFrameMtx(float time, float angle)
 	XMMATRIX frameMtx = XMMatrixIdentity();
 
 	XMVECTOR scl;
-	XMVECTOR rot;
 	XMVECTOR pos;
 
 	XMVECTOR scl1;

@@ -4,7 +4,7 @@ class GameEngine;
 class TransformComponent;
 class Input;
 class GameObject;
-
+class Scene;
 class Component
 {
 public:
@@ -28,6 +28,7 @@ public:
 	virtual void Init(void);//シーンが始まった時と動的に生成された時他オブジェクトやコンポーネント等を参照する場合はここで入れる
 	virtual void Uninit(void);
 	virtual void FixedUpdate(void);
+	virtual void FixedLateUpdate(void);
 	virtual void Update(void);
 	virtual void LateUpdate(void);
 	virtual void Draw(void);
@@ -57,6 +58,7 @@ protected:
 	GameObject* pGameObject;
 	Attribute attribute;
 	GameEngine* pGameEngine;
+	Scene* pScene;
 	Input* input;
 
 private:

@@ -153,6 +153,16 @@ XMMATRIX MeshData::GetLocalOffset(void)
 	return localOffset;
 }
 
+XMFLOAT3 MeshData::GetBoxCenter(void)
+{
+	return boxCenter;
+}
+
+XMFLOAT3 MeshData::GetBoxSize(void)
+{
+	return boxSize;
+}
+
 
 
 
@@ -226,6 +236,7 @@ void MeshData::LoadFbxMesh(FbxMesh* mesh,AssetsManager* ap,MeshData* parent)
 	int PolygonNum = mesh->GetPolygonCount();               //‘ƒ|ƒŠƒSƒ“”
 	if (PolygonNum==0)
 	{
+
 		return;
 	}
 	
@@ -243,6 +254,19 @@ void MeshData::LoadFbxMesh(FbxMesh* mesh,AssetsManager* ap,MeshData* parent)
 	mesh->GetUVSetNames(uvSetNameList);
 	FbxVector2* uv = new FbxVector2[PolygonVertexNum];
 
+	vector<XMFLOAT3> vPosArray;
+	for (int i = 0; i < controlNum; i++)
+	{
+		XMFLOAT3 vPos;
+		vPos.x = (float)src[i][0];
+		vPos.y = (float)src[i][1];
+		vPos.z = (float)src[i][2];
+
+		vPosArray.push_back(vPos);
+
+	}
+
+	SetBoxCenterSize(vPosArray);
 
 	bool bIsUnmapped = false;
 
@@ -583,3 +607,40 @@ string MeshData::GetFileName(void)
 }
 
 
+void MeshData::SetBoxCenterSize(vector<XMFLOAT3> vertices)
+{
+
+	if (vertices.empty())
+	{
+		boxCenter = XMFLOAT3(0.0f, 0.0f, 0.0f);
+		boxSize = XMFLOAT3(0.0f, 0.0f, 0.0f);
+		return;
+	}
+
+	XMFLOAT3 minPoint(FLT_MAX, FLT_MAX, FLT_MAX);
+	XMFLOAT3 maxPoint(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+
+	for (const auto& vertex : vertices)
+	{
+		if (vertex.x < minPoint.x) minPoint.x = vertex.x;
+		if (vertex.y < minPoint.y) minPoint.y = vertex.y;
+		if (vertex.z < minPoint.z) minPoint.z = vertex.z;
+
+		if (vertex.x > maxPoint.x) maxPoint.x = vertex.x;
+		if (vertex.y > maxPoint.y) maxPoint.y = vertex.y;
+		if (vertex.z > maxPoint.z) maxPoint.z = vertex.z;
+	}
+
+	boxCenter = XMFLOAT3(
+		(minPoint.x + maxPoint.x) / 2.0f,
+		(minPoint.y + maxPoint.y) / 2.0f,
+		(minPoint.z + maxPoint.z) / 2.0f
+	);
+
+
+	boxSize = XMFLOAT3(
+		maxPoint.x - minPoint.x,
+		maxPoint.y - minPoint.y,
+		maxPoint.z - minPoint.z
+	);
+}

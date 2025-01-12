@@ -232,8 +232,8 @@ float TerrainComponent::GetHeight(XMFLOAT3 pos)
 
 	XMFLOAT2 sampleUV;
 
-	sampleUV.x = ((terrainSize.x * 0.5) + length.x) / terrainSize.x;
-	sampleUV.y = ((terrainSize.y * 0.5) - length.y) / terrainSize.y;
+	sampleUV.x = ((terrainSize.x * 0.5f) + length.x) / terrainSize.x;
+	sampleUV.y = ((terrainSize.y * 0.5f) - length.y) / terrainSize.y;
 
 	TerrainMaterial* mat = dynamic_cast<TerrainMaterial*>(this->material);
 

@@ -33,34 +33,35 @@ void CameraControllerComponent::Uninit(void)
 void CameraControllerComponent::Update(void)
 {
 	Component::Update();
+	float dt= pGameEngine->GetDeltaTime();
 	if (input->GetKeyboardPress(DIK_UP))
 	{
-		GetTransFormComponent()->MoveZAxis(1.0f);
+		GetTransFormComponent()->MoveZAxis(1.0f*dt);
 
 	}
 	if (input->GetKeyboardPress(DIK_DOWN))
 	{
-		GetTransFormComponent()->MoveZAxis(-1.0f);
+		GetTransFormComponent()->MoveZAxis(-100.0f*dt);
 
 	}
 	if (input->GetKeyboardPress(DIK_RIGHT))
 	{
-		GetTransFormComponent()->MoveXAxis(1.0f);
+		GetTransFormComponent()->MoveXAxis(100.0f*dt);
 
 	}
 	if (input->GetKeyboardPress(DIK_LEFT))
 	{
-		GetTransFormComponent()->MoveXAxis(-1.0f);
+		GetTransFormComponent()->MoveXAxis(-100.0f*dt);
 
 	}
 	if (input->GetKeyboardPress(DIK_E))
 	{
-		GetTransFormComponent()->MoveYAxis(1.0f);
+		GetTransFormComponent()->MoveYAxis(100.0f*dt);
 
 	}
 	if (input->GetKeyboardPress(DIK_Q))
 	{
-		GetTransFormComponent()->MoveYAxis(-1.0f);
+		GetTransFormComponent()->MoveYAxis(-100.0f*dt);
 
 	}
 	if (input->IsMouseRightPressed())

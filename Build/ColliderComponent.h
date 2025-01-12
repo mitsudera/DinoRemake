@@ -9,7 +9,7 @@ struct HitResult
 {
 	BOOL isHit[(int)GameObject::ObjectTag::ObjectTagMax];
 	vector<GameObject*> hitObject;
-
+	vector<pair<GameObject*,XMFLOAT4>> hitRigidObject;
 };
 
 
@@ -27,11 +27,9 @@ public:
 		Sphere,
 		Capsule,
 		Box,
+		RotBox,
 		Terrain,
 
-		//ñ¢é¿ëï
-		AABB,
-		CBB,
 
 	};
 
@@ -47,6 +45,7 @@ public:
 	virtual void Uninit(void) override;
 
 	virtual void Update(void) override;
+	virtual void FixedUpdate(void) override;
 
 	virtual void OnEnable(void)override;
 	virtual void OnDisable(void)override;
@@ -68,6 +67,7 @@ public:
 
 	vector<GameObject*> GetHitTagObjectAll(GameObject::ObjectTag tag);
 
+	vector<pair<GameObject*, XMFLOAT4>>& GetHitRigidObject(void);
 
 	void OnCollider(void);
 	void OffCollider(void);
@@ -81,6 +81,11 @@ public:
 
 	void UpdateCenter(void);
 
+	void SetIsRigid(BOOL b);
+	BOOL GetIsRigid(void);
+
+	void SetRigidObject(GameObject* obj, XMFLOAT4 depth);
+
 protected:
 	HitResult result;
 	Shape shape;
@@ -89,6 +94,6 @@ protected:
 	XMFLOAT3 center;//íÜêS
 	XMVECTOR pivot;
 	float checkRadius;//ëÂÇ‹Ç©Ç»ìñÇΩÇËîªíËÇçsÇ§ÇΩÇﬂÇÃîºåa
-
+	BOOL isRigid;
 };
 

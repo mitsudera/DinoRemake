@@ -81,6 +81,7 @@ cbuffer CameraBuffer : register(b6)
 struct SHADOW
 {
     matrix wvp;
+    matrix wvpf;
     int enable;
     int mode;
     float facter;
