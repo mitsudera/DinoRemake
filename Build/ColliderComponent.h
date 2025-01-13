@@ -74,6 +74,7 @@ public:
 	void Clear(void);
 
 	void SetPivot(XMFLOAT3 pivot);
+	void SetPivot(XMVECTOR pivot);
 
 	XMFLOAT3 GetCenter(void);
 	float GetCheckRadius(void);

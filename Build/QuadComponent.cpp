@@ -80,84 +80,84 @@ void QuadComponent::Uninit(void)
 void QuadComponent::Draw(void)
 {
 	PrimitiveComponent::Draw();
-	//pRenderer->SetCullingMode(CULL_MODE::CULL_MODE_BACK);
-	//XMMATRIX world = XMMatrixIdentity();
+	pRenderer->SetCullingMode(CULL_MODE::CULL_MODE_BACK);
+	XMMATRIX world = XMMatrixIdentity();
 
 
-	//if (isBillBorad)
-	//{
-	//	pRenderer->SetCullingMode(CULL_MODE::CULL_MODE_NONE);
+	if (isBillBorad)
+	{
+		pRenderer->SetCullingMode(CULL_MODE::CULL_MODE_NONE);
 
-	//	XMFLOAT3 scale = GetTransFormComponent()->GetScale();
-	//	XMVECTOR opos = XMLoadFloat3(&GetWorldPos());
-	//	XMMATRIX camW = pGameEngine->GetMainCamera()->GetWorldMtx();
-	//	XMVECTOR camX = pGameEngine->GetMainCamera()->GetTransFormComponent()->GetAxisX();
-	//	XMVECTOR camY = pGameEngine->GetMainCamera()->GetTransFormComponent()->GetAxisY();
-	//	XMVECTOR camZ = pGameEngine->GetMainCamera()->GetTransFormComponent()->GetAxisZ();
-	//	camX = XMVector3TransformNormal(camX, camW) * scale.x;
-	//	camY = XMVector3TransformNormal(camY, camW) * scale.y;
-	//	camZ = XMVector3TransformNormal(camZ, camW) * scale.z;
-
-
-	//	XMVECTOR pos0 = opos + (camX * -0.5 + camY * 0.5) + camZ;
-	//	XMVECTOR pos1 = opos + (camX * 0.5 + camY * 0.5) + camZ;
-	//	XMVECTOR pos2 = opos + (camX * -0.5 + camY * -0.5) + camZ;
-	//	XMVECTOR pos3 = opos + (camX * 0.5 + camY * -0.5) + camZ;
+		XMFLOAT3 scale = GetTransFormComponent()->GetScale();
+		XMVECTOR opos = XMLoadFloat3(&GetWorldPos());
+		XMMATRIX camW = pGameEngine->GetMainCamera()->GetWorldMtx();
+		XMVECTOR camX = pGameEngine->GetMainCamera()->GetTransFormComponent()->GetAxisX();
+		XMVECTOR camY = pGameEngine->GetMainCamera()->GetTransFormComponent()->GetAxisY();
+		XMVECTOR camZ = pGameEngine->GetMainCamera()->GetTransFormComponent()->GetAxisZ();
+		camX = XMVector3TransformNormal(camX, camW) * scale.x;
+		camY = XMVector3TransformNormal(camY, camW) * scale.y;
+		camZ = XMVector3TransformNormal(camZ, camW) * scale.z;
 
 
-	//	VERTEX_3D vertexArray[4];
-
-	//	XMStoreFloat3(&vertexArray[0].Position, pos0);
-	//	vertexArray[0].Diffuse = { 1.0f,1.0f,1.0f,1.0f };
-	//	vertexArray[0].TexCoord = { 0.0f,0.0f };
-
-	//	XMStoreFloat3(&vertexArray[1].Position, pos1);
-	//	vertexArray[1].Diffuse = { 1.0f,1.0f,1.0f,1.0f };
-	//	vertexArray[1].TexCoord = { 1.0f,0.0f };
-
-	//	XMStoreFloat3(&vertexArray[2].Position, pos2);
-	//	vertexArray[2].Diffuse = { 1.0f,1.0f,1.0f,1.0f };
-	//	vertexArray[2].TexCoord = { 0.0f,1.0f };
-
-	//	XMStoreFloat3(&vertexArray[3].Position, pos3);
-	//	vertexArray[3].Diffuse = { 1.0f,1.0f,1.0f,1.0f };
-	//	vertexArray[3].TexCoord = { 1.0f,1.0f };
-
-	//	//頂点バッファの中身を埋める
-
-	//	D3D11_MAPPED_SUBRESOURCE msr;
-	//	pRenderer->GetDeviceContext()->Map(this->vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
-
-	//	VERTEX_3D* pVtx = (VERTEX_3D*)msr.pData;
-
-	//	memcpy(pVtx, vertexArray, sizeof(VERTEX_3D) * 4);
-
-	//	this->pRenderer->GetDeviceContext()->Unmap(this->vertexBuffer, 0);
+		XMVECTOR pos0 = opos + (camX * -0.5 + camY * 0.5) + camZ;
+		XMVECTOR pos1 = opos + (camX * 0.5 + camY * 0.5) + camZ;
+		XMVECTOR pos2 = opos + (camX * -0.5 + camY * -0.5) + camZ;
+		XMVECTOR pos3 = opos + (camX * 0.5 + camY * -0.5) + camZ;
 
 
-	//}
-	//else
-	//{
-	//	world = GetWorldMtx();
-	//}
+		VERTEX_3D vertexArray[4];
+
+		XMStoreFloat3(&vertexArray[0].Position, pos0);
+		vertexArray[0].Diffuse = { 1.0f,1.0f,1.0f,1.0f };
+		vertexArray[0].TexCoord = { 0.0f,0.0f };
+
+		XMStoreFloat3(&vertexArray[1].Position, pos1);
+		vertexArray[1].Diffuse = { 1.0f,1.0f,1.0f,1.0f };
+		vertexArray[1].TexCoord = { 1.0f,0.0f };
+
+		XMStoreFloat3(&vertexArray[2].Position, pos2);
+		vertexArray[2].Diffuse = { 1.0f,1.0f,1.0f,1.0f };
+		vertexArray[2].TexCoord = { 0.0f,1.0f };
+
+		XMStoreFloat3(&vertexArray[3].Position, pos3);
+		vertexArray[3].Diffuse = { 1.0f,1.0f,1.0f,1.0f };
+		vertexArray[3].TexCoord = { 1.0f,1.0f };
+
+		//頂点バッファの中身を埋める
+
+		D3D11_MAPPED_SUBRESOURCE msr;
+		pRenderer->GetDeviceContext()->Map(this->vertexBuffer, 0, D3D11_MAP_WRITE_DISCARD, 0, &msr);
+
+		VERTEX_3D* pVtx = (VERTEX_3D*)msr.pData;
+
+		memcpy(pVtx, vertexArray, sizeof(VERTEX_3D) * 4);
+
+		this->pRenderer->GetDeviceContext()->Unmap(this->vertexBuffer, 0);
 
 
-	//// 頂点バッファ設定
-	//UINT stride = sizeof(VERTEX_3D);
-	//UINT offset = 0;
-
-	//pRenderer->GetDeviceContext()->IASetVertexBuffers(0, 1, &this->vertexBuffer, &stride, &offset);
-	//pRenderer->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-
+	}
+	else
+	{
+		world = GetWorldMtx();
+	}
 
 
-	//this->pGameEngine->GetCBufferManager()->SetWorldMtx(&world);
+	// 頂点バッファ設定
+	UINT stride = sizeof(VERTEX_3D);
+	UINT offset = 0;
+
+	pRenderer->GetDeviceContext()->IASetVertexBuffers(0, 1, &this->vertexBuffer, &stride, &offset);
+	pRenderer->GetDeviceContext()->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 
 
 
-	//texture->SetShaderResourcePS(0);
+	this->pGameEngine->GetCBufferManager()->SetWorldMtx(&world);
 
-	//pRenderer->GetDeviceContext()->Draw(4, 0);
+
+
+	texture->SetShaderResourcePS(0);
+
+	pRenderer->GetDeviceContext()->Draw(4, 0);
 
 }
 

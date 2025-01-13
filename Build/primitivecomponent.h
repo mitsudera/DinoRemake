@@ -47,7 +47,9 @@ public:
 	void SetBoxCenterSize(vector<XMFLOAT3> vertices);
 	void SetBoxCenterSize(XMFLOAT3 center, XMFLOAT3 size);
 
-
+	XMVECTOR GetBoxPivot(void);
+	XMFLOAT3 GetBoxSize(void);
+	 
 protected:
 	Renderer* pRenderer;
 	BOOL hasShadow;

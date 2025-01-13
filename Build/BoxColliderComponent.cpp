@@ -61,6 +61,7 @@ void BoxColliderComponent::SetBox(XMFLOAT3 size)
 
 }
 
+
 XMFLOAT3 BoxColliderComponent::GetSize(void)
 {
 	return this->size;

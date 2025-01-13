@@ -20,7 +20,11 @@
 #include "TextMeshComponent.h"
 #include "ShadowMap.h"
 #include "Tree1.h"
-
+#include "Rock1.h"
+#include "Rock3.h"
+#include "Rock4.h"
+#include "Rock5.h"
+#include "Rock6.h"
 Stage1Scene::Stage1Scene(GameEngine* pGameEngine)
 {
 	this->pGameEngine = pGameEngine;
@@ -52,8 +56,17 @@ void Stage1Scene::Awake()
 
 	CreateGameObject<Golem>()->GetTransFormComponent()->SetPosition(0.0f,0.0f,2000.0f);
 
-	CreateGameObject<Tree1>()->GetTransFormComponent()->SetPosition(300.0f, 0.0f, 300.0f);
-	CreateGameObject<Tree1>()->GetTransFormComponent()->SetPosition(-300.0f, 0.0f, 300.0f);
+
+	//tree
+	CreateGameObject<Tree1>()->GetTransFormComponent()->SetPosition(500.0f, 0.0f, 5000.0f);
+	CreateGameObject<Tree1>()->GetTransFormComponent()->SetPosition(-300.0f, 0.0f, 8000.0f);
+
+	//rock
+	CreateGameObject<Rock1>()->GetTransFormComponent()->SetPosition(-2000.0f, 0.0f, 300.0f);
+	CreateGameObject<Rock3>()->GetTransFormComponent()->SetPosition(-1000.0f, 0.0f, 300.0f);
+	CreateGameObject<Rock4>()->GetTransFormComponent()->SetPosition(0.0f, 0.0f, 300.0f);
+	CreateGameObject<Rock5>()->GetTransFormComponent()->SetPosition(1000.0f, 0.0f, 300.0f);
+	CreateGameObject<Rock6>()->GetTransFormComponent()->SetPosition(2000.0f, 0.0f, 300.0f);
 
 
 	CreateGameObject<GameManager>();

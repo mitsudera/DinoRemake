@@ -205,6 +205,11 @@
     <ClInclude Include="Golem.h" />
     <ClInclude Include="QuadComponent.h" />
     <ClInclude Include="RigidBodyComponent.h" />
+    <ClInclude Include="Rock1.h" />
+    <ClInclude Include="Rock3.h" />
+    <ClInclude Include="Rock4.h" />
+    <ClInclude Include="Rock5.h" />
+    <ClInclude Include="Rock6.h" />
     <ClInclude Include="RotBoxColliderComponent.h" />
     <ClInclude Include="SkinMeshComponent.h" />
     <ClInclude Include="SkinMeshComputeShader.h" />
@@ -330,6 +335,11 @@
     <ClCompile Include="Golem.cpp" />
     <ClCompile Include="QuadComponent.cpp" />
     <ClCompile Include="RigidBodyComponent.cpp" />
+    <ClCompile Include="Rock1.cpp" />
+    <ClCompile Include="Rock3.cpp" />
+    <ClCompile Include="Rock4.cpp" />
+    <ClCompile Include="Rock5.cpp" />
+    <ClCompile Include="Rock6.cpp" />
     <ClCompile Include="RotBoxColliderComponent.cpp" />
     <ClCompile Include="SkinMeshComponent.cpp" />
     <ClCompile Include="SkinMeshComputeShader.cpp" />

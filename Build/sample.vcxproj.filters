@@ -208,11 +208,17 @@
     <Filter Include="Ability">
       <UniqueIdentifier>{e9a40ebf-dc5e-484a-9325-3bff734b9dc1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="gameobject\3D\Tree">
-      <UniqueIdentifier>{8a0d247c-cb32-43b6-989d-42ec90f34541}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Shader\Standard">
       <UniqueIdentifier>{5f321d7b-018d-4e85-a8e7-e52db9eda477}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gameobject\3D\Prop">
+      <UniqueIdentifier>{6b404d93-a536-44d8-ba0c-d0fc0b3af4d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gameobject\3D\Prop\Rock">
+      <UniqueIdentifier>{6c0c2b6d-60aa-4525-9422-d5daf6c0c30f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="gameobject\3D\Prop\Tree">
+      <UniqueIdentifier>{8a0d247c-cb32-43b6-989d-42ec90f34541}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -568,7 +574,7 @@
       <Filter>component\ColliderComponent</Filter>
     </ClInclude>
     <ClInclude Include="Tree1.h">
-      <Filter>gameobject\3D\Tree</Filter>
+      <Filter>gameobject\3D\Prop\Tree</Filter>
     </ClInclude>
     <ClInclude Include="QuadComponent.h">
       <Filter>component\primitiveComponent</Filter>
@@ -578,6 +584,21 @@
     </ClInclude>
     <ClInclude Include="StandardShader.h">
       <Filter>Shader\Standard</Filter>
+    </ClInclude>
+    <ClInclude Include="Rock1.h">
+      <Filter>gameobject\3D\Prop\Rock</Filter>
+    </ClInclude>
+    <ClInclude Include="Rock3.h">
+      <Filter>gameobject\3D\Prop\Rock</Filter>
+    </ClInclude>
+    <ClInclude Include="Rock4.h">
+      <Filter>gameobject\3D\Prop\Rock</Filter>
+    </ClInclude>
+    <ClInclude Include="Rock5.h">
+      <Filter>gameobject\3D\Prop\Rock</Filter>
+    </ClInclude>
+    <ClInclude Include="Rock6.h">
+      <Filter>gameobject\3D\Prop\Rock</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -930,7 +951,7 @@
       <Filter>component\ColliderComponent</Filter>
     </ClCompile>
     <ClCompile Include="Tree1.cpp">
-      <Filter>gameobject\3D\Tree</Filter>
+      <Filter>gameobject\3D\Prop\Tree</Filter>
     </ClCompile>
     <ClCompile Include="QuadComponent.cpp">
       <Filter>component\primitiveComponent</Filter>
@@ -940,6 +961,21 @@
     </ClCompile>
     <ClCompile Include="StandardMaterial.cpp">
       <Filter>Shader\Standard</Filter>
+    </ClCompile>
+    <ClCompile Include="Rock1.cpp">
+      <Filter>gameobject\3D\Prop\Rock</Filter>
+    </ClCompile>
+    <ClCompile Include="Rock3.cpp">
+      <Filter>gameobject\3D\Prop\Rock</Filter>
+    </ClCompile>
+    <ClCompile Include="Rock4.cpp">
+      <Filter>gameobject\3D\Prop\Rock</Filter>
+    </ClCompile>
+    <ClCompile Include="Rock5.cpp">
+      <Filter>gameobject\3D\Prop\Rock</Filter>
+    </ClCompile>
+    <ClCompile Include="Rock6.cpp">
+      <Filter>gameobject\3D\Prop\Rock</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

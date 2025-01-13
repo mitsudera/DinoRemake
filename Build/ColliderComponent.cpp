@@ -179,6 +179,11 @@ void ColliderComponent::SetPivot(XMFLOAT3 pivot)
 	this->pivot = XMLoadFloat3(&pivot);
 }
 
+void ColliderComponent::SetPivot(XMVECTOR pivot)
+{
+	this->pivot = pivot;
+}
+
 XMFLOAT3 ColliderComponent::GetCenter(void)
 {
 	return this->center;

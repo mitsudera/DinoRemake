@@ -52,6 +52,7 @@ void RigidBodyComponent::FixedUpdate(void)
 	float deltaTime = pGameEngine->GetFixedDeltaTime();
 
 	XMVECTOR bWpos = worldPos;
+	worldPos += velocity * deltaTime;
 
 	worldPos += move;
 	move = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
@@ -83,7 +84,6 @@ void RigidBodyComponent::FixedUpdate(void)
 			accel += fricForce * deltaTime;
 		}
 		velocity += accel;
-		worldPos += velocity * deltaTime;
 
 
 
@@ -100,7 +100,7 @@ void RigidBodyComponent::FixedLateUpdate(void)
 	Component::FixedLateUpdate();
 
 	float deltaTime = pGameEngine->GetFixedDeltaTime();
-
+	bool fixY = false;
 
 	//他の剛体との当たり判定を取得し座標修正
 	for (pair<GameObject*, XMFLOAT4> rbObj : collider->GetHitRigidObject())
@@ -111,7 +111,6 @@ void RigidBodyComponent::FixedLateUpdate(void)
 		XMFLOAT3 cnormal = XMFLOAT3(rbObj.second.x, rbObj.second.y, rbObj.second.z);
 
 
-		// 自分の中心と衝突オブジェクトの中心のベクトルを計算
 		XMFLOAT3 myCenter = GetWorldPos();
 		XMFLOAT3 colCenter = colRb->GetWorldPos();
 		XMVECTOR v = XMLoadFloat3(&myCenter) - XMLoadFloat3(&colCenter);
@@ -126,37 +125,55 @@ void RigidBodyComponent::FixedLateUpdate(void)
 
 		// 位置の修正
 		XMVECTOR correction = penetrationDepth * -direction;
+
+		if (correction.m128_f32[1] > 0.0f)
+		{
+			velocity.m128_f32[1] = 0.0f;
+			onGround = TRUE;
+			offGroundTime = 0.0f;
+			groundLen = 0.0f;
+			fixY = true;
+		}
 		worldPos += correction;
 
 
 
 	}
 
-	//地面との当たり判定を取得し座標修正
-	if (collider->GetHitTag(GameObject::ObjectTag::Field))
+	if (!fixY)
 	{
-		float h = collider->GetHitTagObject(GameObject::ObjectTag::Field)->GetComponent<TerrainComponent>()->GetHeight(GetWorldPos());
-		if (worldPos.m128_f32[1] > h)
+		//地面との当たり判定を取得し座標修正
+		if (collider->GetHitTag(GameObject::ObjectTag::Field))
 		{
-			onGround = FALSE;
-			offGroundTime += deltaTime;
-			groundLen = worldPos.m128_f32[1] - h;
+
+
+			float h = collider->GetHitTagObject(GameObject::ObjectTag::Field)->GetComponent<TerrainComponent>()->GetHeight(GetWorldPos());
+			if (worldPos.m128_f32[1] > h)
+			{
+				onGround = FALSE;
+				offGroundTime += deltaTime;
+				groundLen = worldPos.m128_f32[1] - h;
+			}
+			else
+			{
+
+				worldPos.m128_f32[1] = h;
+				velocity.m128_f32[1] = 0.0f;
+				onGround = TRUE;
+				offGroundTime = 0.0f;
+				groundLen = 0.0f;
+			}
 		}
 		else
 		{
-
-			worldPos.m128_f32[1] = h;
-			velocity.m128_f32[1] = 0.0f;
-			onGround = TRUE;
-			offGroundTime = 0.0f;
-			groundLen = 0.0f;
+			onGround = FALSE;
 		}
-	}
-	else
-	{
-		onGround = FALSE;
+
 	}
 
+
+
+	transform->SetWorldPosition(worldPos);
 
 
 }

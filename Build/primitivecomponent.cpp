@@ -201,6 +201,16 @@ void PrimitiveComponent::SetBoxCenterSize(XMFLOAT3 center, XMFLOAT3 size)
 	this->size = size;
 }
 
+XMVECTOR PrimitiveComponent::GetBoxPivot(void)
+{
+	return this->pivot;
+}
+
+XMFLOAT3 PrimitiveComponent::GetBoxSize(void)
+{
+	return this->size;
+}
+
 
 
 BOOL PrimitiveComponent::GetHasShadow(void)

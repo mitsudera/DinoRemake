@@ -400,7 +400,7 @@ void MeshData::LoadFbxMesh(FbxMesh* mesh,AssetsManager* ap,MeshData* parent)
 				int IndexNumber = mesh->GetPolygonVertex(p, n);
 				VertexArray[vcnt].Position.x = (float)src[IndexNumber][0];
 				VertexArray[vcnt].Position.y = (float)src[IndexNumber][1];
-				VertexArray[vcnt].Position.z = -(float)src[IndexNumber][2];
+				VertexArray[vcnt].Position.z = (float)src[IndexNumber][2];
 
 
 				VertexArray[vcnt].Diffuse = { 1.0f,1.0f,1.0f,1.0f };
@@ -443,7 +443,7 @@ void MeshData::LoadFbxMesh(FbxMesh* mesh,AssetsManager* ap,MeshData* parent)
 				int IndexNumber = mesh->GetPolygonVertex(p, n);
 				VertexArray[vcnt].Position.x = (float)src[IndexNumber][0];
 				VertexArray[vcnt].Position.y = (float)src[IndexNumber][1];
-				VertexArray[vcnt].Position.z = -(float)src[IndexNumber][2];
+				VertexArray[vcnt].Position.z = (float)src[IndexNumber][2];
 
 
 				VertexArray[vcnt].Diffuse = { 1.0f,1.0f,1.0f,1.0f };
