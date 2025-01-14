@@ -25,6 +25,20 @@ void SoundSpeakerComponent::Awake(void)
 void SoundSpeakerComponent::Uninit(void)
 {
 	Component::Uninit();
+	StopAllSound();
+
+	for (AudioData* audioData : audioDataArray)
+	{
+		// ソースボイスの破棄
+		audioData->sorceVoice->DestroyVoice();
+
+		// オーディオデータの開放
+		free(audioData->pDataAudio);
+
+		delete audioData;
+
+	}
+
 }
 
 void SoundSpeakerComponent::Update(void)

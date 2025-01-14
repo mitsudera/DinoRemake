@@ -13,7 +13,8 @@
 #include "ColliderComponent.h"
 #include "AttackComponent.h"
 #include "SpriteComponent.h"
-
+#include "SoundSpeakerComponent.h"
+#include "SceneManager.h"
 
 PlayerComponent::PlayerComponent(GameObject* gameObject)
 {
@@ -27,11 +28,10 @@ PlayerComponent::~PlayerComponent()
 void PlayerComponent::Awake(void)
 {
 	Component::Awake();
-	speed = 100.0f;
+	speed = 150.0f;
 	jumpForce = 600.0f;
-	hpMax = 100;
-	dodgeForce = 2000.0f;
-	dodgeUpForce = 200.0f;
+	hpMax = 200;
+	dodgeForce = 600.0f;
 }
 
 void PlayerComponent::Init(void)
@@ -47,8 +47,8 @@ void PlayerComponent::Init(void)
 	hpFrame= pGameObject->SerchAllChild("HPFrame")->GetComponent<SpriteComponent>();
 	hpLine = pGameObject->SerchAllChild("HPLine")->GetComponent<SpriteComponent>();
 
-	hpLineWidth = pGameEngine->GetWindowSize().x * 0.16f;
-	hpLineHeight = pGameEngine->GetWindowSize().y * 0.01f;
+	hpLineWidth = pGameEngine->GetWindowSize().x * 0.32f;
+	hpLineHeight = pGameEngine->GetWindowSize().y * 0.02f;
 	hpLinePos = XMFLOAT3(pGameEngine->GetWindowSize().x * 0.026f,pGameEngine->GetWindowSize().y * 0.05f,0.0f);
 
 	hpFrame->SetSpriteLeftDown("data/texture/Hp_frame.png", hpLinePos, hpLineWidth, hpLineHeight);
@@ -56,7 +56,7 @@ void PlayerComponent::Init(void)
 
 
 
-
+	camInvMode = FALSE;
 
 	//linker->SetSpring("J_Sec_L_Bust1", 20.0f, 12000.0f, 280.0f);
 	//linker->SetSpring("J_Sec_R_Bust1", 20.0f, 12000.0f, 280.0f);
@@ -70,7 +70,12 @@ void PlayerComponent::Init(void)
 	attackCnt = 0.0f;
 	onAttack = FALSE;
 
+	sound = GetComponent<SoundSpeakerComponent>();
+	sound->LoadSound("slash.wav", "slash", SoundType::SE);
+	sound->LoadSound("playerAtkVoice.wav", "Attack", SoundType::VOICE);
 
+	atkCom->SetHitSound(sound, "slash");
+	dieCnt = 0.0f;
 	hp = hpMax;
 }
 
@@ -83,19 +88,55 @@ void PlayerComponent::Update(void)
 {
 	Component::Update();
 
+	float dt = pGameEngine->GetDeltaTime();
+
+	if (state == PlayerState::Die)
+	{
+		dieCnt += dt;
+		if (dieCnt > 2.5f)
+		{
+			pGameEngine->GetSceneManager()->SetScene(SceneManager::SCENE::TITLE);
+			pScene->GetGameObjectName("Loading")->SetActive(TRUE);
+		}
+		return;
+	}
+
 	state = PlayerState::Idle;
 	XMVECTOR playerFront = transform->GetAxisZ();
-	float dt = pGameEngine->GetDeltaTime();
 
 
 	if (control)
 	{
 		camAt->RotPitch((float)input->GetRightStickY(0) * 0.001f * XM_PI * dt);
 
+		if (input->IsButtonTriggered(0, BUTTON_R3))
+		{
+			if (camInvMode)
+			{
+				camInvMode = FALSE;
+				camAt->RotWorldYaw(XM_PI);
 
-		if (!onAttack)
+			}
+			else
+			{
+				camInvMode = TRUE;
+
+				camAt->RotWorldYaw(-XM_PI);
+
+			}
+		}
+
+		if (!onAttack&&!onDodge)
 		{
 
+			if (camInvMode)
+			{
+
+			}
+			else
+			{
+
+			}
 			if (input->GetLeftStickY(0) < -950)
 			{
 
@@ -266,23 +307,26 @@ void PlayerComponent::Update(void)
 
 
 	}
+	if (onAttack)
+	{
+		attackCnt += pGameEngine->GetDeltaTime();
+	}
+	else if (onDodge)
+	{
+		dodgeCnt += pGameEngine->GetDeltaTime();
+		rb->MovePosition(dodgeVec, dodgeForce * dt);
+
+	}
+	else
+	{
+		attackCnt = 0.0f;
+		dodgeCnt = 0.0f;
+	}
+
 
 	if (rb->GetOnGround())
 	{
 
-		if (onAttack)
-		{
-			attackCnt += pGameEngine->GetDeltaTime();
-		}
-		else if (onDodge)
-		{
-			dodgeCnt += pGameEngine->GetDeltaTime();
-		}
-		else
-		{
-			attackCnt = 0.0f;
-			dodgeCnt = 0.0f;
-		}
 		switch (combo)
 		{
 		case Combo::Zero:
@@ -295,6 +339,7 @@ void PlayerComponent::Update(void)
 					onAttack = TRUE;
 					atkCom->SetAttack(5, 0.8f);
 					combo = Combo::Attack1;
+					sound->StartSound("Attack");
 				}
 				else if (input->GetKeyboardTrigger(DIK_R) || input->IsButtonTriggered(0, BUTTON_C))
 				{
@@ -322,15 +367,29 @@ void PlayerComponent::Update(void)
 				{
 					animControl->AttackTrigger();
 					onAttack = TRUE;
+
 					atkCom->SetAttack(5, 0.8f);
 
 					combo = Combo::Attack2;
+					sound->StartSound("Attack");
+
 				}
+				else if (input->GetKeyboardTrigger(DIK_R) || input->IsButtonTriggered(0, BUTTON_C))
+				{
+
+					Dodge();
+					onDodge = TRUE;
+					onAttack = FALSE;
+
+					combo = Combo::Dodge;
+				}
+
 
 			}
 			else if (attackCnt > 1.0f)
 			{
 				onAttack = FALSE;
+
 				combo = Combo::Zero;
 			}
 
@@ -348,7 +407,19 @@ void PlayerComponent::Update(void)
 					atkCom->SetAttack(5, 0.8f);
 
 					combo = Combo::Attack1;
+					sound->StartSound("Attack");
+
 				}
+				else if (input->GetKeyboardTrigger(DIK_R) || input->IsButtonTriggered(0, BUTTON_C))
+				{
+
+					Dodge();
+					onDodge = TRUE;
+					onAttack = FALSE;
+
+					combo = Combo::Dodge;
+				}
+
 			}
 			else if (attackCnt > 1.0f)
 			{
@@ -360,16 +431,29 @@ void PlayerComponent::Update(void)
 		}
 		case Combo::Dodge:
 		{//‰ñ”ð
-			if (dodgeCnt > 0.8f && dodgeCnt <= 1.0f)
+			if (dodgeCnt > 0.5f && dodgeCnt <= 0.666f)
 			{
 				if (input->GetKeyboardTrigger(DIK_RETURN) || input->IsButtonTriggered(0, BUTTON_B))
 				{
 					animControl->AttackTrigger();
 					onAttack = TRUE;
+					onDodge = FALSE;
+
 					atkCom->SetAttack(5, 0.8f);
 
 					combo = Combo::Attack1;
+					sound->StartSound("Attack");
+
 				}
+				else if (input->GetKeyboardTrigger(DIK_R) || input->IsButtonTriggered(0, BUTTON_C))
+				{
+
+					Dodge();
+					dodgeCnt = 0.0f;
+					onDodge = TRUE;
+					combo = Combo::Dodge;
+				}
+
 			}
 			else if (dodgeCnt > 0.666f)
 			{
@@ -406,7 +490,7 @@ void PlayerComponent::Update(void)
 				{
 					hitList.push_back(hitObj);
 					hp -= atack->GetDamage();
-
+					atack->PlayHitSound();
 
 				}
 			}
@@ -439,6 +523,10 @@ void PlayerComponent::Update(void)
 
 	UIUpdate();
 
+	if (hp <= 0.0f)
+	{
+		state = PlayerState::Die;
+	}
 
 	//if (collider->GetHitTag(GameObject::ObjectTag::Enemy))
 	//{
@@ -472,41 +560,34 @@ BOOL PlayerComponent::FindHitObject(GameObject* obj)
 	return FALSE;
 }
 
+void PlayerComponent::PlayHitSoound(void)
+{
+	sound->StartSound("slash");
+}
+
 void PlayerComponent::Dodge(void)
 {
 	XMVECTOR playerFront = transform->GetAxisZ();
-
+	XMVECTOR vec;
+	float angle = 0.0f;
 	animControl->DodgeTrigger();
 
 	if (input->GetKeyboardPress(DIK_W) || input->GetKeyboardPress(DIK_D) || input->GetKeyboardPress(DIK_S) || input->GetKeyboardPress(DIK_A))
 	{
 		if (input->GetKeyboardPress(DIK_W) && input->GetKeyboardPress(DIK_D))
 		{
-			float angle = XM_PIDIV4 * 1.0f;
+			angle = XM_PIDIV4 * 1.0f;
 
-			XMVECTOR vec = XMVector3Rotate(playerFront, XMQuaternionRotationAxis(yonevec(), angle));
-			rb->AddForce(vec * dodgeForce);
-			rb->AddForce(yonevec() * dodgeUpForce);
-			animControl->SetAngle(angle);
 
 		}
 		else if (input->GetKeyboardPress(DIK_D) && input->GetKeyboardPress(DIK_S))
 		{
-			float angle = XM_PIDIV4 * 3.0f;
-			XMVECTOR vec = XMVector3Rotate(playerFront, XMQuaternionRotationAxis(yonevec(), angle));
-			rb->AddForce(vec * dodgeForce);
-			rb->AddForce(yonevec() * dodgeUpForce);
-			animControl->SetAngle(angle);
-
+			angle = XM_PIDIV4 * 3.0f;
 
 		}
 		else if (input->GetKeyboardPress(DIK_S) && input->GetKeyboardPress(DIK_A))
 		{
-			float angle = XM_PIDIV4 * 5.0f;
-			XMVECTOR vec = XMVector3Rotate(playerFront, XMQuaternionRotationAxis(yonevec(), angle));
-			rb->AddForce(vec * dodgeForce);
-			rb->AddForce(yonevec() * dodgeUpForce);
-			animControl->SetAngle(angle);
+			angle = XM_PIDIV4 * 5.0f;
 
 
 
@@ -514,11 +595,7 @@ void PlayerComponent::Dodge(void)
 		}
 		else if (input->GetKeyboardPress(DIK_A) && input->GetKeyboardPress(DIK_W))
 		{
-			float angle = XM_PIDIV4 * 7.0f;
-			XMVECTOR vec = XMVector3Rotate(playerFront, XMQuaternionRotationAxis(yonevec(), angle));
-			rb->AddForce(vec * dodgeForce);
-			rb->AddForce(yonevec() * dodgeUpForce);
-			animControl->SetAngle(angle);
+			angle = XM_PIDIV4 * 7.0f;
 
 
 
@@ -526,45 +603,28 @@ void PlayerComponent::Dodge(void)
 		}
 		else if (input->GetKeyboardPress(DIK_W))
 		{
-			float angle = 0.0f;
-			XMVECTOR vec = XMVector3Rotate(playerFront, XMQuaternionRotationAxis(yonevec(), angle));
-			rb->AddForce(vec * dodgeForce);
-			rb->AddForce(yonevec() * dodgeUpForce);
-			animControl->SetAngle(angle);
+			angle = 0.0f;
 
 
 
 		}
 		else if (input->GetKeyboardPress(DIK_D))
 		{
-			float angle = XM_PIDIV2 * 1.0f;
-			XMVECTOR vec = XMVector3Rotate(playerFront, XMQuaternionRotationAxis(yonevec(), angle));
-			rb->AddForce(vec * dodgeForce);
-			rb->AddForce(yonevec() * dodgeUpForce);
-			animControl->SetAngle(angle);
+			angle = XM_PIDIV2 * 1.0f;
 
 
 
 		}
 		else if (input->GetKeyboardPress(DIK_S))
 		{
-			float angle = XM_PIDIV2 * 2.0f;
-			XMVECTOR vec = XMVector3Rotate(playerFront, XMQuaternionRotationAxis(yonevec(), angle));
-			rb->AddForce(vec * dodgeForce);
-			rb->AddForce(yonevec() * dodgeUpForce);
-			animControl->SetAngle(angle);
+			angle = XM_PIDIV2 * 2.0f;
 
 
 
 		}
 		else if (input->GetKeyboardPress(DIK_A))
 		{
-			float angle = XM_PIDIV2 * 3.0f;
-			XMVECTOR vec = XMVector3Rotate(playerFront, XMQuaternionRotationAxis(yonevec(), angle));
-			rb->AddForce(vec * dodgeForce);
-			rb->AddForce(yonevec() * dodgeUpForce);
-			animControl->SetAngle(angle);
-
+			angle = XM_PIDIV2 * 3.0f;
 
 		}
 
@@ -575,25 +635,18 @@ void PlayerComponent::Dodge(void)
 		int y = input->GetLeftStickY(0);
 
 
-		float angle = GetAngleInRadiansFromVector(XMFLOAT2(-y, x));
-		XMVECTOR vec = XMVector3Rotate(playerFront, XMQuaternionRotationAxis(yonevec(), angle));
-		rb->AddForce(vec * dodgeForce);
-		rb->AddForce(yonevec() * dodgeUpForce);
-		animControl->SetAngle(angle);
+		angle = GetAngleInRadiansFromVector(XMFLOAT2(-y, x));
 
 	}
 	else
 	{
-		float angle = XM_PIDIV2 * 2.0f;
-		XMVECTOR vec = XMVector3Rotate(playerFront, XMQuaternionRotationAxis(yonevec(), angle));
-		rb->AddForce(vec * dodgeForce);
-		rb->AddForce(yonevec() * dodgeUpForce);
-		animControl->SetAngle(angle);
+		angle = XM_PIDIV2 * 2.0f;
 	}
- 
+	vec = XMVector3Rotate(playerFront, XMQuaternionRotationAxis(yonevec(), angle));
+	animControl->SetAngle(angle);
 
 
-
+	dodgeVec = vec;
 
 
 }

@@ -70,10 +70,13 @@ public:
     void Awake();
 	void Update();
 
+	void ClearLight(void);
+
     void SetLightNear(XMFLOAT3 pos);//指定のポジションに近いライトをオンにする
 
 	int AddLight(DirectionalLightComponent* com);
 	int AddLight(PointLightComponent* com);
+
 
 	void SetPointLight(PointLightComponent* pointlightComponent, int index);
 	void SetDirecLight(DirectionalLightComponent* direclightComponent, int index);

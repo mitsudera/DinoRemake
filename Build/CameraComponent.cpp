@@ -286,7 +286,9 @@ void CameraComponent::Render(void)
 
 	pGameEngine->GetCBufferManager()->SetViewMtx(&this->mtxView);
 	XMFLOAT2 screenSize = GetGameObject()->GetScene()->GetGameEngine()->GetWindowSize();
-	XMMATRIX viewproj = XMMatrixMultiply(this->mtxView, this->mtxProj);
+	viewProj = XMMatrixMultiply(this->mtxView, this->mtxProj);
+	SetFrustumPlanes();
+	SetFrustumCorners();
 	//シェーダー毎に描画
 	for (int i = 0; i < ShaderSet::ShaderIndex::MAXShader; i++)
 	{
@@ -295,6 +297,9 @@ void CameraComponent::Render(void)
 		for (PrimitiveComponent* com : pGameObject->GetScene()->GetAllPrimitiveComponent())
 		{
 			if (!com->GetActive())
+				continue;
+
+			if (com->GetAlphaTest())
 				continue;
 
 			//レイヤーのカリングチェック
@@ -313,17 +318,21 @@ void CameraComponent::Render(void)
 				continue;
 
 			
+			//if (com->GetIsFrustumCulling())
+			//{
+			//	if (this->FrustumCulling(com->GetBoxMin(),com->GetBoxMax()))
+			//	{
+			//		continue;
+			//	}
+			//}
 
-			if (com->GetIsFrustumCulling(viewproj))
-				continue;
+
 
 			com->Draw();
 
 
 		}
 	}
-
-	
 
 #ifdef _DEBUG
 	pGameEngine->GetDebugUtility()->SetDebugLineShader();
@@ -336,6 +345,55 @@ void CameraComponent::Render(void)
 	}
 
 #endif
+
+
+
+	//シェーダー毎に描画
+	for (int i = 0; i < ShaderSet::ShaderIndex::MAXShader; i++)
+	{
+			pGameObject->GetScene()->GetGameEngine()->GetAssetsManager()->SetShader((ShaderSet::ShaderIndex)i);
+
+		for (PrimitiveComponent* com : pGameObject->GetScene()->GetAllPrimitiveComponent())
+		{
+			if (!com->GetActive())
+				continue;
+
+			if (!com->GetAlphaTest())
+				continue;
+
+
+			//レイヤーのカリングチェック
+			if (layerCulling[(int)com->GetGameObject()->GetLayer()] || com->GetGameObject()->GetLayer() == GameObject::Layer::Text)
+				continue;
+
+			if (com->GetMaterial() == nullptr)
+			{
+				com->Draw();
+				continue;
+
+			}
+
+			//現在セットしてるシェーダーを使っている場合描画
+			if (com->GetMaterial()->GetShaderSet()->GetShaderIndex() != i)
+				continue;
+
+			//if (com->GetIsFrustumCulling())
+			//{
+			//	if (this->FrustumCulling(com->GetBoxMin(),com->GetBoxMax()))
+			//	{
+			//		continue;
+			//	}
+			//}
+
+
+
+			com->Draw();
+
+
+		}
+	}
+
+	
 
 
 
@@ -474,6 +532,87 @@ void CameraComponent::SetProjectionMtx(void)
 {
 	this->mtxProj = XMMatrixPerspectiveFovLH(this->angle, this->aspect, this->nearZ, this->farZ);
 
+}
+
+BOOL CameraComponent::FrustumCulling(XMVECTOR min, XMVECTOR max)
+{
+	for (int i
+	  = 0; i < 6; ++i)
+	{
+		int r = 0;
+		XMVECTOR plane = planes[i];
+		r += (XMVectorGetX(XMPlaneDotCoord(plane, XMVectorSet(min.m128_f32[0], min.m128_f32[1], min.m128_f32[2], 1.0f))) < 0.0f) ? 1 : 0;
+		r += (XMVectorGetX(XMPlaneDotCoord(plane, XMVectorSet(max.m128_f32[0], min.m128_f32[1], min.m128_f32[2], 1.0f))) < 0.0f) ? 1 : 0;
+		r += (XMVectorGetX(XMPlaneDotCoord(plane, XMVectorSet(min.m128_f32[0], max.m128_f32[1], min.m128_f32[2], 1.0f))) < 0.0f) ? 1 : 0;
+		r += (XMVectorGetX(XMPlaneDotCoord(plane, XMVectorSet(max.m128_f32[0], max.m128_f32[1], min.m128_f32[2], 1.0f))) < 0.0f) ? 1 : 0;
+		r += (XMVectorGetX(XMPlaneDotCoord(plane, XMVectorSet(min.m128_f32[0], min.m128_f32[1], max.m128_f32[2], 1.0f))) < 0.0f) ? 1 : 0;
+		r += (XMVectorGetX(XMPlaneDotCoord(plane, XMVectorSet(max.m128_f32[0], min.m128_f32[1], max.m128_f32[2], 1.0f))) < 0.0f) ? 1 : 0;
+		r += (XMVectorGetX(XMPlaneDotCoord(plane, XMVectorSet(min.m128_f32[0], max.m128_f32[1], max.m128_f32[2], 1.0f))) < 0.0f) ? 1 : 0;
+		r += (XMVectorGetX(XMPlaneDotCoord(plane, XMVectorSet(max.m128_f32[0], max.m128_f32[1], max.m128_f32[2], 1.0f))) < 0.0f) ? 1 : 0;
+
+		if (r == 8) return false;
+	}
+
+	// 視錘台のコーナーポイントをチェックする
+	int r = 0;
+	for (int i = 0; i < 8; ++i) r += (points[i].m128_f32[0] > max.m128_f32[0]) ? 1 : 0;
+	if (r == 8) 
+		return false;
+	r = 0; for (int i = 0; i < 8; ++i) r += (points[i].m128_f32[0] < min.m128_f32[0]) ? 1 : 0;
+	if (r == 8) 
+		return false;
+	r = 0; for (int i = 0; i < 8; ++i) r += (points[i].m128_f32[1] > max.m128_f32[1]) ? 1 : 0;
+	if (r == 8) 
+		return false;
+	r = 0; for (int i = 0; i < 8; ++i) r += (points[i].m128_f32[1] < min.m128_f32[1]) ? 1 : 0;
+	if (r == 8) 
+		return false;
+	r = 0; for (int i = 0; i < 8; ++i) r += (points[i].m128_f32[2] > max.m128_f32[2]) ? 1 : 0;
+	if (r == 8) 
+		return false;
+	r = 0; for (int i = 0; i < 8; ++i) r += (points[i].m128_f32[2] < min.m128_f32[2]) ? 1 : 0;
+	if (r == 8) 
+		return false;
+
+	return true;
+}
+void CameraComponent::SetFrustumPlanes(void)
+{
+	
+	XMMATRIX vp = XMMatrixTranspose(this->viewProj);
+
+	XMVECTOR vright = (vp.r[0]);
+	XMVECTOR vup(vp.r[1]);
+	XMVECTOR vforward(vp.r[2]);
+	XMVECTOR vpos(vp.r[3]);
+
+	planes[0] = vpos + vright;		// left
+	planes[1] = vpos - vright;		// right
+	planes[2] = vpos + vup;			// bottom
+	planes[3] = vpos - vup;			// top
+	planes[4] = vforward;			// near
+	planes[5] = vpos - vforward;	// far
+}
+
+void CameraComponent::SetFrustumCorners(void)
+{
+	XMMATRIX vpInv = XMMatrixInverse(nullptr, viewProj);
+
+
+	XMVECTOR corners[8];
+	corners[0] = XMVectorSet(-1.0f, -1.0f, -1.0f, 1.0f);
+	corners[1] = XMVectorSet( 1.0f, -1.0f, -1.0f, 1.0f);
+	corners[2] = XMVectorSet( 1.0f,  1.0f, -1.0f, 1.0f);
+	corners[3] = XMVectorSet(-1.0f, -1.0f, -1.0f, 1.0f);
+	corners[4] = XMVectorSet(-1.0f,  1.0f,  1.0f, 1.0f);
+	corners[5] = XMVectorSet( 1.0f, -1.0f,  1.0f, 1.0f);
+	corners[6] = XMVectorSet( 1.0f,  1.0f,  1.0f, 1.0f);
+	corners[7] = XMVectorSet(-1.0f,  1.0f,  1.0f, 1.0f);
+	for (int i = 0; i < 8; i++)
+	{
+		XMVECTOR q = XMVector3Transform(corners[i], vpInv);
+		points[i] = q;
+	}
 }
 
 void CameraComponent::SetViewPort(int m_type)

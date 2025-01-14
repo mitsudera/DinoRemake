@@ -47,6 +47,8 @@ BOOL CollisionBoxRotBox(XMFLOAT3 center1, XMFLOAT3 size1, XMFLOAT3 center2, XMFL
 BOOL CollisionBoxTerrain(XMFLOAT3 center1, XMFLOAT3 size1, XMFLOAT3 center, XMFLOAT2 hw);
 
 BOOL CollisionRotBoxRotBox(XMFLOAT3 center1, XMFLOAT3 size1, XMVECTOR rotQton1, XMFLOAT3 center2, XMFLOAT3 size2, XMVECTOR rotQton2);
+FLOAT LenSegOnSeparateAxis(XMVECTOR* Sep, XMVECTOR* e1, XMVECTOR* e2, XMVECTOR* e3);
+FLOAT LenSegOnSeparateAxis(XMVECTOR* Sep, XMVECTOR* e1, XMVECTOR* e2);
 BOOL CollisionRotBoxTerrain(XMFLOAT3 center1, XMFLOAT3 size1, XMVECTOR rotQton, XMFLOAT3 center, XMFLOAT2 hw);
 
 XMFLOAT4 GetDepthPointSphere(XMFLOAT3 point, XMFLOAT3 center, float r);

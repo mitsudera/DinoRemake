@@ -1,5 +1,7 @@
 #include "SphereColliderComponent.h"
-
+#include "DebugUtility.h"
+#include "GameEngine.h"
+#include "CBufferManager.h"
 SphereColliderComponent::SphereColliderComponent(GameObject* gameObject)
 {
 	this->pGameObject = gameObject;
@@ -24,6 +26,18 @@ void SphereColliderComponent::Uninit(void)
 void SphereColliderComponent::Update(void)
 {
 	ColliderComponent::Update();
+}
+
+void SphereColliderComponent::DebugDraw(void)
+{
+	ColliderComponent::DebugDraw();
+	XMMATRIX world = XMMatrixScaling(checkRadius, checkRadius, checkRadius) * XMMatrixTranslationFromVector(XMLoadFloat3(&GetWorldPos()));
+	
+
+	this->pGameEngine->GetCBufferManager()->SetWorldMtx(&world);
+
+	pGameEngine->GetDebugUtility()->DrawDebugSphere();
+
 }
 
 void SphereColliderComponent::SetRadius(float r)

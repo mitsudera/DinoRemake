@@ -1,5 +1,5 @@
 #include "Rock6.h"
-#include "RotBoxColliderComponent.h"
+#include "BoxColliderComponent.h"
 #include "RigidBodyComponent.h"
 #include "primitivecomponent.h"
 #include "renderer.h"
@@ -17,8 +17,8 @@ void Rock6::Awake(void)
 	GameObject::Awake();
 
 	LoadFbxFileMesh("Rock_6.fbx");
-	RotBoxColliderComponent* box = AddComponent<RotBoxColliderComponent>();
-	box->SetRotBox(XMFLOAT3(250.0f, 500.0f, 400.0f));
+	BoxColliderComponent* box = AddComponent<BoxColliderComponent>();
+	box->SetBox(XMFLOAT3(330.0f, 1000.0f, 450.0f));
 	AddComponent<RigidBodyComponent>()->SetIsStatic(TRUE);
 
 }

@@ -1,5 +1,6 @@
 #include "AttackComponent.h"
 #include "GameEngine.h"
+#include "SoundSpeakerComponent.h"
 AttackComponent::AttackComponent(GameObject* gameObject)
 {
 	pGameObject = gameObject;
@@ -16,6 +17,13 @@ AttackComponent::~AttackComponent()
 {
 }
 
+
+void AttackComponent::Awake(void)
+{
+	Component::Awake();
+	hasHitSound = FALSE;
+
+}
 
 void AttackComponent::Init(void)
 {
@@ -91,4 +99,19 @@ int AttackComponent::GetDamage(void)
 BOOL AttackComponent::GetEnable(void)
 {
 	return this->enable;
+}
+
+void AttackComponent::PlayHitSound(void)
+{
+	if (!hasHitSound) 
+		return;
+
+	hitSoundSpeaker->StartSound(hitSoundName);
+}
+
+void AttackComponent::SetHitSound(SoundSpeakerComponent* speaker, string seName)
+{
+	hasHitSound = TRUE;
+	hitSoundSpeaker = speaker;
+	hitSoundName = seName;
 }

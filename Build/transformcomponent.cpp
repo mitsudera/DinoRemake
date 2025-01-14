@@ -234,9 +234,21 @@ void TransformComponent::SetRotation(XMFLOAT3 rot)
 	this->quaternion = XMQuaternionRotationMatrix(XMMatrixRotationRollPitchYaw(rot.x, rot.y, rot.z));
 }
 
+void TransformComponent::SetRotation(float x, float y, float z)
+{
+	this->rot = XMFLOAT3(x, y, z);
+	this->quaternion = XMQuaternionRotationMatrix(XMMatrixRotationRollPitchYaw(rot.x, rot.y, rot.z));
+
+}
+
 void TransformComponent::SetScale(XMFLOAT3 scl)
 {
 	this->scl = scl;
+	this->mtxscl = XMMatrixScaling(scl.x, scl.y, scl.z);
+}
+void TransformComponent::SetScale(float x,float y,float z)
+{
+	this->scl = XMFLOAT3(x, y, z);
 	this->mtxscl = XMMatrixScaling(scl.x, scl.y, scl.z);
 }
 

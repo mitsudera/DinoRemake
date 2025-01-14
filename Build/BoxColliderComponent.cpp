@@ -61,6 +61,15 @@ void BoxColliderComponent::SetBox(XMFLOAT3 size)
 
 }
 
+void BoxColliderComponent::SetBox(float x,float y,float z)
+{
+	this->size = XMFLOAT3(x, y, z);
+	XMVECTOR len = XMVector3Length(XMLoadFloat3(&size));
+	XMStoreFloat(&checkRadius, len / 2);
+
+
+}
+
 
 XMFLOAT3 BoxColliderComponent::GetSize(void)
 {

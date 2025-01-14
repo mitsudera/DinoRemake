@@ -703,70 +703,7 @@ BOOL CollisionBoxBox(XMFLOAT3 center1, XMFLOAT3 size1, XMFLOAT3 center2, XMFLOAT
 
 BOOL CollisionBoxRotBox(XMFLOAT3 center1, XMFLOAT3 size1, XMFLOAT3 center2, XMFLOAT3 size2, XMVECTOR rotQton2)
 {
-	// ボックスの中心をベクトルに変換
-	XMVECTOR box1CenterVec = XMLoadFloat3(&center1);
-	XMVECTOR box2CenterVec = XMLoadFloat3(&center2);
-
-	// ボックスの半サイズを計算
-	XMVECTOR box1HalfSize = XMVectorSet(size1.x / 2.0f, size1.y / 2.0f, size1.z / 2.0f, 0.0f);
-	XMVECTOR box2HalfSize = XMVectorSet(size2.x / 2.0f, size2.y / 2.0f, size2.z / 2.0f, 0.0f);
-
-	// 各ボックスの回転行列を計算
-	XMMATRIX rotationMatrix1 = XMMatrixIdentity();
-	XMMATRIX rotationMatrix2 = XMMatrixRotationQuaternion(rotQton2);
-
-	// ボックス間の中心の距離を計算
-	XMVECTOR translationVec = XMVectorSubtract(box2CenterVec, box1CenterVec);
-
-	// ボックスの軸
-	XMVECTOR box1Axes[] = {
-		rotationMatrix1.r[0],
-		rotationMatrix1.r[1],
-		rotationMatrix1.r[2]
-	};
-	XMVECTOR box2Axes[] = {
-		rotationMatrix2.r[0],
-		rotationMatrix2.r[1],
-		rotationMatrix2.r[2]
-	};
-
-	// 分離軸テスト関数
-	auto TestAxis = [](XMVECTOR axis, XMVECTOR box1HalfSize, XMMATRIX rotationMatrix1, XMVECTOR box2HalfSize, XMMATRIX rotationMatrix2, XMVECTOR translationVec) -> bool {
-		// 軸を正規化
-		axis = XMVector3Normalize(axis);
-
-		// ボックスの半サイズを軸に投影
-		float proj1 = fabs(XMVectorGetX(XMVector3Dot(axis, XMVector3TransformNormal(box1HalfSize, rotationMatrix1))));
-		float proj2 = fabs(XMVectorGetX(XMVector3Dot(axis, XMVector3TransformNormal(box2HalfSize, rotationMatrix2))));
-
-		// 軸を沿った中心間の距離を計算
-		float dist = fabs(XMVectorGetX(XMVector3Dot(axis, translationVec)));
-
-		// 投影距離の合計が中心間の距離以上の場合は衝突なし
-		return dist <= proj1 + proj2;
-	};
-
-	// 各軸で分離軸テストを行う
-	for (int i = 0; i < 3; ++i)
-	{
-		if (!TestAxis(box1Axes[i], box1HalfSize, rotationMatrix1, box2HalfSize, rotationMatrix2, translationVec) ||
-			!TestAxis(box2Axes[i], box1HalfSize, rotationMatrix1, box2HalfSize, rotationMatrix2, translationVec))
-		{
-			return FALSE;
-		}
-
-		for (int j = 0; j < 3; ++j)
-		{
-			XMVECTOR crossAxis = XMVector3Cross(box1Axes[i], box2Axes[j]);
-			if (!TestAxis(crossAxis, box1HalfSize, rotationMatrix1, box2HalfSize, rotationMatrix2, translationVec))
-			{
-				return FALSE;
-			}
-		}
-	}
-
-	// 全ての軸で分離軸が見つからなかった場合は衝突
-	return TRUE;
+	return CollisionRotBoxRotBox(center1, size1, XMQuaternionIdentity(), center2, size2, rotQton2);
 }
 
 
@@ -798,89 +735,177 @@ BOOL CollisionRotBoxRotBox(XMFLOAT3 center1, XMFLOAT3 size1, XMVECTOR rotQton1, 
 	XMVECTOR c2 = XMLoadFloat3(&center2);
 	XMVECTOR halfSize1 = XMLoadFloat3(&XMFLOAT3(size1.x * 0.5f, size1.y * 0.5f, size1.z * 0.5f));
 	XMVECTOR halfSize2 = XMLoadFloat3(&XMFLOAT3(size2.x * 0.5f, size2.y * 0.5f, size2.z * 0.5f));
+	XMVECTOR interval = c1 - c2;
+
+	
 
 	// 各ボックスの軸ベクトルを計算
-	XMVECTOR axes1[3] = {
+	XMVECTOR axesA[3] = {
 		XMVector3Rotate(XMVectorSet(1, 0, 0, 0), rotQton1),
 		XMVector3Rotate(XMVectorSet(0, 1, 0, 0), rotQton1),
 		XMVector3Rotate(XMVectorSet(0, 0, 1, 0), rotQton1)
 	};
 
-	XMVECTOR axes2[3] = {
+	XMVECTOR axesB[3] = {
 		XMVector3Rotate(XMVectorSet(1, 0, 0, 0), rotQton2),
 		XMVector3Rotate(XMVectorSet(0, 1, 0, 0), rotQton2),
 		XMVector3Rotate(XMVectorSet(0, 0, 1, 0), rotQton2)
 	};
 
-	// 分離軸を格納するベクトル
-	vector<XMVECTOR> axes;
+	XMVECTOR ae[3] = {
+		axesA[0]*halfSize1.m128_f32[0],
+		axesA[1]*halfSize1.m128_f32[1],
+		axesA[2]*halfSize1.m128_f32[2],
+	};
 
-	// ボックス1とボックス2の軸を追加
-	axes.insert(axes.end(), begin(axes1), end(axes1));
-	axes.insert(axes.end(), begin(axes2), end(axes2));
+	XMVECTOR be[3] = {
+		axesB[0]*halfSize2.m128_f32[0],
+		axesB[1]*halfSize2.m128_f32[1],
+		axesB[2]*halfSize2.m128_f32[2],
+	};
 
-	// クロス積を計算して追加
-	for (int i = 0; i < 3; ++i)
-	{
-		for (int j = 0; j < 3; ++j)
-		{
-			axes.push_back(XMVector3Cross(axes1[i], axes2[j]));
-		}
-	}
 
-	float minPenetrationDepth = FLT_MAX;
-	XMVECTOR collisionNormal = XMVectorZero();
 
-	for (const auto& axis : axes)
-	{
-		if (XMVector3Equal(axis, XMVectorZero()))
-		{
-			continue;
-		}
+	// 分離軸 : ae[0]
+	FLOAT rA = XMVectorGetX(XMVector3Length(ae[0]));
+	FLOAT rB = LenSegOnSeparateAxis(&axesA[0], &be[0], &be[1], &be[2]);
+	FLOAT L = fabs(XMVectorGetX(XMVector3Dot(interval, axesA[0])));
+	if (L > rA + rB)
+		return false; // 衝突していない
 
-		XMVECTOR axisNorm = XMVector3Normalize(axis);
+	 // 分離軸 : ae[1]
+	rA = XMVectorGetX(XMVector3Length(ae[1]));
+	rB = LenSegOnSeparateAxis(&axesA[1], &be[0], &be[1], &be[2]);
+	L = fabs(XMVectorGetX(XMVector3Dot(interval, axesA[1])));
+	if (L > rA + rB)
+		return false;
 
-		float min1 = FLT_MAX, max1 = -FLT_MAX;
-		float min2 = FLT_MAX, max2 = -FLT_MAX;
+	// 分離軸 : ae[2]
+	rA = XMVectorGetX(XMVector3Length(ae[2]));
+	rB = LenSegOnSeparateAxis(&axesA[2], &be[0], &be[1], &be[2]);
+	L = fabs(XMVectorGetX(XMVector3Dot(interval, axesA[2])));
+	if (L > rA + rB)
+		return false;
 
-		for (int i = 0; i < 8; ++i)
-		{
-			XMVECTOR corner1 = c1 + XMVectorSet((i & 1 ? halfSize1.m128_f32[0] : -halfSize1.m128_f32[0]),
-				(i & 2 ? halfSize1.m128_f32[1] : -halfSize1.m128_f32[1]),
-				(i & 4 ? halfSize1.m128_f32[2] : -halfSize1.m128_f32[2]), 0);
+	// 分離軸 : be[0]
+	rA = LenSegOnSeparateAxis(&axesB[0], &ae[0], &ae[1], &ae[2]);
+	rB = XMVectorGetX(XMVector3Length(be[0]));
+	L = fabs(XMVectorGetX(XMVector3Dot(interval, axesB[0])));
+	if (L > rA + rB)
+		return false;
 
-			XMVECTOR corner2 = c2 + XMVectorSet((i & 1 ? halfSize2.m128_f32[0] : -halfSize2.m128_f32[0]),
-				(i & 2 ? halfSize2.m128_f32[1] : -halfSize2.m128_f32[1]),
-				(i & 4 ? halfSize2.m128_f32[2] : -halfSize2.m128_f32[2]), 0);
+	// 分離軸 : be[1]
+	rA = LenSegOnSeparateAxis(&axesB[1], &ae[0], &ae[1], &ae[2]);
+	rB = XMVectorGetX(XMVector3Length(be[1]));
+	L = fabs(XMVectorGetX(XMVector3Dot(interval, axesB[1])));
+	if (L > rA + rB)
+		return false;
 
-			float projection1 = XMVectorGetX(XMVector3Dot(corner1, axisNorm));
-			float projection2 = XMVectorGetX(XMVector3Dot(corner2, axisNorm));
+	// 分離軸 : be[2]
+	rA = LenSegOnSeparateAxis(&axesB[2], &ae[0], &ae[1], &ae[2]);
+	rB = XMVectorGetX(XMVector3Length(be[2]));
+	L = fabs(XMVectorGetX(XMVector3Dot(interval, axesB[2])));
+	if (L > rA + rB)
+		return false;
 
-			min1 = min(min1, projection1);
-			max1 = max(max1, projection1);
-			min2 = min(min2, projection2);
-			max2 = max(max2, projection2);
-		}
+	// 分離軸 : C11
+	XMVECTOR Cross;
+	Cross=XMVector3Cross(axesA[0], axesB[0]);
+	rA = LenSegOnSeparateAxis(&Cross, &ae[1], &ae[2]);
+	rB = LenSegOnSeparateAxis(&Cross, &be[1], &be[2]);
+	L = fabs(XMVectorGetX(XMVector3Dot(interval, Cross)));
+	if (L > rA + rB)
+		return false;
 
-		float overlap = min(max1, max2) - max(min1, min2);
+	// 分離軸 : C12
+	Cross=XMVector3Cross(axesA[0], axesB[1]);
+	rA = LenSegOnSeparateAxis(&Cross, &ae[1], &ae[2]);
+	rB = LenSegOnSeparateAxis(&Cross, &be[0], &be[2]);
+	L = fabs(XMVectorGetX(XMVector3Dot(interval, Cross)));
+	if (L > rA + rB)
+		return false;
 
-		if (overlap < 0.0f)
-		{
-			return FALSE;
-		}
+	// 分離軸 : C13
+	Cross=XMVector3Cross(axesA[0], axesB[2]);
+	rA = LenSegOnSeparateAxis(&Cross, &ae[1], &ae[2]);
+	rB = LenSegOnSeparateAxis(&Cross, &be[0], &be[1]);
+	L = fabs(XMVectorGetX(XMVector3Dot(interval, Cross)));
+	if (L > rA + rB)
+		return false;
 
-		if (overlap < minPenetrationDepth)
-		{
-			minPenetrationDepth = overlap;
-			collisionNormal = axisNorm;
-		}
-	}
+	// 分離軸 : C21
+	Cross=XMVector3Cross(axesA[1], axesB[0]);
+	rA = LenSegOnSeparateAxis(&Cross, &ae[0], &ae[2]);
+	rB = LenSegOnSeparateAxis(&Cross, &be[1], &be[2]);
+	L = fabs(XMVectorGetX(XMVector3Dot(interval, Cross)));
+	if (L > rA + rB)
+		return false;
 
-	XMFLOAT4 result;
-	XMStoreFloat3(reinterpret_cast<XMFLOAT3*>(&result), collisionNormal);
-	result.w = minPenetrationDepth;
+	// 分離軸 : C22
+	Cross=XMVector3Cross(axesA[1], axesB[1]);
+	rA = LenSegOnSeparateAxis(&Cross, &ae[0], &ae[2]);
+	rB = LenSegOnSeparateAxis(&Cross, &be[0], &be[2]);
+	L = fabs(XMVectorGetX(XMVector3Dot(interval, Cross)));
+	if (L > rA + rB)
+		return false;
 
-	return TRUE;
+	// 分離軸 : C23
+	Cross=XMVector3Cross(axesA[1], axesB[2]);
+	rA = LenSegOnSeparateAxis(&Cross, &ae[0], &ae[2]);
+	rB = LenSegOnSeparateAxis(&Cross, &be[0], &be[1]);
+	L = fabs(XMVectorGetX(XMVector3Dot(interval, Cross)));
+	if (L > rA + rB)
+		return false;
+
+	// 分離軸 : C31
+	Cross=XMVector3Cross(axesA[2], axesB[0]);
+	rA = LenSegOnSeparateAxis(&Cross, &ae[0], &ae[1]);
+	rB = LenSegOnSeparateAxis(&Cross, &be[1], &be[2]);
+	L = fabs(XMVectorGetX(XMVector3Dot(interval, Cross)));
+	if (L > rA + rB)
+		return false;
+
+	// 分離軸 : C32
+	Cross=XMVector3Cross(axesA[2], axesB[1]);
+	rA = LenSegOnSeparateAxis(&Cross, &ae[0], &ae[1]);
+	rB = LenSegOnSeparateAxis(&Cross, &be[0], &be[2]);
+	L = fabs(XMVectorGetX(XMVector3Dot(interval, Cross)));
+	if (L > rA + rB)
+		return false;
+
+	// 分離軸 : C33
+	Cross=XMVector3Cross(axesA[2], axesB[2]);
+	rA = LenSegOnSeparateAxis(&Cross, &ae[0], &ae[1]);
+	rB = LenSegOnSeparateAxis(&Cross, &be[0], &be[1]);
+	L = fabs(XMVectorGetX(XMVector3Dot(interval, Cross)));
+	if (L > rA + rB)
+		return false;
+
+	// 分離平面が存在しないので「衝突している」
+	return true;
+}
+
+// 分離軸に投影された軸成分から投影線分長を算出
+FLOAT LenSegOnSeparateAxis(XMVECTOR* Sep, XMVECTOR* e1, XMVECTOR* e2, XMVECTOR* e3)
+{
+	// 3つの内積の絶対値の和で投影線分長を計算
+	// 分離軸Sepは標準化されていること
+
+	FLOAT r1 = fabs(XMVectorGetX(XMVector3Dot(*Sep, *e1)));
+	FLOAT r2 = fabs(XMVectorGetX(XMVector3Dot(*Sep, *e2)));
+	FLOAT r3 = fabs(XMVectorGetX(XMVector3Dot(*Sep, *e3)));
+	return r1 + r2 + r3;
+}
+
+FLOAT LenSegOnSeparateAxis(XMVECTOR* Sep, XMVECTOR* e1, XMVECTOR* e2)
+{
+	// 3つの内積の絶対値の和で投影線分長を計算
+	// 分離軸Sepは標準化されていること
+
+	FLOAT r1 = fabs(XMVectorGetX(XMVector3Dot(*Sep, *e1)));
+	FLOAT r2 = fabs(XMVectorGetX(XMVector3Dot(*Sep, *e2)));
+	FLOAT r3 = 0;
+	return r1 + r2 + r3;
 }
 
 BOOL CollisionRotBoxTerrain(XMFLOAT3 center1, XMFLOAT3 size1, XMVECTOR rotQton, XMFLOAT3 center, XMFLOAT2 hw)

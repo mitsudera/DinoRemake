@@ -55,6 +55,7 @@ protected:
 
 	TransformComponent* hpFrameTrans;
 	TransformComponent* hpLineTrans;
+	BOOL die;
 
 private:
 	BOOL onAttack;

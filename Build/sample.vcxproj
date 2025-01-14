@@ -210,6 +210,7 @@
     <ClInclude Include="Rock4.h" />
     <ClInclude Include="Rock5.h" />
     <ClInclude Include="Rock6.h" />
+    <ClInclude Include="InvisibleWall.h" />
     <ClInclude Include="RotBoxColliderComponent.h" />
     <ClInclude Include="SkinMeshComponent.h" />
     <ClInclude Include="SkinMeshComputeShader.h" />
@@ -264,11 +265,12 @@
     <ClInclude Include="TextMesh.h" />
     <ClInclude Include="TextMeshComponent.h" />
     <ClInclude Include="TextWriteComponent.h" />
-    <ClInclude Include="TitleBG.h" />
+    <ClInclude Include="Loading.h" />
     <ClInclude Include="TitleCursor.h" />
     <ClInclude Include="TitleLogo.h" />
     <ClInclude Include="TitleManager.h" />
     <ClInclude Include="TitleManagerComponent.h" />
+    <ClInclude Include="TitlePlayer.h" />
     <ClInclude Include="TitleScene.h" />
     <ClInclude Include="transformcomponent.h" />
     <ClInclude Include="Tree1.h" />
@@ -279,6 +281,8 @@
     <ClInclude Include="UIMaterial.h" />
     <ClInclude Include="UIShader.h" />
     <ClInclude Include="WicFactory.h" />
+    <ClInclude Include="Bear.h" />
+    <ClInclude Include="BearComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="AbilitySystemComponent.cpp" />
@@ -340,6 +344,7 @@
     <ClCompile Include="Rock4.cpp" />
     <ClCompile Include="Rock5.cpp" />
     <ClCompile Include="Rock6.cpp" />
+    <ClCompile Include="InvisibleWall.cpp" />
     <ClCompile Include="RotBoxColliderComponent.cpp" />
     <ClCompile Include="SkinMeshComponent.cpp" />
     <ClCompile Include="SkinMeshComputeShader.cpp" />
@@ -391,11 +396,12 @@
     <ClCompile Include="TextMesh.cpp" />
     <ClCompile Include="TextMeshComponent.cpp" />
     <ClCompile Include="TextWriteComponent.cpp" />
-    <ClCompile Include="TitleBG.cpp" />
+    <ClCompile Include="Loading.cpp" />
     <ClCompile Include="TitleCursor.cpp" />
     <ClCompile Include="TitleLogo.cpp" />
     <ClCompile Include="TitleManager.cpp" />
     <ClCompile Include="TitleManagerComponent.cpp" />
+    <ClCompile Include="TitlePlayer.cpp" />
     <ClCompile Include="TitleScene.cpp" />
     <ClCompile Include="transformcomponent.cpp" />
     <ClCompile Include="Tree1.cpp" />
@@ -406,6 +412,8 @@
     <ClCompile Include="UIMaterial.cpp" />
     <ClCompile Include="UIShader.cpp" />
     <ClCompile Include="WicFactory.cpp" />
+    <ClCompile Include="Bear.cpp" />
+    <ClCompile Include="BearComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="shaders\CSskinmesh.hlsl">

@@ -405,7 +405,7 @@
     <ClInclude Include="MeshField.h">
       <Filter>gameobject\3D\Field</Filter>
     </ClInclude>
-    <ClInclude Include="TitleBG.h">
+    <ClInclude Include="Loading.h">
       <Filter>gameobject\2D\Title</Filter>
     </ClInclude>
     <ClInclude Include="MikanSoftLogo.h">
@@ -600,6 +600,18 @@
     <ClInclude Include="Rock6.h">
       <Filter>gameobject\3D\Prop\Rock</Filter>
     </ClInclude>
+    <ClInclude Include="InvisibleWall.h">
+      <Filter>gameobject\3D\Prop\Rock</Filter>
+    </ClInclude>
+    <ClInclude Include="Bear.h">
+      <Filter>gameobject\3D\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="BearComponent.h">
+      <Filter>component\ProjectOriginal\Enemy</Filter>
+    </ClInclude>
+    <ClInclude Include="TitlePlayer.h">
+      <Filter>gameobject\3D\Player</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Main.cpp">
@@ -782,7 +794,7 @@
     <ClCompile Include="MeshField.cpp">
       <Filter>gameobject\3D\Field</Filter>
     </ClCompile>
-    <ClCompile Include="TitleBG.cpp">
+    <ClCompile Include="Loading.cpp">
       <Filter>gameobject\2D\Title</Filter>
     </ClCompile>
     <ClCompile Include="MikanSoftLogo.cpp">
@@ -976,6 +988,18 @@
     </ClCompile>
     <ClCompile Include="Rock6.cpp">
       <Filter>gameobject\3D\Prop\Rock</Filter>
+    </ClCompile>
+    <ClCompile Include="InvisibleWall.cpp">
+      <Filter>gameobject\3D\Prop\Rock</Filter>
+    </ClCompile>
+    <ClCompile Include="Bear.cpp">
+      <Filter>gameobject\3D\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="BearComponent.cpp">
+      <Filter>component\ProjectOriginal\Enemy</Filter>
+    </ClCompile>
+    <ClCompile Include="TitlePlayer.cpp">
+      <Filter>gameobject\3D\Player</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

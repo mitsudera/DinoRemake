@@ -113,7 +113,6 @@ void VSmain(in float4 inPosition : POSITION0,
 						  out float2 outTexCoord : TEXCOORD0,
 						  out float4 outDiffuse : COLOR0,
 						  out float4 outWorldPos : POSITION0,
-						  out float4 outPosSM : POSITION1,
 						  out float4 outTangent : TANGENT0,
 						  out float4 outBiNormal : BINORMAL0
 )
@@ -134,11 +133,6 @@ void VSmain(in float4 inPosition : POSITION0,
     outDiffuse = inDiffuse;
 	
 	
-    float4 pos4 = mul(inPosition, Shadow.wvp);
-    pos4.xyz = pos4.xyz / pos4.w;
-    outPosSM.x = (pos4.x + 1.0) / 2.0;
-    outPosSM.y = (-pos4.y + 1.0) / 2.0;
-    outPosSM.z = pos4.z;
 
 
 }
@@ -184,7 +178,6 @@ void PSmain(in float4 inPosition : SV_POSITION,
 						 in float2 inTexCoord : TEXCOORD0,
 						 in float4 inDiffuse : COLOR0,
 						 in float4 inWorldPos : POSITION0,
-						 in float4 inPosSM : POSITION1,
 						 in float4 inTangent : TANGENT0,
 						 in float4 inBiNormal : BINORMAL0,
 
@@ -194,7 +187,14 @@ void PSmain(in float4 inPosition : SV_POSITION,
 
     float sma = 1.0;
     bool shadow;
-    
+
+    float4 pos4 = mul(inWorldPos, Shadow.wvp);
+    float4 PosSM;
+    PosSM.x = (pos4.x + 1.0) / 2.0;
+    PosSM.y = (-pos4.y + 1.0) / 2.0;
+    PosSM.z = pos4.z;
+    PosSM.w = 1.0f;
+
     
     float4 normal = inNormal;
     
@@ -220,16 +220,16 @@ void PSmain(in float4 inPosition : SV_POSITION,
     					//‰e
     if (Shadow.enable == 1)
     {
-        if (inPosSM.z > 1.0)
+        if (PosSM.z > 1.0)
         {
             sma = 1.0;
         }
         else if (Shadow.mode == 0)
         {
-            float sm0 = ShadowMapNear.Sample(BorderSampler, inPosSM.xy);
+            float sm0 = ShadowMapNear.Sample(BorderSampler, PosSM.xy);
 
             
-            if (inPosSM.z - 0.0002 > sm0)
+            if (PosSM.z - 0.0002 > sm0)
             {
                 sma = 0.5;
 
@@ -238,10 +238,10 @@ void PSmain(in float4 inPosition : SV_POSITION,
         }
         else if (Shadow.mode == 1)
         {
-            sma = GetVarianceDirectionalShadowFactor(inPosSM);
-            if (sma < 0.99f)
+            sma = GetVarianceDirectionalShadowFactor(PosSM);
+            if (sma != 1.0f)
             {
-                sma = sma * sma;
+                sma = sma * 0.5;
 
             }
 

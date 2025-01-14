@@ -18,18 +18,23 @@ GolemComponent::~GolemComponent()
 void GolemComponent::Init(void)
 {
 	EnemyComponent::Init();
-	hpMax = 100;
-	hp = 100;
+	hpMax = 10;
+	hp = 10;
 	speed = 50.0f;
 	rotValue = 1.0f;
 	atkAngle = XM_PIDIV4 * 0.1;
 	
-
+	
 }
 
 void GolemComponent::Update(void)
 {
 	EnemyComponent::Update();
+
+	if (die)
+	{
+		return;
+	}
 
 	float dt = pGameEngine->GetDeltaTime();
 	XMVECTOR pv = XMLoadFloat3(&playerTransform->GetWorldPos());
@@ -58,7 +63,7 @@ void GolemComponent::Update(void)
 				if (!animControler->GetIsTransition())
 				{
 					this->animControler->SetCondition("Attack", TRUE);
-					lHand->SetAttackDelay(5, 1.2f, 0.4f);
+					lHand->SetAttackDelay(10, 1.2f, 0.4f);
 					StartAtk(2.66f);
 				}
 

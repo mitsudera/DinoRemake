@@ -61,67 +61,79 @@ void EnemyComponent::Init(void)
 	hpLineTrans->SetScale(XMFLOAT3(hpWidth, hpHeght, 0.5f));
 	hpFrameTrans->SetPosition(XMFLOAT3(0.0f, 310.0f, 0.0f));
 	hpLineTrans->SetPosition(XMFLOAT3(0.0f, 310.0f, 0.0f));
-
+	die = FALSE;
 }
 
 void EnemyComponent::Update(void)
 {
 	Component::Update();
 
-	if (collider->GetHitTag(GameObject::ObjectTag::PlayerAttack))
+	if (!die)
 	{
-		for (GameObject* hitObj : collider->GetHitTagObjectAll(GameObject::ObjectTag::PlayerAttack))
+		if (collider->GetHitTag(GameObject::ObjectTag::PlayerAttack))
 		{
-			AttackComponent* atack = hitObj->GetComponent<AttackComponent>();
-			if (atack->GetEnable())
+			for (GameObject* hitObj : collider->GetHitTagObjectAll(GameObject::ObjectTag::PlayerAttack))
 			{
-				if (FindHitObject(hitObj))
+				AttackComponent* atack = hitObj->GetComponent<AttackComponent>();
+				if (atack->GetEnable())
 				{
+					if (FindHitObject(hitObj))
+					{
 
+					}
+					else
+					{
+						hitList.push_back(hitObj);
+						hp -= atack->GetDamage();
+						atack->PlayHitSound();
+
+					}
 				}
 				else
 				{
-					hitList.push_back(hitObj);
-					hp -= atack->GetDamage();
 
+					hitList.remove(hitObj);
 
 				}
+
+			}
+
+		}
+
+
+
+
+
+		for (auto it = hitList.begin(); it != hitList.end(); )
+		{
+			GameObject* obj = *it;
+			if (!collider->GetHitObject(obj)) {
+				it = hitList.erase(it); // eraseは次の要素のイテレータを返す
 			}
 			else
 			{
-
-				hitList.remove(hitObj);
-
+				++it;
 			}
-
 		}
 
-	}
-
-
-	
-
-
-	for (auto it = hitList.begin(); it != hitList.end(); ) 
-	{
-		GameObject* obj = *it;
-		if (!collider->GetHitObject(obj)) {
-			it = hitList.erase(it); // eraseは次の要素のイテレータを返す
-		}
-		else 
+		if (onAttack)
 		{
-			++it;
+			atkCnt += pGameEngine->GetDeltaTime();
+			if (atkCnt > atkTime)
+			{
+				onAttack = FALSE;
+			}
 		}
+		if (hp <= 0.0f)
+		{
+			die = TRUE;
+			this->animControler->SetCondition("Die", TRUE);
+
+		}
+
 	}
 
-	if (onAttack)
-	{
-		atkCnt += pGameEngine->GetDeltaTime();
-		if (atkCnt > atkTime)
-		{
-			onAttack = FALSE;
-		}
-	}
+
 
 }
 

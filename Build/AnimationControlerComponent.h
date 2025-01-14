@@ -109,6 +109,7 @@ private:
 	AnimationTransition* exitTransition;
 	float endTime;
 	float exitTime;
+	BOOL animEnd;
 	BOOL loop;
 	string name;
 

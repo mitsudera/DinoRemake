@@ -30,7 +30,8 @@ void RigidBodyComponent::Awake(void)
     drag = 0.1f;
 	friction = 50.0f;
 	onGround = TRUE;
-	isStatic = TRUE;
+	isStatic = FALSE;
+	isFixTerrain = TRUE;
 }
 
 void RigidBodyComponent::Init(void)
@@ -98,10 +99,37 @@ void RigidBodyComponent::FixedUpdate(void)
 void RigidBodyComponent::FixedLateUpdate(void)
 {
 	Component::FixedLateUpdate();
+	if (isStatic)
+	{
+		if (isFixTerrain)
+		{
+			//’n–Ê‚Æ‚Ì“–‚½‚è”»’è‚ğæ“¾‚µÀ•WC³
+			if (collider->GetHitTag(GameObject::ObjectTag::Field))
+			{
+
+
+				float h = collider->GetHitTagObject(GameObject::ObjectTag::Field)->GetComponent<TerrainComponent>()->GetHeight(GetWorldPos());
+
+				worldPos.m128_f32[1] = h;
+				onGround = TRUE;
+				transform->SetWorldPosition(worldPos);
+
+			}
+			else
+			{
+				onGround = FALSE;
+			}
+
+		}
+
+
+		return;
+
+	}
+
 
 	float deltaTime = pGameEngine->GetFixedDeltaTime();
 	bool fixY = false;
-
 	//‘¼‚Ì„‘Ì‚Æ‚Ì“–‚½‚è”»’è‚ğæ“¾‚µÀ•WC³
 	for (pair<GameObject*, XMFLOAT4> rbObj : collider->GetHitRigidObject())
 	{
@@ -115,9 +143,34 @@ void RigidBodyComponent::FixedLateUpdate(void)
 		XMFLOAT3 colCenter = colRb->GetWorldPos();
 		XMVECTOR v = XMLoadFloat3(&myCenter) - XMLoadFloat3(&colCenter);
 
-		if (v.m128_f32[0] > 0.0f) cnormal.x *= -1;
-		if (v.m128_f32[1] > 0.0f) cnormal.y *= -1;
-		if (v.m128_f32[2] > 0.0f) cnormal.z *= -1;
+		if (v.m128_f32[0] > 0.0f && cnormal.x > 0.0f)
+		{
+			cnormal.x *= -1;
+		}
+		else if(v.m128_f32[0] < 0.0f && cnormal.x < 0.0f)
+		{
+			cnormal.x *= -1;
+
+		}
+		if (v.m128_f32[1] > 0.0f && cnormal.y > 0.0f)
+		{
+			cnormal.y *= -1;
+		}
+		else if (v.m128_f32[1] < 0.0f && cnormal.y < 0.0f)
+		{
+			cnormal.y *= -1;
+
+		}
+
+		if (v.m128_f32[2] > 0.0f && cnormal.z > 0.0f)
+		{
+			cnormal.z *= -1;
+		}
+		else if (v.m128_f32[2] < 0.0f && cnormal.z < 0.0f)
+		{
+			cnormal.z *= -1;
+
+		}
 
 
 		XMVECTOR direction = XMLoadFloat3(&cnormal);
@@ -277,4 +330,9 @@ BOOL RigidBodyComponent::GetOnGround(void)
 void RigidBodyComponent::SetIsStatic(BOOL b)
 {
 	isStatic = b;
+}
+
+void RigidBodyComponent::SetIsFixTerrain(BOOL b)
+{
+	isFixTerrain = b;
 }

@@ -7,6 +7,7 @@ class SkinMeshLinkerComponent;
 class ColliderComponent;
 class AttackComponent;
 class SpriteComponent;
+class SoundSpeakerComponent;
 class PlayerComponent :public Component
 {
 public:
@@ -18,6 +19,7 @@ public:
 		Run,
 		Jump,
 		Fall,
+		Die,
 
 	};
 
@@ -44,11 +46,11 @@ public:
 
 	BOOL FindHitObject(GameObject* obj);
 
-
+	void PlayHitSoound(void);
 
 private:
 	BOOL control;
-
+	SoundSpeakerComponent* sound;
 	PlayerState state;
 	RigidBodyComponent* rb;
 	PlayerAnimationControlComponent* animControl;
@@ -59,6 +61,7 @@ private:
 	TransformComponent* camAt;
 	SpriteComponent* hpLine;
 	SpriteComponent* hpFrame;
+	
 	float hpLineWidth;
 	float hpLineHeight;
 	XMFLOAT3 hpLinePos;
@@ -71,10 +74,12 @@ private:
 	BOOL onAttack;
 	BOOL onDodge;
 	float dodgeForce;
-	float dodgeUpForce;
-
+	float dodgeVelo;
+	XMVECTOR dodgeVec;
 	void Dodge(void);
 	void UIUpdate(void);
+	
+	BOOL camInvMode;
 
 	BOOL devicePad;
 
@@ -82,6 +87,8 @@ private:
 
 	int hpMax;
 	int hp;
+
+	float dieCnt;
 
 	list<GameObject*> hitList;
 

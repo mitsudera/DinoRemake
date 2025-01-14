@@ -57,6 +57,12 @@ void LightManager::Update()
 
 }
 
+void LightManager::ClearLight(void)
+{
+	direcLightList.clear();
+	pointLightList.clear();
+}
+
 
 
 void LightManager::SetLightNear(XMFLOAT3 pos)

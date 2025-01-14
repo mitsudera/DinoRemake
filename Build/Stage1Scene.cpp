@@ -25,6 +25,11 @@
 #include "Rock4.h"
 #include "Rock5.h"
 #include "Rock6.h"
+#include "InvisibleWall.h"
+#include "BoxColliderComponent.h"
+#include "SoundSpeakerComponent.h"
+#include "Bear.h"
+#include "Loading.h"
 Stage1Scene::Stage1Scene(GameEngine* pGameEngine)
 {
 	this->pGameEngine = pGameEngine;
@@ -56,19 +61,81 @@ void Stage1Scene::Awake()
 
 	CreateGameObject<Golem>()->GetTransFormComponent()->SetPosition(0.0f,0.0f,2000.0f);
 
+	CreateGameObject<Bear>()->GetTransFormComponent()->SetPosition(0.0f,0.0f,200.0f);
+
 
 	//tree
-	CreateGameObject<Tree1>()->GetTransFormComponent()->SetPosition(500.0f, 0.0f, 5000.0f);
-	CreateGameObject<Tree1>()->GetTransFormComponent()->SetPosition(-300.0f, 0.0f, 8000.0f);
+	{
+		CreateGameObject<Tree1>()->GetTransFormComponent()->SetPosition(-3645.0f, 0.0f, 5638.0f);
+		CreateGameObject<Tree1>()->GetTransFormComponent()->SetPosition(-1996.0f, 0.0f, 2905.0f);
+		CreateGameObject<Tree1>()->GetTransFormComponent()->SetPosition(2987.0f, 0.0f, -7111.0f);
+		CreateGameObject<Tree1>()->GetTransFormComponent()->SetPosition(1221.0f, 0.0f, 6019.0f);
+		CreateGameObject<Tree1>()->GetTransFormComponent()->SetPosition(4163.0f, 0.0f, -6402.0f);
 
+		CreateGameObject<Tree1>()->GetTransFormComponent()->SetPosition(219.0f, 0.0f, 2879.0f);
+		CreateGameObject<Tree1>()->GetTransFormComponent()->SetPosition(-1984.0f, 0.0f, -5502.0f);
+		CreateGameObject<Tree1>()->GetTransFormComponent()->SetPosition(6705.0f, 0.0f, -6216.0f);
+		CreateGameObject<Tree1>()->GetTransFormComponent()->SetPosition(5642.0f, 0.0f, 7467.0f);
+		CreateGameObject<Tree1>()->GetTransFormComponent()->SetPosition(-4462.0f, 0.0f, 4634.0f);
+
+
+		CreateGameObject<Tree1>()->GetTransFormComponent()->SetPosition(-408.0f, 0.0f, -227.0f);
+		CreateGameObject<Tree1>()->GetTransFormComponent()->SetPosition(392.0f, 0.0f, 1954.0f);
+		CreateGameObject<Tree1>()->GetTransFormComponent()->SetPosition(470.0f, 0.0f, -2246.0f);
+		CreateGameObject<Tree1>()->GetTransFormComponent()->SetPosition(-2946.0f, 0.0f, 844.0f);
+
+	}
+
+
+	
 	//rock
-	CreateGameObject<Rock1>()->GetTransFormComponent()->SetPosition(-2000.0f, 0.0f, 300.0f);
-	CreateGameObject<Rock3>()->GetTransFormComponent()->SetPosition(-1000.0f, 0.0f, 300.0f);
-	CreateGameObject<Rock4>()->GetTransFormComponent()->SetPosition(0.0f, 0.0f, 300.0f);
-	CreateGameObject<Rock5>()->GetTransFormComponent()->SetPosition(1000.0f, 0.0f, 300.0f);
-	CreateGameObject<Rock6>()->GetTransFormComponent()->SetPosition(2000.0f, 0.0f, 300.0f);
+	{
+		TransformComponent* rt = CreateGameObject<Rock1>()->GetTransFormComponent();
+		rt->SetPosition(300.0f, 0.0f, 300.0f);
 
+	}
+
+
+		
+		
+		
+		
+		
+		
+		
+		
+	float fieldSize = 1024.0f * 16.0f * 0.5;
+
+
+
+
+	
+	GameObject* iw1 = CreateGameObject<InvisibleWall>();
+	iw1->GetTransFormComponent()->SetPosition(0.0f, 0.0f, fieldSize);
+	iw1->GetComponent<BoxColliderComponent>()->SetBox(fieldSize * 2.0f, 10000.0f, 1000.0f);
+
+	GameObject* iw2 = CreateGameObject<InvisibleWall>();
+	iw2->GetTransFormComponent()->SetPosition(0.0f, 0.0f, -fieldSize);
+	iw2->GetComponent<BoxColliderComponent>()->SetBox(fieldSize * 2.0f, 10000.0f, 1000.0f);
+
+	GameObject* iw3 = CreateGameObject<InvisibleWall>();
+	iw3->GetTransFormComponent()->SetPosition(fieldSize, 0.0f, 0.0f);
+	iw3->GetComponent<BoxColliderComponent>()->SetBox(1000.0f, 10000.0f, fieldSize * 2.0f);
+
+	GameObject* iw4 = CreateGameObject<InvisibleWall>();
+	iw4->GetTransFormComponent()->SetPosition(-fieldSize, 0.0f, 0.0f);
+	iw4->GetComponent<BoxColliderComponent>()->SetBox(1000.0f, 10000.0f, fieldSize * 2.0f);
+
+
+	SoundSpeakerComponent* speaker= CreateGameObject<BGMPlayer>()->GetComponent<SoundSpeakerComponent>();
+	speaker->LoadSound("stage1bgm.wav", "BGM", SoundType::BGM);
+	speaker->StartSound("BGM");
+
+
+	CreateGameObject<Loading>()->SetActive(FALSE);
 
 	CreateGameObject<GameManager>();
+
+
 
 }

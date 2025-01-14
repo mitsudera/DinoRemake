@@ -406,7 +406,7 @@ void SoundEngine::StartSound(AudioData* audioData)
 	switch (audioData->type)
 	{
 	case SoundType::BGM:
-		buffer.LoopCount = -1;
+		buffer.LoopCount = XAUDIO2_LOOP_INFINITE;
 
 		break;
 	case SoundType::SE:
@@ -461,6 +461,7 @@ void SoundEngine::StopSound(AudioData* audioData)
 
 void SoundEngine::StopAllSound(void)
 {
+
 }
 
 

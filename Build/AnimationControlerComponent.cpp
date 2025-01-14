@@ -673,13 +673,6 @@ void AnimationNode::UpdateAnimation(GameObject* gameObject)
 {
 	MtxNode* root = animData->GetMtxTreeRoot();
 
-	for (int i = 0; i < root->GetChildCnt(); i++)
-	{
-		MtxNode* child = root->GetChild(i);
-		GameObject* childObj = gameObject->GetChild(i);
-
-		UpdateMtx(child, childObj);
-	}
 
 
 	if (!controler->GetStop())
@@ -705,7 +698,7 @@ void AnimationNode::UpdateAnimation(GameObject* gameObject)
 			{
 				exitTransition->StartTransition(timeCnt, overTime);
 			}
-			else if (timeCnt > endTime)
+			if (timeCnt > endTime)
 			{
 				timeCnt = endTime;
 				controler->StopAnim();
@@ -725,6 +718,14 @@ void AnimationNode::UpdateAnimation(GameObject* gameObject)
 		}
 	}
 
+	for (int i = 0; i < root->GetChildCnt(); i++)
+	{
+		MtxNode* child = root->GetChild(i);
+		GameObject* childObj = gameObject->GetChild(i);
+
+		UpdateMtx(child, childObj);
+	}
+
 
 }
 
@@ -733,7 +734,9 @@ void AnimationNode::CreateNode(string fileName, string name, BOOL loop)
 	this->animData = pAssetsManager->LoadAnimationData(fileName);
 	this->name = name;
 	this->loop = loop;
-	this->endTime = ((float)animData->GetFrameNum()) / 60.0f;
+	this->endTime = ((float)animData->GetFrameNum() - 1) / 60.0f;
+	exitTime = endTime;
+	animEnd = FALSE;
 	blend = Blend::None;
 }
 
@@ -742,7 +745,10 @@ void AnimationNode::CreateNode(string fileName1, string fileName2, string name, 
 	this->animData = pAssetsManager->LoadAnimationData(fileName1, fileName2);
 	this->name = name;
 	this->loop = loop;
-	this->endTime = ((float)animData->GetFrameNum()) / 60.0f;
+	this->endTime = ((float)animData->GetFrameNum() - 1) / 60.0f;
+	exitTime = endTime;
+	animEnd = FALSE;
+
 	blend = Blend::Double;
 }
 
@@ -751,7 +757,10 @@ void AnimationNode::CreateNode(string fileName1, string fileName2, string fileNa
 	this->animData = pAssetsManager->LoadAnimationData(fileName1, fileName2, fileName3, fileName4);
 	this->name = name;
 	this->loop = loop;
-	this->endTime = ((float)animData->GetFrameNum()) / 60.0f;
+	this->endTime = ((float)animData->GetFrameNum() - 1) / 60.0f;
+	exitTime = endTime;
+	animEnd = FALSE;
+
 	blend = Blend::Angle;
 
 }

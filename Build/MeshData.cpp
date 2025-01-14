@@ -153,15 +153,16 @@ XMMATRIX MeshData::GetLocalOffset(void)
 	return localOffset;
 }
 
-XMFLOAT3 MeshData::GetBoxCenter(void)
+XMVECTOR MeshData::GetBoxMin(void)
 {
-	return boxCenter;
+	return boxMin;
 }
 
-XMFLOAT3 MeshData::GetBoxSize(void)
+XMVECTOR MeshData::GetBoxMax(void)
 {
-	return boxSize;
+	return boxMax;
 }
+
 
 
 
@@ -266,7 +267,7 @@ void MeshData::LoadFbxMesh(FbxMesh* mesh,AssetsManager* ap,MeshData* parent)
 
 	}
 
-	SetBoxCenterSize(vPosArray);
+	SetBoxMinMax(vPosArray);
 
 	bool bIsUnmapped = false;
 
@@ -606,41 +607,35 @@ string MeshData::GetFileName(void)
 	return this->fileName;
 }
 
-
-void MeshData::SetBoxCenterSize(vector<XMFLOAT3> vertices)
+void MeshData::SetBoxMinMax(vector<XMFLOAT3> vertices)
 {
-
 	if (vertices.empty())
 	{
-		boxCenter = XMFLOAT3(0.0f, 0.0f, 0.0f);
-		boxSize = XMFLOAT3(0.0f, 0.0f, 0.0f);
+		boxMin = XMVectorZero();
+		boxMax = XMVectorZero();
+
 		return;
 	}
 
-	XMFLOAT3 minPoint(FLT_MAX, FLT_MAX, FLT_MAX);
-	XMFLOAT3 maxPoint(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+	// èâä˙âª
+	XMFLOAT3 minVertex = vertices[0];
+	XMFLOAT3 maxVertex = vertices[0];
 
+	// ç≈è¨ílÇ∆ç≈ëÂílÇå©Ç¬ÇØÇÈ
 	for (const auto& vertex : vertices)
 	{
-		if (vertex.x < minPoint.x) minPoint.x = vertex.x;
-		if (vertex.y < minPoint.y) minPoint.y = vertex.y;
-		if (vertex.z < minPoint.z) minPoint.z = vertex.z;
+		if (vertex.x < minVertex.x) minVertex.x = vertex.x;
+		if (vertex.y < minVertex.y) minVertex.y = vertex.y;
+		if (vertex.z < minVertex.z) minVertex.z = vertex.z;
 
-		if (vertex.x > maxPoint.x) maxPoint.x = vertex.x;
-		if (vertex.y > maxPoint.y) maxPoint.y = vertex.y;
-		if (vertex.z > maxPoint.z) maxPoint.z = vertex.z;
+		if (vertex.x > maxVertex.x) maxVertex.x = vertex.x;
+		if (vertex.y > maxVertex.y) maxVertex.y = vertex.y;
+		if (vertex.z > maxVertex.z) maxVertex.z = vertex.z;
 	}
 
-	boxCenter = XMFLOAT3(
-		(minPoint.x + maxPoint.x) / 2.0f,
-		(minPoint.y + maxPoint.y) / 2.0f,
-		(minPoint.z + maxPoint.z) / 2.0f
-	);
-
-
-	boxSize = XMFLOAT3(
-		maxPoint.x - minPoint.x,
-		maxPoint.y - minPoint.y,
-		maxPoint.z - minPoint.z
-	);
+	// XMVectorÇ…ïœä∑
+	boxMin = XMLoadFloat3(&minVertex);
+	boxMax = XMLoadFloat3(&maxVertex);
 }
+
+

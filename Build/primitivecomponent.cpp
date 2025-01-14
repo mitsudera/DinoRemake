@@ -128,88 +128,34 @@ BOOL PrimitiveComponent::GetAlphaTest(void)
 	return this->alphaTest;
 }
 
-BOOL PrimitiveComponent::GetIsFrustumCulling(XMMATRIX frustum)
+BOOL PrimitiveComponent::GetIsFrustumCulling(void)
 {
-	if (!isFrustumCulling)
-	{
-		return FALSE;
-	}
-
-
-	// サイズをワールド座標に変換
-
-	XMMATRIX wvp = GetWorldMtx() * frustum;
-
-	if (IsInsideFrustum(XMVector3Transform(pivot, GetTransFormComponent()->GetLocalMtx()), XMLoadFloat3(&size), wvp))
-	{
-		return FALSE;
-
-	}
-
-
-	return TRUE;
+	return isFrustumCulling;
 }
 
+void PrimitiveComponent::SetIsFrustumCulling(BOOL b)
+{
+	this->isFrustumCulling = b;
+}
 
-
-void PrimitiveComponent::SetBoxCenterSize(std::vector<XMFLOAT3> vertices)
+void PrimitiveComponent::SetBoxMinMax(XMVECTOR min, XMVECTOR max)
 {
 	isFrustumCulling = TRUE;
-
-	if (vertices.empty())
-	{
-		pivot = XMVectorSet(0.0f, 0.0f, 0.0f, 0.0f);
-		size = XMFLOAT3(0.0f, 0.0f, 0.0f);
-		return;
-	}
-
-	XMFLOAT3 minPoint(FLT_MAX, FLT_MAX, FLT_MAX);
-	XMFLOAT3 maxPoint(-FLT_MAX, -FLT_MAX, -FLT_MAX);
-
-	for (const auto& vertex : vertices)
-	{
-		if (vertex.x < minPoint.x) minPoint.x = vertex.x;
-		if (vertex.y < minPoint.y) minPoint.y = vertex.y;
-		if (vertex.z < minPoint.z) minPoint.z = vertex.z;
-
-		if (vertex.x > maxPoint.x) maxPoint.x = vertex.x;
-		if (vertex.y > maxPoint.y) maxPoint.y = vertex.y;
-		if (vertex.z > maxPoint.z) maxPoint.z = vertex.z;
-	}
-
-	XMFLOAT3 Center = XMFLOAT3(
-		(minPoint.x + maxPoint.x) / 2.0f,
-		(minPoint.y + maxPoint.y) / 2.0f,
-		(minPoint.z + maxPoint.z) / 2.0f
-	);
-
-	pivot = XMLoadFloat3(&Center);
-
-	size = XMFLOAT3(
-		maxPoint.x - minPoint.x,
-		maxPoint.y - minPoint.y,
-		maxPoint.z - minPoint.z
-	);
+	boxMin = min;
+	boxMax = max;
 }
 
-
-void PrimitiveComponent::SetBoxCenterSize(XMFLOAT3 center, XMFLOAT3 size)
+XMVECTOR PrimitiveComponent::GetBoxMin(void)
 {
-	isFrustumCulling = TRUE;
-
-	pivot = XMLoadFloat3(&center);
-	this->size = size;
+	return XMVector3Transform(boxMin,GetWorldMtx());
 }
 
-XMVECTOR PrimitiveComponent::GetBoxPivot(void)
+XMVECTOR PrimitiveComponent::GetBoxMax(void)
 {
-	return this->pivot;
+	return XMVector3Transform(boxMax, GetWorldMtx());
 }
 
-XMFLOAT3 PrimitiveComponent::GetBoxSize(void)
-{
-	return this->size;
-}
+
 
 
 

@@ -35,6 +35,7 @@
 #include <filesystem>
 #include <cwchar>
 #include <list>
+#include <future>
 //#include <minmax.h>
 #include <functional>
 

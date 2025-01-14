@@ -52,7 +52,7 @@ class Material;
 	 string GetName(void);
 	 string GetFileName(void);
 
-	 void SetBoxCenterSize(vector<XMFLOAT3> vertices);
+	 void SetBoxMinMax(vector<XMFLOAT3> vertices);
 
 	 AssetsManager* GetpAssetsManager(void);
 
@@ -62,8 +62,8 @@ class Material;
 	 BOOL GetIsRoot(void);
 	 XMMATRIX GetLocalOffset(void);
 
-	 XMFLOAT3 GetBoxCenter(void);
-	 XMFLOAT3 GetBoxSize(void);
+	 XMVECTOR GetBoxMin(void);
+	 XMVECTOR GetBoxMax(void);
 
  private:
 	 AssetsManager* pAssetsManager;
@@ -89,8 +89,8 @@ class Material;
 
 	 string name;
 	 string fileName;
-	 XMFLOAT3 boxCenter;
-	 XMFLOAT3 boxSize;
+	 XMVECTOR boxMin;
+	 XMVECTOR boxMax;
 
  };
 

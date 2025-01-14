@@ -109,12 +109,17 @@ public:
 
 	void SetProjectionMtx(void);
 
+	BOOL FrustumCulling(XMVECTOR min, XMVECTOR max);
+
+
+
 private:
 
 	D3D11_VIEWPORT vp;
 
 	XMMATRIX mtxView;
 	XMMATRIX mtxProj;
+	XMMATRIX viewProj;
 
 	XMFLOAT3			at;				// カメラの注視点
 	XMFLOAT3			up;				// カメラの上方向ベクトル
@@ -149,4 +154,10 @@ private:
 	RenderTexture* renderTexture;
 	int renderTextureIndex;
 
+	void SetFrustumPlanes(void);
+	void SetFrustumCorners(void);
+
+
+	XMVECTOR planes[6];
+	XMVECTOR points[8];
 };

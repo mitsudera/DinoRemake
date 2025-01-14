@@ -15,6 +15,7 @@
 #include "RotBoxColliderComponent.h"
 #include "AttackComponent.h"
 #include "SpriteComponent.h"
+#include "SoundSpeakerComponent.h"
 Player::Player(Scene* scene)
 {
 	pScene = scene;
@@ -45,81 +46,93 @@ void Player::Awake(void)
 
 	animControler->LoadDefaulAnimation("PlayerIdle.fbx", "Idle");
 
-	//animControler->LoadAnimation("PlayerWalk.fbx", "PlayerRightWalk.fbx", "PlayerBackWalk.fbx", "PlayerLeftWalk.fbx", "Walk", TRUE);
-	//animControler->LoadAnimation("PlayerDodgeForward.fbx", "PlayerDodgeRight.fbx", "PlayerDodgeLeft.fbx", "PlayerDodgeBack.fbx", "Dodge", FALSE);
+	animControler->LoadAnimation("PlayerWalk.fbx", "PlayerRightWalk.fbx", "PlayerBackWalk.fbx", "PlayerLeftWalk.fbx", "Walk", TRUE);
+	animControler->LoadAnimation("PlayerDodgeForward.fbx", "PlayerDodgeRight.fbx", "PlayerDodgeLeft.fbx", "PlayerDodgeBack.fbx", "Dodge", FALSE);
 
-	//animControler->LoadAnimation("PlayerRun.fbx", "Run", TRUE);
-	//animControler->LoadAnimation("PlayerFallIdle.fbx", "FallIdle", TRUE);
-	//animControler->LoadAnimation("PlayerAttack1.fbx", "Attack1", FALSE);
-	//animControler->LoadAnimation("PlayerAttack2.fbx", "Attack2", FALSE);
+	animControler->LoadAnimation("PlayerRun.fbx", "Run", TRUE);
+	animControler->LoadAnimation("PlayerFallIdle.fbx", "FallIdle", TRUE);
+	animControler->LoadAnimation("PlayerAttack1.fbx", "Attack1", FALSE);
+	animControler->LoadAnimation("PlayerAttack2.fbx", "Attack2", FALSE);
+	animControler->LoadAnimation("PlayerDie.fbx", "Die", FALSE);
 
-	////アニメーショントランジション用パラメータの設定
-	////bool
-	//AnimParameter para;
-	//para.value = FALSE;
-	//para.isTrigger = FALSE;
-	//animControler->CreateCondition("Walk", para);
-	//animControler->CreateCondition("Run", para);
-	//animControler->CreateCondition("OnGround", para);
+	//アニメーショントランジション用パラメータの設定
+	//bool
+	AnimParameter para;
+	para.value = FALSE;
+	para.isTrigger = FALSE;
+	animControler->CreateCondition("Walk", para);
+	animControler->CreateCondition("Run", para);
+	animControler->CreateCondition("OnGround", para);
+	animControler->CreateCondition("Die", para);
 
-	////trigger
-	//para.value = FALSE;
-	//para.isTrigger = TRUE;
-	//animControler->CreateCondition("JumpTrigger", para);
-	//animControler->CreateCondition("Attack", para);
-	//animControler->CreateCondition("Dodge", para);
-
-
-	////トランジションの設定
-	////追加した順番が優先順位になる
-	////idolからの移行
-	//animControler->CreateTransition("Idle", "FallIdle", "OnGround", FALSE);
-	//animControler->CreateTransition("Idle", "Attack1", "Attack", TRUE);
-	//animControler->CreateTransition("Idle", "Dodge", "Dodge", TRUE,0.1f);
-	//animControler->CreateTransition("Idle", "Run", "Run", TRUE);
-	//animControler->CreateTransition("Idle", "Walk", "Walk", TRUE);
-
-	////walkからの移行
-	//animControler->CreateTransition("Walk", "FallIdle", "OnGround", FALSE);
-	//animControler->CreateTransition("Walk", "Attack1", "Attack", TRUE);
-	//animControler->CreateTransition("Walk", "Dodge", "Dodge", TRUE,0.1f);
-	//animControler->CreateTransition("Walk", "Run", "Run", TRUE);
-	//animControler->CreateTransition("Walk", "Idle", "Walk", FALSE);
+	//trigger
+	para.value = FALSE;
+	para.isTrigger = TRUE;
+	animControler->CreateCondition("JumpTrigger", para);
+	animControler->CreateCondition("Attack", para);
+	animControler->CreateCondition("Dodge", para);
 
 
-	////Runからの移行
-	//animControler->CreateTransition("Run", "FallIdle", "OnGround", FALSE);
-	//animControler->CreateTransition("Run", "Attack1", "Attack", TRUE);
-	//animControler->CreateTransition("Run", "Dodge", "Dodge", TRUE, 0.1f);
-	//animControler->CreateTransition("Run", "Walk", "Walk", TRUE);
-	//animControler->CreateTransition("Run", "Idle", "Run", FALSE);
+	//トランジションの設定
+	//追加した順番が優先順位になる
+	//idolからの移行
+	animControler->CreateTransition("Idle", "Die", "Die", TRUE);
+	animControler->CreateTransition("Idle", "FallIdle", "OnGround", FALSE);
+	animControler->CreateTransition("Idle", "Attack1", "Attack", TRUE);
+	animControler->CreateTransition("Idle", "Dodge", "Dodge", TRUE,0.1f);
+	animControler->CreateTransition("Idle", "Run", "Run", TRUE);
+	animControler->CreateTransition("Idle", "Walk", "Walk", TRUE);
+
+	//walkからの移行
+	animControler->CreateTransition("Walk", "Die", "Die", TRUE);
+	animControler->CreateTransition("Walk", "FallIdle", "OnGround", FALSE);
+	animControler->CreateTransition("Walk", "Attack1", "Attack", TRUE);
+	animControler->CreateTransition("Walk", "Dodge", "Dodge", TRUE,0.1f);
+	animControler->CreateTransition("Walk", "Run", "Run", TRUE);
+	animControler->CreateTransition("Walk", "Idle", "Walk", FALSE);
 
 
-	////FallIdleからの移行
-	//animControler->CreateTransition("FallIdle", "Idle", "OnGround", TRUE);
+	//Runからの移行
+	animControler->CreateTransition("Run", "Die", "Die", TRUE);
+	animControler->CreateTransition("Run", "FallIdle", "OnGround", FALSE);
+	animControler->CreateTransition("Run", "Attack1", "Attack", TRUE);
+	animControler->CreateTransition("Run", "Dodge", "Dodge", TRUE, 0.1f);
+	animControler->CreateTransition("Run", "Walk", "Walk", TRUE);
+	animControler->CreateTransition("Run", "Idle", "Run", FALSE);
 
-	////Attack1
-	//animControler->CreateTransition("Attack1", "Attack2","Attack",TRUE);
-	//animControler->CreateTransition("Attack1", "Dodge", "Dodge",TRUE, 0.1f);
-	//animControler->CreateNotLoopAnimExitTransition("Attack1", "Idle");
 
-	////Attack2
-	//animControler->CreateTransition("Attack2", "Attack1", "Attack", TRUE);
-	//animControler->CreateTransition("Attack2", "Dodge", "Dodge", TRUE, 0.1f);
-	//animControler->CreateNotLoopAnimExitTransition("Attack2", "Idle");
+	//FallIdleからの移行
+	animControler->CreateTransition("FallIdle", "Idle", "OnGround", TRUE);
 
-	////dodge
-	//animControler->CreateTransition("dodge", "Attack1", "Attack", TRUE);
-	//animControler->CreateNotLoopAnimExitTransition("Dodge", "Idle");
+	//Attack1
+	animControler->CreateTransition("Attack1", "Die", "Die", TRUE);
+	animControler->CreateTransition("Attack1", "Attack2","Attack",TRUE);
+	animControler->CreateTransition("Attack1", "Dodge", "Dodge",TRUE, 0.1f);
+	animControler->CreateNotLoopAnimExitTransition("Attack1", "Idle");
+
+	//Attack2
+	animControler->CreateTransition("Attack2", "Die", "Die", TRUE);
+	animControler->CreateTransition("Attack2", "Attack1", "Attack", TRUE);
+	animControler->CreateTransition("Attack2", "Dodge", "Dodge", TRUE, 0.1f);
+	animControler->CreateNotLoopAnimExitTransition("Attack2", "Idle");
+
+	//dodge
+	animControler->CreateTransition("Dodge", "Attack1", "Attack", TRUE);
+	animControler->CreateTransition("Dodge", "Dodge", "Dodge", TRUE);
+	animControler->CreateNotLoopAnimExitTransition("Dodge", "Idle");
 
 
 	AddComponent<PlayerComponent>();
 
 	AddComponent<PlayerAnimationControlComponent>();
 
-	RotBoxColliderComponent* box = AddComponent<RotBoxColliderComponent>();
-	box->SetRotBox(XMFLOAT3(50.0f, 160.0f, 50.0f));
-	box->SetPivot(XMFLOAT3(0.0f, 80.0f, 0.0f));
+	////RotBoxColliderComponent* box = AddComponent<RotBoxColliderComponent>();
+	////box->SetRotBox(XMFLOAT3(50.0f, 160.0f, 50.0f));
+	////box->SetPivot(XMFLOAT3(0.0f, 80.0f, 0.0f));
+
+	CapsuleColliderComponent* box = AddComponent<CapsuleColliderComponent>();
+	box->SetCapsule(XMFLOAT3(0.0f, 20.0f, 0.0f),XMFLOAT3(0.0f,160.0f,0.0f),20.0f);
+	//box->SetPivot(XMFLOAT3(0.0f, 80.0f, 0.0f));
 
 	RigidBodyComponent* rb = AddComponent<RigidBodyComponent>();
 
@@ -127,7 +140,7 @@ void Player::Awake(void)
 	rb->SetMass(5000.0f);
 	rb->SetIsStatic(FALSE);
 
-
+	SoundSpeakerComponent* soundSpeaker = AddComponent<SoundSpeakerComponent>();
 
 	//子オブジェクトとしてカメラを作成
 	{

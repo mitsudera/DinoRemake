@@ -49,7 +49,9 @@ public:
 	void SetPosition(XMVECTOR pos);
 	void SetRotation(XMVECTOR qton);
 	void SetRotation(XMFLOAT3 rot);
+	void SetRotation(float x, float y, float z);
 	void SetScale(XMFLOAT3 scl);
+	void SetScale(float x, float y, float z);
 	void SetPositionMtx(XMMATRIX pos);
 	void SetRotationMtx(XMMATRIX rot);
 	void SetScaleMtx(XMMATRIX scl);

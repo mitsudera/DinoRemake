@@ -325,6 +325,7 @@ void GameEngine::SetNextScene(Scene* scene)
 void GameEngine::SwichScene(void)
 {
 	if (this->activeScene) this->activeScene->Uninit();
+	this->lightManager->ClearLight();
 	this->activeScene = nextScene;
 	activeScene->Awake();
 	activeScene->Init();

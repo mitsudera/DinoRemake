@@ -57,6 +57,11 @@ void PlayerAnimationControlComponent::Update(void)
 
 			break;
 		}
+		case PlayerComponent::PlayerState::Die:
+		{
+
+			break;
+		}
 
 		default:
 			break;
@@ -84,6 +89,11 @@ void PlayerAnimationControlComponent::Update(void)
 
 			break;
 		}
+		case PlayerComponent::PlayerState::Die:
+		{
+			this->animControler->SetCondition("Die", TRUE);
+			break;
+		}
 
 		default:
 			break;
@@ -98,7 +108,7 @@ void PlayerAnimationControlComponent::Update(void)
 
 
 
-	if (rb->GetGroundLength() < 10.0f)
+	if (rb->GetGroundLength() < 30.0f)
 	{
 		this->animControler->SetCondition("OnGround", TRUE);
 

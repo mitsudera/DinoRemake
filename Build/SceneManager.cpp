@@ -13,7 +13,7 @@ SceneManager::SceneManager(GameEngine* pGameEngine)
 {
 	this->pGameEngine = pGameEngine;
 
-	this->defaultScene = SCENE::STAGE1;
+	this->defaultScene = SCENE::TITLE;
 
 	TestScene* testScene = new TestScene(pGameEngine);
 	this->SceneList.push_back(testScene);
@@ -47,7 +47,6 @@ SceneManager::~SceneManager()
 
 void SceneManager::SetScene(SCENE scene)
 {
-	this->pGameEngine->GetSoundEngine()->StopAllSound();
 
 	this->pGameEngine->SetActiveScene(this->SceneList[(int)scene]);
 

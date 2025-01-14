@@ -15,6 +15,8 @@ public:
 
 	void SetBox(XMFLOAT3 size);
 
+	void SetBox(float x, float y, float z);
+
 	XMFLOAT3 GetSize(void);
 
 protected:

@@ -1,5 +1,5 @@
 #include "Rock5.h"
-#include "RotBoxColliderComponent.h"
+#include "BoxColliderComponent.h"
 #include "RigidBodyComponent.h"
 #include "primitivecomponent.h"
 #include "renderer.h"
@@ -17,8 +17,9 @@ void Rock5::Awake(void)
 	GameObject::Awake();
 
 	LoadFbxFileMesh("Rock_5.fbx");
-	RotBoxColliderComponent* box = AddComponent<RotBoxColliderComponent>();
-	box->SetRotBox(XMFLOAT3(250.0f, 500.0f, 250.0f));
+	BoxColliderComponent* box = AddComponent<BoxColliderComponent>();
+	box->SetBox(XMFLOAT3(350.0f, 1000.0f, 250.0f));
+	box->SetPivot(XMFLOAT3(-20.0f, 0.0f, 40.0f));
 	AddComponent<RigidBodyComponent>()->SetIsStatic(TRUE);
 
 }

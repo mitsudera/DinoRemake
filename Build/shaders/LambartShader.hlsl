@@ -262,9 +262,9 @@ void PSmain(in float4 inPosition : SV_POSITION,
         else if (Shadow.mode == 1)
         {
             sma = GetVarianceDirectionalShadowFactor(inPosSM);
-            if (sma < 0.99f)
+            if (sma != 1.0f)
             {
-                sma = sma * sma;
+                sma = sma * 0.5;
 
             }
 

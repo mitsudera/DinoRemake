@@ -37,6 +37,7 @@ public:
 
 	void SetIsStatic(BOOL b);
 
+	void SetIsFixTerrain(BOOL b);
 
 private:
 	ColliderComponent* collider;
@@ -54,6 +55,7 @@ private:
 	BOOL isKinematic;
 	BOOL onGround;
 	BOOL isStatic;
+	BOOL isFixTerrain;
 	float groundLen;
 };
 

@@ -4,7 +4,7 @@
 #include "CameraComponent.h"
 #include "component.h"
 #include "transformcomponent.h"
-
+#include "SoundEngine.h"
 Scene::Scene()
 {
 }
@@ -146,17 +146,19 @@ void Scene::Draw()
 
 void Scene::Uninit()
 {
+	this->pGameEngine->GetSoundEngine()->StopAllSound();
+
 	for (GameObject* gameObject : GetGameObject())
 	{
 		gameObject->Destroy();
 		delete gameObject;
 	}
 	gameObjectArray.clear();
-	
+	cameraArray.clear();
 	allComponent.clear();
 	allTransformComponent.clear();
 	allPrimitiveComponent.clear();
-
+	allRigidBodyComponent.clear();
 }
 
 
